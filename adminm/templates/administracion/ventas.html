@@ -1,0 +1,78 @@
+{% load static %}
+
+      <div class="content seccion" id="Ventas" style="display: none;">
+        <div class="container-fluid">
+          
+          
+          <div class="row">
+            
+            <div class="col-md-12">
+              <div class="card card-chart">
+                <div class="card-header card-header-success">
+                  <h4 class="card-title" id="fechah4">Ventas de la semana</h4>
+                </div>
+                <div  class="card-body">
+                  <input type="hidden" name="date" id="fechainputsend" value="0">
+                  <input type="hidden" name="date" id="urlventas" value="showventas/">
+                  <div class="row">
+
+                    <div class="col-md-6">
+                      <button id="ventasanterior" class="btn btn-success">Semana anterior</button>
+                      <button id="ventassiguiente" class="btn btn-success" disabled>Semana siguiente</button>
+                    </div>
+                    <div class="col-md-3">
+                      <button class="dropdown-toggle btn btn-success btn-round btn-block" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          Mostrar por
+                        <div class="ripple-container"></div></button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" x-placement="bottom-start" style="position: absolute; top: 41px; left: 1px; will-change: top, left;">
+                          <h6 class="dropdown-header">Mostrar por</h6>
+                          <a id="changesemanal" class="dropdown-item" href="#">Dia</a>
+                          <a id="changemensual" class="dropdown-item" href="#">Mes</a>
+                        </div>
+                    </div>
+                      
+                    
+                  </div>
+                  <canvas id="myChart" style="width:100%; max-height:450px;"></canvas>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="row">
+              <div class="col-md-12 card">
+                <div class="card-header card-header-success">
+                  <h4 class="card-title" id="ventastabla">Ventas</h4>
+                </div>
+                <div class="card-body">
+                  
+                  <div class="table-responsive">
+
+                    <table class="table row-border" id="TablaVentas">
+                      <thead class=" text-primary">
+                        
+                        <th>
+                          No. de Venta
+                        </th>                        
+                        <th>
+                          Fecha y Hora
+                        </th>
+                        <th>
+                          Cliente
+                        </th>
+                        <th>
+                          Total
+                        </th>
+                      </thead>
+                      <tbody>
+                        
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+      

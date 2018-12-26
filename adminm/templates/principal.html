@@ -1,0 +1,108 @@
+{% load static %}
+
+      <div class="content seccion" id="Principal">
+        <div class="container-fluid">
+          <div class="row">
+            
+            <div class="col-lg-6 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                <div class="card-header card-header-success card-header-icon">
+                  <div class="card-icon">
+                    <i class="material-icons">attach_money</i>
+                  </div>
+                  <p class="card-category">Ventas</p>
+                  <h3 class="card-title">${{ventas}}</h3>
+                </div>
+                <div class="card-footer">
+                  <div class="stats">
+                    <i class="material-icons">date_range</i> Ventas del mes
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                <div class="card-header card-header-danger card-header-icon">
+                  <div class="card-icon">
+                    <i class="material-icons">local_shipping</i>
+                  </div>
+                  <p class="card-category">Pedidos</p>
+                  <h3 class="card-title">{{sumapedidos}}</h3>
+                </div>
+                <div class="card-footer">
+                  <div class="stats">
+                    <i class="material-icons">date_range</i> Pedidos del mes
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="row">
+            
+            <div class="col-lg-6 col-md-12">
+              <div class="card">
+                <div class="card-header card-header-warning">
+                  <h4 class="card-title">Top productos</h4>
+                  <p class="card-category"></p>
+                </div>
+                <div class="card-body table-responsive">
+                  <table class="table table-hover">
+                    <thead class="text-warning">
+                      <th>ID</th>
+                      <th>Nombre</th>
+                      <th>Costo</th>
+                      <th>Categoria</th>
+                    </thead>
+                    <tbody>
+                      {% for x, producto in maspedidos.items %}
+                      {% if producto != "" %}
+                      <tr>
+                        <td>{{producto.id}}</td>
+                        <td>{{producto.nombre}}</td>
+                        <td>${{producto.precio.amount}}</td>
+                        <td>{{producto.categoria.nombre}}</td>
+                      </tr>
+                      {% endif %}
+                      {% endfor %}
+                     
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-6 col-md-12">
+              <div class="card">
+                <div class="card-header card-header-warning">
+                  <h4 class="card-title">Ultimos pedidos</h4>
+                  <p class="card-category"></p>
+                </div>
+                <div class="card-body table-responsive">
+                  <table class="table table-hover">
+                    <thead class="text-warning">
+                      <th>ID</th>
+                      <th>Cliente</th>
+                      <th>Fecha</th>
+                      <th>Estado</th>
+                    </thead>
+                    <tbody>
+                      {% for pedido in ultimospedidos %}
+                      
+                      <tr>
+                        <td>{{pedido.id}}</td>
+                        <td>{{pedido.usuario.first_name}} {{pedido.usuario.last_name}}</td>
+                        <td>{{pedido.fecha}}</td>
+                        <td>{{pedido.estado_pedido}}</td>
+                      </tr>
+                      {% endfor %}
+                      
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
