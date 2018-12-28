@@ -42,7 +42,8 @@ def showmodificarproductos(request):
 		"precio_oferta":{"tipo":"money","valor":producto.precio_oferta.amount,"label":"Precio Oferta:", "name":"precio_oferta"},
 		"inventario":{"tipo":"int","valor":producto.inventario,"label":"Inventario:", "name":"inventario"},
 		"categorias":{"tipo":"select","valor":producto.categoria.nombre, "sel":producto.categoria.id, "label":"Categoria:", "opciones":serializers.serialize('json', Categoria.objects.all()), "name":"categoria"},
-		"imagenes":{"tipo":"imagen","valor":imagenes,"label":"Imagenes del producto: ", "name":"imagenes"}
+		"tallas":{"tipo":"multiselect","valor":"","label":"Tallas:", "sel":serializers.serialize('json', producto.tallas.all()), "opciones":serializers.serialize('json', Talla.objects.all()), "name":"tallas"},
+		"imagenes":{"tipo":"imagen","valor":imagenes,"label":"Imagenes del producto: ", "name":"imagenes"},
 		}
 	return JsonResponse(data, safe=False)
 
@@ -55,13 +56,16 @@ def showagregarproductos(request):
 		"precio_oferta":{"tipo":"money","valor":"","label":"Precio Oferta:", "name":"precio_oferta"},
 		"inventario":{"tipo":"int","valor":"","label":"Inventario:", "name":"inventario"},
 		"categorias":{"tipo":"select","valor":"","label":"Categoria:", "sel":"", "opciones":serializers.serialize('json', Categoria.objects.all()), "name":"categoria"},
-		"imagenes":{"tipo":"imagen","valor":"","label":"Imagenes:","name":"imagenes"}
+		"tallas":{"tipo":"multiselect","valor":"","label":"Tallas:", "sel":"", "opciones":serializers.serialize('json', Talla.objects.all()), "name":"tallas"},
+		"imagenes":{"tipo":"imagen","valor":"","label":"Imagenes:","name":"imagenes"},
 		}
 	return JsonResponse(data, safe=False)
 
 @csrf_exempt
 def agregarproducto(request):
 	idimagenes = request.POST.getlist("idimagenes")
+	listatallas = request.POST.getlist("tallas")
+	tallas = Talla.objects.filter(id__in=listatallas)
 	if len(idimagenes) > 0:
 		if request.POST.get("popular"):
 			popular=True
@@ -76,6 +80,7 @@ def agregarproducto(request):
 			popular=popular,
 			inventario=request.POST.get("inventario"),
 			categoria=categoria)
+		producto.tallas.add(*tallas)
 		for imagenid in idimagenes:
 			imagen = Imagen.objects.get(id=imagenid)
 			producto.imagenes.add(imagen)
@@ -88,6 +93,8 @@ def modificarproducto(request):
 	producto = Producto.objects.get(id=request.POST.get("idproducto"))
 	idimagenes = request.POST.getlist("idimagenes")
 	idimagenesnu = request.POST.getlist("idimagenesnu")
+	listatallas = request.POST.getlist("tallas")
+	tallas = Talla.objects.filter(id__in=listatallas)
 	if len(idimagenes) > 0 or len(idimagenesnu) > 0:
 		if request.POST.get("popular"):
 			popular=True
@@ -95,6 +102,7 @@ def modificarproducto(request):
 			popular=False
 		categoria = Categoria.objects.get(id=request.POST.get("categoria"))
 
+		producto.tallas.clear()
 		producto.nombre=request.POST.get("nombre")
 		producto.descripcion=request.POST.get("descripcion")
 		producto.precio=request.POST.get("precio")
@@ -102,6 +110,7 @@ def modificarproducto(request):
 		producto.popular=popular
 		producto.inventario=request.POST.get("inventario")
 		producto.categoria=categoria
+		producto.tallas.add(*tallas)
 
 		for imagenproducto in producto.imagenes.all():
 			if len(idimagenes) == 0:

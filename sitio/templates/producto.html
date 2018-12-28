@@ -56,12 +56,10 @@
 
 								<div class="size-204 respon6-next">
 									<div class="rs1-select2 bor8 bg0">
-										<select class="js-select2" name="time">
-											<option>Escoje una opción</option>
-											<option>Chica</option>
-											<option>Mediana</option>
-											<option>Grande</option>
-											<option>Extra Grande</option>
+										<select class="js-select2 talla" name="talla">
+											{% for talla in producto.tallas.all %}
+											<option value="{{talla.id}}">{{talla.nombre}}</option>
+											{% endfor %}
 										</select>
 										<div class="dropDownSelect2"></div>
 									</div>
@@ -97,16 +95,16 @@
 											<i class="fs-16 zmdi zmdi-minus"></i>
 										</div>
 
-										<input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product" value="1">
+										<input class="mtext-104 cl3 txt-center num-product cant" type="number" name="num-product" value="1">
 
 										<div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
 											<i class="fs-16 zmdi zmdi-plus"></i>
 										</div>
 									</div>
 
-									<button class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail">
+									<a href="javascript:agregarCarrito()" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">
 										Agregar al carrito
-									</button>
+									</a>
 								</div>
 							</div>	
 						</div>
@@ -166,5 +164,51 @@
 			</div>
 		</div>
 	</section>
+
+	{% endblock %}
+
+	{% block js %}
+
+	<script>
+	function agregarCarrito() {
+			var cantidad = $(".cant").val();
+			var talla = $(".talla").val();
+			$.ajax({
+		             url : '/agregarCarrito/', // the endpoint,commonly same url
+		             type : "POST", // http method
+		             data : {producto:"{{producto.id}}",
+		             	cantidad:cantidad,
+		             	talla:talla
+		             }, // data sent with the post request
+		     success : function(json) {
+		     	
+		     	if ($(".carrito").find("div#"+json.id+json.talla.replace(" ","")).length > 0 ){
+		     	var producto = "<div class='header-cart-item-img' id='{{producto.id}}"+json.talla.replace(" ","")+"'><img src='{{ producto.imagenes.first.imagen.url }}' alt='IMG'></div><div class='header-cart-item-txt p-t-8'><a href='#' class='header-cart-item-name m-b-18 hov-cl1 trans-04'>{{ producto.nombre }}</a><span class='header-cart-item-info tallacart'>" +json.talla+ "</span><span class='header-cart-item-info'>"+json.cantidad+" x $ {{ producto.precio }}</span></div>";
+		     	$(".carrito").find("div#"+json.id+json.talla.replace(" ","")).parent().html(producto);
+		     }
+		     else{
+		     	var producto = "<li class='header-cart-item flex-w flex-t m-b-12'><div class='header-cart-item-img' id='{{producto.id}}"+json.talla.replace(" ","")+"'><img src='{{ producto.imagenes.first.imagen.url }}' alt='IMG'></div><div class='header-cart-item-txt p-t-8'><a href='#' class='header-cart-item-name m-b-18 hov-cl1 trans-04'>{{ producto.nombre }}</a><span class='header-cart-item-info tallacart'>" +json.talla+ "</span><span class='header-cart-item-info'>"+json.cantidad+" x $ {{ producto.precio }}</span></div></li>";
+		     	$(".carrito").append(producto);
+		     }
+
+		     	totalpro = "Total: $"+json.suma;
+            	$(".header-cart-total").html(totalpro);
+                var conta = parseInt($(".contador").attr("data-notify"));
+	     		$(".contador").attr("data-notify",conta+parseInt(cantidad));
+
+		     	
+		     		swal({
+	                  type: 'success',
+	                  icon: 'success',
+	                  title: '¡Genial!',
+	                  text: 'Agregado al carrito',
+	                })
+	                
+		  		}		
+		  	    
+		     
+		   });
+		}
+	</script>
 
 	{% endblock %}

@@ -232,6 +232,9 @@ function irAtras(argument) {
 	else if($("#formagregar").attr('action') == "agregarcategoria/" | $("#formmodificar").attr('action') == "modificarcategoria/"){
 		$("#mostrarCategorias").click();
 	}	
+	else if($("#formagregar").attr('action') == "agregartalla/" | $("#formmodificar").attr('action') == "modificartalla/"){
+		$("#mostrarTallas").click();
+	}
 	else if($("#formagregar").attr('action') == "agregarcoleccion/" | $("#formmodificar").attr('action') == "modificarcoleccion/"){
 		$("#mostrarColecciones").click();
 	}

@@ -22,6 +22,9 @@ import json
 def showmodificardatos(request):
 	dato = Empresa.objects.last()
 	data = {"nombre":{"tipo":"char","valor":dato.nombre,"label":"Nombre:", "name":"nombre"},
+		"direccion":{"tipo":"char","valor":dato.direccion,"label":"Dirección:", "name":"direccion"},
+		"telefono":{"tipo":"char","valor":dato.telefono,"label":"Telefono:", "name":"telefono"},
+		"correo":{"tipo":"char","valor":dato.correo,"label":"Correo electronico:", "name":"correo"},
 		"logo":{"tipo":"imagen2","valor":dato.logo.url,"label":"Logo:", "name":"logo"},
 		"mision":{"tipo":"ckeditor","valor":dato.mision,"label":"Misión:", "name":"mision"},
 		"vision":{"tipo":"ckeditor","valor":dato.vision,"label":"Visión:", "name":"vision"},
@@ -39,6 +42,9 @@ def modificardato(request):
 	dato.delete()
 	if "logo" in request.FILES:
 		dato = Empresa.objects.create(nombre=request.POST.get("nombre"),
+				direccion=request.POST.get("direccion"),
+				telefono=request.POST.get("telefono"),
+				correo=request.POST.get("correo"),
 				logo=request.FILES["logo"],
 				mision=request.POST.get("mision"),
 				vision=request.POST.get("vision"),
@@ -47,6 +53,9 @@ def modificardato(request):
 				giro_de_la_empresa=request.POST.get("giro"))
 	else:
 		dato = Empresa.objects.create(nombre=request.POST.get("nombre"),
+				direccion=request.POST.get("direccion"),
+				telefono=request.POST.get("telefono"),
+				correo=request.POST.get("correo"),
 				logo=imagen,
 				mision=request.POST.get("mision"),
 				vision=request.POST.get("vision"),

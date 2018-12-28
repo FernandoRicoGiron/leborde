@@ -5,6 +5,7 @@ __all__ = [
 "colecciones",
 "imagenes",
 "productos",
+"tallas",
 
 
 

@@ -8,7 +8,7 @@
   <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <title>
-    Material Dashboard by Creative Tim
+    Admin
   </title>
   <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
   <!--     Fonts and icons     -->
@@ -79,6 +79,12 @@
                             <a class="nav-link" href="#" id="mostrarColecciones">
                               <span class="sidebar-mini"> C </span>
                               <span class="sidebar-normal"> Colecciones </span>
+                            </a>
+                        </li>
+                        <li class="nav-item ">
+                            <a class="nav-link" href="#" id="mostrarTallas">
+                              <span class="sidebar-mini"> T </span>
+                              <span class="sidebar-normal"> Tallas </span>
                             </a>
                         </li>
                     </ul>
@@ -219,6 +225,7 @@
     {% include "ecommerce/productos.html" %}
     {% include "ecommerce/categorias.html" %}
     {% include "ecommerce/colecciones.html" %}
+    {% include "ecommerce/tallas.html" %}
     <!--Administracion-->
     {% include "administracion/clientes.html" %}
     {% include "administracion/pedidos.html" %}
@@ -560,6 +567,33 @@
           // "scrollY": 450,
           // "scrollX": true,
       });
+
+        var table10 = $('#TablaTallas').DataTable({
+          language: {
+              "decimal": "",
+              "emptyTable": "No hay información",
+              "info": "Mostrando _START_ a _END_ de _TOTAL_ Tallas",
+              "infoEmpty": "Mostrando 0 a 0 de 0 Tallas",
+              "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+              "infoPostFix": "",
+              "thousands": ",",
+              "lengthMenu": "Mostrar _MENU_",
+              "loadingRecords": "Cargando...",
+              "processing": "Procesando...",
+              "search": "",
+              "zeroRecords": "Sin resultados encontrados",
+              "paginate": {
+                  "first": "Primero",
+                  "last": "Ultimo",
+                  "next": "Siguiente",
+                  "previous": "Anterior"
+              }
+
+          },
+          // fixedHeader: true,
+          // "scrollY": 450,
+          // "scrollX": true,
+      });
         $('div.dataTables_filter input').addClass('form-control form-control-sm');
         $('div.dataTables_filter input').attr('placeholder','Buscar')
         $('div.dataTables_length select').addClass('custom-select custom-select-sm form-control form-control-sm');
@@ -575,6 +609,7 @@
   <script src="{% static 'js/admin/ecommerce/productos.js' %}"></script>
   <script src="{% static 'js/admin/ecommerce/categorias.js' %}"></script>
   <script src="{% static 'js/admin/ecommerce/colecciones.js' %}"></script>
+  <script src="{% static 'js/admin/ecommerce/tallas.js' %}"></script>
   <script src="{% static 'js/admin/administracion/clientes.js' %}"></script>
   <script src="{% static 'js/admin/administracion/pedidos.js' %}"></script>
   <script src="{% static 'js/admin/administracion/ventas.js' %}"></script>

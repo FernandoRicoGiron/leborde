@@ -35,9 +35,8 @@ class Categoria(models.Model):
 	def __str__(self):
 		return self.nombre
 
-class Sub_Categoria(models.Model):
+class Talla(models.Model):
 	nombre = models.CharField(max_length=100)
-	categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE, blank=True, null=True)
 
 	def __str__(self):
 		return self.nombre
@@ -51,6 +50,7 @@ class Producto(models.Model):
 	imagenes = models.ManyToManyField(Imagen)
 	inventario = models.IntegerField()
 	categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
+	tallas = models.ManyToManyField(Talla, blank=True)
 
 	def __str__(self):
 		return self.nombre

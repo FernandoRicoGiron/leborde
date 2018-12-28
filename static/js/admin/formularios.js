@@ -170,7 +170,12 @@ function seccionInputs(campos, json) {
 	        $("button.multiselect-clear-filter").removeClass('btn-default')
 	        $("button.multiselect-clear-filter").addClass( "btn-danger" )
 	        $("i.glyphicon-remove-circle").attr('class', 'material-icons').html("close");
-	        seleccionados = JSON.parse(value.sel);
+	        if (value.sel != "") {
+	        	seleccionados = JSON.parse(value.sel);
+	        }
+	        else{
+	        	seleccionados = "";
+	        }
 		    lista = []
 		     $.each( seleccionados, function( key, val ) {
 					idse = val.pk;

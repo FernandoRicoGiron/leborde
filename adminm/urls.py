@@ -32,6 +32,13 @@ urlpatterns = [
     path('eliminarcoleccion/', colecciones.eliminarcoleccion),
     path('modificarcoleccion/', colecciones.modificarcoleccion),
     path('agregarcoleccion/', colecciones.agregarcoleccion),
+    # Tallas
+    path('showtallas/', tallas.showtallas),
+    path('showmodificartallas/', tallas.showmodificartallas),
+    path('showagregartallas/', tallas.showagregartallas),
+    path('eliminartalla/', tallas.eliminartalla),
+    path('modificartalla/', tallas.modificartalla),
+    path('agregartalla/', tallas.agregartalla),
     # Clientes
     path('showclientes/', clientes.showclientes),
     path('showmodificarclientes/', clientes.showmodificarclientes),
