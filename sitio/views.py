@@ -80,3 +80,9 @@ def producto(request, id):
 										"producto":producto,
 										"pro_re":pro_re
 										})
+
+def contacto(request):
+	cart = Cart(request)
+	variables(request)
+	return render(request, 'contacto.html', {"cart":cart,
+										})

@@ -7,5 +7,6 @@ urlpatterns = [
     path('nosotros/', vi.nosotros),
     re_path('tienda/(?P<id>\d+)/', vi.producto),
     path('tienda/', vi.tienda),
+    path('contacto/', vi.contacto),
 
 ]
