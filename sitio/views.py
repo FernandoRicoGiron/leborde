@@ -126,6 +126,94 @@ def mensajecontacto(request):
 		)
 	return redirect("/contacto/")
 
+# Autentificacion
+@csrf_exempt
+def registrar(request):
+	cart = Cart(request)
+	usuario = request.POST.get("username")
+	email = request.POST.get("email")
+	password = request.POST.get("password")
+	nombre = request.POST.get("nombre")
+	apellido = request.POST.get("apellido")
+	user = User.objects.create_user(username=usuario,
+		email=email,
+		password=password,
+		first_name=nombre,
+		last_name=apellido)
+	user = authenticate(request, username=usuario, password=password)
+
+	if request.method == 'GET':
+		return redirect("/")
+	else:
+		sale = Sale()
+		sale.charge(request, user)
+		if user is not None:
+			login(request, user)
+			return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
+		else:
+			return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
+	
+
+@csrf_exempt
+def cerrarsesion(request):
+	logout(request)
+	cart = Cart(request)
+	return redirect("/")
+
+@csrf_exempt
+def iniciarsesion(request):
+	cart = Cart(request)
+	usuario = request.POST.get("username")
+	email = request.POST.get("email")
+	password = request.POST.get("password")
+	user = authenticate(request, username=usuario, password=password)
+	if user is not None:
+		login(request, user)
+		return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
+	else:
+		return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
+	return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
+
+def req_sesion(request):
+	cart = Cart(request)
+	return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
+
+@csrf_exempt
+def recuperarcontraseña(request):
+	cart = Cart(request)
+	email = request.POST.get("email")
+	username = request.POST.get("username")
+	if User.objects.filter(email=email, username=username).exists():
+		user = User.objects.get(email=email, username=username)
+		datos = Cliente.objects.get(user=user)
+		datos.token_req = request.POST.get("token")
+		datos.save()
+		cart = Cart(request)
+		email = EmailMessage('Recuperar Contraseña', 'Ingresa al siguiente url para modificar tu contraseña \n http://127.0.0.1:8000/modificarcontra/' + request.POST.get("token"),to = [request.POST.get("email")])
+		email.send()
+		error = False
+	else:
+		error = True
+	return render(request, 'envioderecu.html', {"cart":cart, "errorusu":error,})
+
+@csrf_exempt
+def modificarcontra(request, token):
+	if Cliente.objects.filter(token_req=token).exists():
+		error = False
+	else:
+		error = True
+	return render(request, 'modificarcontra.html', {"error":error,"token":token,})
+
+@csrf_exempt
+def cambiarpassword(request):
+	datos = Cliente.objects.get(token_req=request.POST.get("token"))
+	user = datos.user
+	user.set_password(request.POST.get("password"))
+	user.save()
+	datos.token_req = ""
+	datos.save()
+	return render(request, 'modificadacontra.html', {})
+
 # Compras
 @csrf_exempt
 def add_to_cart(request):
@@ -147,11 +235,10 @@ def remove_from_cart(request):
 	producto = Producto.objects.get(id=id)
 	cart = Cart(request)
 	cantidad = 0
-	talla = ""
+	talla = request.POST.get("talla")
 	for item in cart:
-		if item.product == producto:
+		if item.product == producto and item.talla == talla:
 			cantidad = item.quantity
-			talla = item.talla
 	cart.remove(producto, talla)
 	data = {"suma":cart.summary(),"id":producto.id, "cantidad":cantidad}
 	return JsonResponse(data, safe=False)

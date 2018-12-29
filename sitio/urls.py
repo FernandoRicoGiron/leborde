@@ -11,6 +11,14 @@ urlpatterns = [
     path('tienda/', vi.tienda),
     path('contacto/', vi.contacto),
     path('mensajecontacto/', vi.mensajecontacto),
+    # Autentificacion
+    path('req_sesion/', vi.req_sesion),
+    path('registrar/', vi.registrar),
+    path('login/', vi.iniciarsesion),
+    path('logout/', vi.cerrarsesion),
+    path('recuperarcontraseña/', vi.recuperarcontraseña),
+    path('cambiarpassword/', vi.cambiarpassword),
+	path('modificarcontraseña/', vi.modificarcontra),
     # Ecommerce
     path('agregarCarrito/', vi.add_to_cart),
     path('eliminarCarrito/', vi.remove_from_cart),

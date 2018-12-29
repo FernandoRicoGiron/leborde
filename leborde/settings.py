@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'ecommerce',
     'sweetify',
     'cart',
-    'ckeditor'
+    'ckeditor',
+    'conekta'
 ]
 
 MIDDLEWARE = [
@@ -151,3 +152,6 @@ EMAIL_PORT = 587
 
 #This did the trick
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# Conekta private API Key
+CONEKTA_PRIVATE_KEY = 'key_RAxYKoV19Kg4TpDoamExqQ'

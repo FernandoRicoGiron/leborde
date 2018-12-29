@@ -74,11 +74,10 @@ class Cliente(models.Model):
 	def __str__(self):
 		return self.usuario.username
  
-# @receiver(post_save, sender=User)
-# def create_user_profile(sender, instance, created, **kwargs):
-# 	if created:
-# 		Dato.objects.create(user=instance)
-# 		Pedido.objects.create(usuario=instance)
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+	if created:
+		Cliente.objects.create(usuario=instance)
 
 # Contacto
 class Mensaje(models.Model):

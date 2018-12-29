@@ -1,0 +1,127 @@
+ 
+ <!-- Modal -->
+<div class="modal fade" id="iniciosesion" role="dialog" style="z-index:10000">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header" style="display: block">
+          <button style="margin-right: 2%;" type="button" class="close" data-dismiss="modal">&times;</button>
+          <h1 style="padding-left: 23%;" class="modal-title">Inicio de sesion</h1>
+        </div>
+        <div style="color:#000" class="modal-body">
+          
+            <div class="container">
+        <div class="row">
+            <div style="width: 100%">
+                <div class="panel panel-login">
+                    <div class="panel-heading">
+                        <div class="row" style="padding-left:10%">
+                            <div class="col-xs-6">
+                                <a href="#" style="padding-top: 12%; height: 30px; color:#BC0C4C" class="active" id="login-form-link">Iniciar sesión</a>
+                            </div>
+                            <!--<div class="col-xs-6" style="margin-left:10%;">
+                                <a href="#" style="padding-top: 9%; height: 30px;" class="btn essence-btn btnfil" id="register-form-link">Regístrate ahora</a>
+                            </div>-->
+                        </div>
+                        <hr>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <form id="login-form" action="/login/" method="post" role="form" style="display: block;">
+                                    <div class="form-group">
+                                        <input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Usuario" value="">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Contraseña">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <div class="">
+                                            <div class="col-sm-offset-3">
+                                                <input type="submit" name="login-submit" id="login-submit" tabindex="4" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 " value="Iniciar sesión">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="text-center">
+                                                    <a style="color:#BC0C4C" href="#" tabindex="5" class="forgot-password" id="register-form-link">Registrate Ahora</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="text-center">
+                                                    <a style="color:#BC0C4C" href="#" tabindex="5" class="forgot-password" id="recuperar-form-link">¿Has olvidado tu contraseña?</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                <form id="register-form" action="/registrar/" method="post" role="form" style="display: none;">
+                                    <div class="form-group">
+                                        <input type="text" name="nombre" id="nombre" tabindex="1" class="form-control" placeholder="Nombre" value="">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" name="apellido" id="apellido" tabindex="1" class="form-control" placeholder="Apellido" value="">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Usuario" value="">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="email" name="email" id="email" tabindex="1" class="form-control" placeholder="Correo electronico" value="">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="password" name="password" id="pass" tabindex="2" class="form-control" placeholder="Contraseña">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="password" name="confirm-password" id="confirm-pass" tabindex="2" class="form-control" placeholder="Confirmar contraseña">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <div class="">
+                                            <div class="col-sm-offset-3">
+                                                <input type="submit" name="register-submit" id="register-submit" tabindex="4" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 " value="Crear cuenta">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                <form id="recuperar-form" action="/recuperarcontraseña/" method="post" role="form" style="display: none;">
+                                    <div class="form-group">
+                                        <input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Usuario" value="">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="email" name="email" id="nombre" tabindex="1" class="form-control" placeholder="Email" value="">
+                                    </div>
+                                    <input type="hidden" name="token" value="{{csrf_token}}">
+                                    <div class="form-group">
+                                        <div class="">
+                                            <div class=" col-sm-offset-3">
+                                                <input type="submit" name="register-submit" id="register-submit" tabindex="4" class="form-control btn essence-btn" value="Recuperar Contraseña">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+      
+    </div>
+</div>
+    <!-- endmodal -->
