@@ -68,6 +68,9 @@ urlpatterns = [
     # Datos de la empresa
     path('showmodificardatos/', datosempresa.showmodificardatos),
     path('modificardato/', datosempresa.modificardato),
+    # Datos de la envio
+    path('showmodificarenvio/', costoenvio.showmodificarenvio),
+    path('modificarenvio/', costoenvio.modificarenvio),
     # Carruseles
     path('showcarruseles/', carruseles.showcarruseles),
     path('showmodificarcarruseles/', carruseles.showmodificarcarruseles),

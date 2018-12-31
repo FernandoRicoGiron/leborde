@@ -66,9 +66,9 @@ class Cliente(models.Model):
 	estado = models.CharField(max_length=100, blank=True, null=True)
 	pais = models.CharField(max_length=100, blank=True, null=True)
 	codigopostal = models.CharField(max_length=100, blank=True, null=True)
-	id_conekta = models.CharField(max_length=100, blank=True, null=True)
-	id_pago = models.CharField(max_length=100, blank=True, null=True)
-	id_envio = models.CharField(max_length=100, blank=True, null=True)
+	# id_conekta = models.CharField(max_length=100, blank=True, null=True)
+	# id_pago = models.CharField(max_length=100, blank=True, null=True)
+	# id_envio = models.CharField(max_length=100, blank=True, null=True)
 	token_req = models.CharField(max_length=200, blank=True, null=True)
 
 	def __str__(self):

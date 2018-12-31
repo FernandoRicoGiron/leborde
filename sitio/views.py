@@ -1,4 +1,5 @@
 from django.shortcuts import render, render_to_response, redirect
+from django.urls import reverse
 from django.utils import timezone
 from .models import *
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
@@ -12,6 +13,7 @@ from .utileria import render_pdf
 from django.conf import settings
 from django.core import serializers
 from django.contrib.auth.hashers import check_password
+from paypal.standard.forms import PayPalPaymentsForm
 import json
 import goslate
 import smtplib
@@ -23,6 +25,7 @@ def variables(request):
 	empresa = Empresa.objects.last()
 	request.session["logo"] = empresa.logo.url
 	request.session["nombreempresa"] = empresa.nombre
+	request.session["giro"] = empresa.giro_de_la_empresa
 	# Categorias
 	categorias = Categoria.objects.all()
 	lista = {}
@@ -58,6 +61,14 @@ def nosotros(request):
 	empresa = Empresa.objects.last()
 	return render(request, 'nosotros.html', {"cart":cart,
 										"empresa":empresa,
+										})
+
+def faqs(request):
+	cart = Cart(request)
+	variables(request)
+	faqs = FAQ.objects.all()
+	return render(request, 'faqs.html', {"cart":cart,
+										"faqs":faqs,
 										})
 
 def tienda(request):
@@ -135,23 +146,28 @@ def registrar(request):
 	password = request.POST.get("password")
 	nombre = request.POST.get("nombre")
 	apellido = request.POST.get("apellido")
-	user = User.objects.create_user(username=usuario,
+	try:
+		user = User.objects.create_user(username=usuario,
 		email=email,
 		password=password,
 		first_name=nombre,
 		last_name=apellido)
-	user = authenticate(request, username=usuario, password=password)
+		user = authenticate(request, username=usuario, password=password)
 
-	if request.method == 'GET':
-		return redirect("/")
-	else:
-		sale = Sale()
-		sale.charge(request, user)
-		if user is not None:
-			login(request, user)
-			return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
+		if request.method == 'GET':
+			return redirect("/")
 		else:
-			return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
+			# sale = Sale()
+			# sale.charge(request, user)
+			if user is not None:
+				login(request, user)
+				return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
+			else:
+				return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
+	except Exception as e:
+		sweetify.error(request, 'El nombre de usuario ya esta en uso', persistent=':(')
+		return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
+	
 	
 
 @csrf_exempt
@@ -171,11 +187,13 @@ def iniciarsesion(request):
 		login(request, user)
 		return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
 	else:
+		sweetify.error(request, 'Usuario o contraseña incorrecto', persistent=':(')
 		return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
 	return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
 
 def req_sesion(request):
 	cart = Cart(request)
+	sweetify.error(request, 'Nesecitas iniciar sesion para acceder a esta seccion', persistent=':(')
 	return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
 
 @csrf_exempt
@@ -214,7 +232,68 @@ def cambiarpassword(request):
 	datos.save()
 	return render(request, 'modificadacontra.html', {})
 
+@login_required(login_url='/')	
+def perfil(request):
+	cart = Cart(request)
+	variables(request)
+	user = request.user
+	datos = Cliente.objects.get(usuario=user)
+	return render(request, 'datos.html', {"cart":cart, "datos":datos,})
+
+@login_required(login_url='/')	
+def modificardatos(request):
+	user = request.user
+	cliente = Cliente.objects.get(usuario=user)
+	cliente.usuario.first_name=request.POST.get("nombre")
+	cliente.usuario.last_name=request.POST.get("apellido")
+	cliente.usuario.email=request.POST.get("email")
+	cliente.telefono = request.POST.get("telefono")
+	cliente.direccion=request.POST.get("direccion")
+	cliente.ciudad=request.POST.get("ciudad")
+	cliente.estado=request.POST.get("estado")
+	cliente.pais=request.POST.get("pais")
+	cliente.codigopostal=request.POST.get("codigo")
+	cliente.usuario.save()
+	cliente.save()
+	sweetify.success(request, 'Sus datos han sido modificados correctamente', persistent=':(')
+	return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
+
+@login_required(login_url='/')	
+def modificarcontraseña(request):
+	user = request.user
+	cliente = Cliente.objects.get(usuario=user)
+	if check_password(request.POST.get("viejacontraseña"), user.password):
+		if request.POST.get("nuevacontraseña") == request.POST.get("recontraseña"):
+			cliente.usuario.set_password(request.POST.get("nuevacontraseña"))
+			cliente.usuario.save()
+			user = authenticate(request, username=user, password=request.POST.get("nuevacontraseña"))
+			login(request, user)
+			sweetify.success(request, 'Su contraseña ha sido modificada correctamente', persistent=':(')
+			return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
+		else:
+			sweetify.error(request, 'Verifique que su nueva contraseña es igual en los dos campos', persistent=':(')
+			return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
+	else:
+		sweetify.error(request, 'La contraseña antigua no coincide', persistent=':(')
+		return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
+
 # Compras
+@login_required(login_url='/req_sesion/')
+def pago(request):
+	cart = Cart(request)
+	envio = Envio.objects.last()
+	variables(request)
+	cliente = Cliente.objects.get(usuario=request.user)
+	if cliente.telefono != "null" and cliente.direccion != "null" and cliente.ciudad != "null" and cliente.estado != "null" and cliente.pais != "null" and cliente.codigopostal != "null":
+		estadodatos = True
+	else:
+		estadodatos = "No cuenta con datos de envio"
+	if cart.count() > 0:
+		return render(request, 'pago.html', {"cart":cart, "envio":envio, "total":envio.costo.amount+cart.summary(), "estadodatos":estadodatos})
+	else:
+		sweetify.error(request, 'Agregue por lo menos un producto al carrito de compras', persistent=':(')
+		return redirect("/tienda/")
+
 @csrf_exempt
 def add_to_cart(request):
 	cantidad = request.POST.get("cantidad")
@@ -242,3 +321,97 @@ def remove_from_cart(request):
 	cart.remove(producto, talla)
 	data = {"suma":cart.summary(),"id":producto.id, "cantidad":cantidad}
 	return JsonResponse(data, safe=False)
+
+# PAYPAL
+def pagadopaypal(request):
+	sweetify.success(request, 'El pago se ha completado correctamente, espere su pedido de 3 a 5 dias habiles', persistent=':(')
+	return redirect("/")
+
+def errorpagadopaypal(request):
+	sweetify.success(request, 'El pago no se a podido completar', persistent=':(')
+	return redirect("/")
+
+def pagarpaypal(request):
+	envio = Envio.objects.last()
+	datos = Cliente.objects.get(usuario=request.user)
+	cart = Cart(request)
+	suma = cart.summary()+envio.costo.amount
+	productos = {}
+	cont = 1
+	for item in cart:
+		productos["item_name_"+str(cont)] = item.product.nombre + " " + item.talla
+		productos["amount_"+str(cont)] = item.unit_price
+		productos["quantity_"+str(cont)] = item.quantity			
+		cont += 1
+	productos["item_name_"+str(cont)] = "Envio"
+	productos["amount_"+str(cont)] = ("%.2f" % envio.costo)
+	productos["quantity_"+str(cont)] = 1
+
+	pedido = Num_Pedido.objects.first()
+	pedido.pedido += 1
+	pedido.save()
+	# What you want the button to do.
+	
+	if request.POST.get("enviomod") == "2":
+		envio = {"email":request.POST.get("email"),
+		"pais":request.POST.get("pais"),
+		"ciudad":request.POST.get("ciudad"),
+		"estado":request.POST.get("estado"),
+		"direccion":request.POST.get("direccion"),
+		"codigo":request.POST.get("codigo"),
+		"telefono":request.POST.get("telefono"),
+		"nombre":request.POST.get("nombrerev")}
+		paypal_dict = {
+			"business": "riicoo28@gmail.com",
+			"receiver_email":"riicoo28@gmail.com",
+			"payer_email":request.POST.get("email"),
+			"address_override":1,
+			"country":"MX",
+			"city":request.POST.get("ciudad"),
+			"state":request.POST.get("estado"),
+			"address1":request.POST.get("direccion"),
+			"zip":request.POST.get("codigo"),
+			"contact_phone":request.POST.get("telefono"),
+			"first_name":request.POST.get("nombrerev"),
+			"cmd":"_cart",
+			"upload":1,
+			"invoice": pedido.pedido,
+			"currency_code":"MXN",
+			"notify_url": request.build_absolute_uri(reverse('paypal-ipn')),
+			"return": request.build_absolute_uri(reverse('pagadopaypal')),
+			"cancel_return": request.build_absolute_uri(reverse('errorpagadopaypal')),
+		}
+	else:
+		envio = {"email":request.user.email,
+		"pais":datos.pais,
+		"ciudad":datos.ciudad,
+		"estado":datos.estado,
+		"direccion":datos.direccion,
+		"codigo":datos.codigopostal,
+		"telefono":datos.telefono,
+		"nombre":request.user.first_name+" "+request.user.last_name}
+		paypal_dict = {
+			"business": "eduardo@cacaonativa.com",
+			"receiver_email":"eduardo@cacaonativa.com",
+			"payer_email":request.user.email,
+			"address_override":1,
+			"country":"MX",
+			"city":datos.ciudad,
+			"state":datos.estado,
+			"address1":datos.direccion,
+			"zip":datos.codigopostal,
+			"contact_phone":datos.telefono,
+			"first_name":request.user.first_name+" "+request.user.last_name,
+			"cmd":"_cart",
+			"upload":1,
+			"invoice": pedido.pedido,
+			"currency_code":"MXN",
+			"notify_url": request.build_absolute_uri(reverse('paypal-ipn')),
+			"return": request.build_absolute_uri(reverse('pagadopaypal')),
+			"cancel_return": request.build_absolute_uri(reverse('errorpagadopaypal')),
+		}
+	dic = paypal_dict.update(productos)
+	# Create the instance.
+	form = PayPalPaymentsForm(initial=paypal_dict)
+	context = {"form": form, "cart":cart, "denvio":envio, "envio":Envio.objects.last(), "suma":("%.2f" % suma), "total":Envio.objects.last().costo.amount+cart.summary(),}
+	return render(request, "pagopaypal.html", context)

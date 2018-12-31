@@ -255,6 +255,9 @@ function irAtras(argument) {
 	}	
 	else if($("#formagregar").attr('action') == "agregarmarca/" | $("#formmodificar").attr('action') == "modificarmarca/"){
 		$("#mostrarMarcas").click();
+	}	
+	else if($("#formagregar").attr('action') == "agregarpregunta/" | $("#formmodificar").attr('action') == "modificarpregunta/"){
+		$("#mostrarPreguntas").click();
 	}			
 	$("#botonModificar").html("Modificar")
 	$(".botonCancelar").show();

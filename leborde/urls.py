@@ -24,5 +24,6 @@ urlpatterns = [
  #    path('jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),  # Django JET dashboard URLS
     path('admin/', admin.site.urls),
     path('dashboard/', include('adminm.urls')),
-    path('', include('sitio.urls'))
+    path('', include('sitio.urls')),
+    path('paypal/', include('paypal.standard.ipn.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

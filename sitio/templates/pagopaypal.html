@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+{% load tags %}
+		
+<section class="bg-img1 txt-center p-lr-15 p-tb-92" style="background-image: url({% static 'sitio/images/Sitio/coleccion3.jpg' %});">
+	<h2 class="ltext-105 cl0 txt-center">
+		Proceder al pago
+	</h2>
+</section>	<br>
+	<!-- Shoping Cart -->
+	
+		<div class="container">
+			<div class="row">
+
+				<div class="col-sm-6 ">
+					<div class="bor10 p-lr-40 p-t-30 p-b-40 m-l-63 m-r-40 m-lr-0-xl p-lr-15-sm">
+						<h4 class="mtext-109 cl2 p-b-30">
+							Totales
+						</h4>
+
+						<div class="flex-w flex-t bor12 p-b-13">
+							<div class="size-208">
+								<span class="stext-110 cl2">
+									Subtotal:
+								</span>
+							</div>
+
+							<div class="size-209">
+								<span class="mtext-110 cl2">
+									$ {{cart.summary}} MXN
+								</span>
+							</div>
+						</div>
+						<div class="flex-w flex-t bor12 p-b-13">
+							<div class="size-208">
+								<span class="stext-110 cl2">
+									Costo de Envio:
+								</span>
+							</div>
+
+							<div class="size-209">
+								<span class="mtext-110 cl2">
+									$ {{envio.costo}}
+								</span>
+							</div>
+						</div>
+						<div class="flex-w flex-t bor12 p-b-13">
+							<div class="size-208">
+								<span class="stext-110 cl2">
+									Total:
+								</span>
+							</div>
+
+							<div class="size-209">
+								<span class="mtext-110 cl2">
+									$ {{total}} MXN
+								</span>
+							</div>
+						</div>
+
+						
+							
+					</div>
+				</div>
+
+				<div class="col-sm-6">
+						
+
+							<div class="row">
+								<h4 class="mtext-109 cl2 p-b-30">
+									Totales
+								</h4>
+								
+								
+
+									
+
+									
+									<div id="ingdatosenvio" class="col-sm-12">
+
+										<div class="row">
+											<div class="bor8 bg0 m-b-12 col-md-4">
+												<div class="w-full-ssm">
+													<span class="stext-110 cl2">
+														Nombre:
+													</span>
+												</div>
+												<input disabled class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="nombrerev" placeholder="Nombre del que recibira el producto" value="{{denvio.nombre}}">
+											</div>
+
+											<div class="bor8 bg0 m-b-12 col-md-4">
+												<div class="w-full-ssm">
+													<span class="stext-110 cl2">
+														Email:
+													</span>
+												</div>
+												<input disabled value="{{denvio.email}}" class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="email" placeholder="Email">
+											</div>
+											
+											<div class="bor8 bg0 m-b-12 col-md-4">
+												<div class="w-full-ssm">
+													<span class="stext-110 cl2">
+														Telefono:
+													</span>
+												</div>
+												<input disabled value="{{denvio.telefono}}" class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="telefono" placeholder="Numero de telefono">
+											</div>
+											
+											<div class="bor8 bg0 m-b-12 col-md-4">
+												<div class="w-full-ssm">
+													<span class="stext-110 cl2">
+														Dirección:
+													</span>
+												</div>
+												<input disabled value="{{denvio.direccion}}" class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="direccion" placeholder="Dirección">
+											</div>
+											
+											<div class="bor8 bg0 m-b-12 col-md-4">
+												<div class="w-full-ssm">
+													<span class="stext-110 cl2">
+														Ciudad:
+													</span>
+												</div>
+												<input disabled value="{{denvio.ciudad}}" class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="ciudad" placeholder="Ciudad">
+											</div>
+											
+											<div class="bor8 bg0 m-b-12 col-md-4">
+												<div class="w-full-ssm">
+													<span class="stext-110 cl2">
+														Estado:
+													</span>
+												</div>
+												<input disabled value="{{denvio.estado}}" class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="estado" placeholder="Estado">
+											</div>
+											
+											<div class="bor8 bg0 m-b-12 col-md-4">
+												<div class="w-full-ssm">
+													<span class="stext-110 cl2">
+														Pais:
+													</span>
+												</div>
+												<input disabled value="{{denvio.pais}}" class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="pais" placeholder="Pais">
+											</div>
+
+											<div class="bor8 bg0 m-b-12 col-md-4">
+												<div class="w-full-ssm">
+													<span class="stext-110 cl2">
+														Codigo Postal:
+													</span>
+												</div>
+												<input disabled value="{{denvio.codigo}}" class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="codigo" placeholder="Codigo Postal">
+											</div>
+											{{ form.render }}
+										</div>
+										
+									</div>
+									
+										
+								
+							</div>
+						
+
+						
+
+						
+				</div>
+
+			</div>
+		</div>
+	
+		
+	
+		
+
+{% endblock %}

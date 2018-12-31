@@ -51,7 +51,7 @@
 					</div>
 
 					<div class="right-top-bar flex-w h-full">
-						<a href="#" class="flex-c-m trans-04 p-lr-25">
+						<a href="/faqs/" class="flex-c-m trans-04 p-lr-25">
 							Ayuda & FAQs
 						</a>
 
@@ -59,7 +59,7 @@
 						<a href="#" data-toggle="modal" data-target="#iniciosesion" class="flex-c-m trans-04 p-lr-25">
 							Hola {{user}}
 						</a>
-						<a href="#"  class="flex-c-m trans-04 p-lr-25">
+						<a href="/perfil/"  class="flex-c-m trans-04 p-lr-25">
 							Modificar Perfil
 						</a>
 						<a href="/logout/" class="flex-c-m trans-04 p-lr-25">
@@ -87,7 +87,7 @@
 					
 					<!-- Logo desktop -->		
 					<a href="#" class="logo">
-						<img src="{{ request.session.logo}}" alt="IMG-LOGO"> <h3 style="margin-left:6px">{{ request.session.nombreempresa }}</h3>
+						<img src="{{ request.session.logo}}" alt="IMG-LOGO"> <h3 style="margin-left:6px; color:#BC0C4C">{{ request.session.nombreempresa }}</h3>
 					</a>
 
 					<!-- Menu desktop -->
@@ -129,8 +129,9 @@
 		<div class="wrap-header-mobile">
 			<!-- Logo moblie -->		
 			<div class="logo-mobile">
-				<a href="/"><img src="{% static 'sitio/images/icons/logo-01.png' %}" alt="IMG-LOGO"></a>
+				<a href="/"><img src="{{request.session.logo}}" alt="IMG-LOGO"></a>
 			</div>
+
 
 			<!-- Icon header -->
 			<div class="wrap-icon-header flex-w flex-r-m m-r-15">
@@ -154,64 +155,51 @@
 		<!-- Menu Mobile -->
 		<div class="menu-mobile">
 			<ul class="topbar-mobile">
-				<li>
-					<div class="left-top-bar">
-						Free shipping for standard order over $100
-					</div>
-				</li>
+				
 
 				<li>
 					<div class="right-top-bar flex-w h-full">
-						<a href="#" class="flex-c-m p-lr-10 trans-04">
+						<!--<a href="#" class="flex-c-m p-lr-10 trans-04">
 							Help & FAQs
-						</a>
+						</a>-->
 
-						<a href="#" class="flex-c-m p-lr-10 trans-04">
-							My Account
+						{% if user.is_authenticated %}
+						<a href="#" data-toggle="modal" data-target="#iniciosesion" class="flex-c-m trans-04 p-lr-25">
+							Hola {{user}}
 						</a>
+						<a href="/perfil/"  class="flex-c-m trans-04 p-lr-25">
+							Modificar Perfil
+						</a>
+						<a href="/logout/" class="flex-c-m trans-04 p-lr-25">
+							Cerrar Sesión
+						</a>
+						{% else %}
+						<a href="#" data-toggle="modal" data-target="#iniciosesion" class="flex-c-m trans-04 p-lr-25">
+							Iniciar Sesion / Registrarse
+						</a>
+						{% endif %}
 
-						<a href="#" class="flex-c-m p-lr-10 trans-04">
-							EN
-						</a>
-
-						<a href="#" class="flex-c-m p-lr-10 trans-04">
-							USD
-						</a>
+						
 					</div>
 				</li>
 			</ul>
 
 			<ul class="main-menu-m">
 				<li>
-					<a href="/">Home</a>
-					<ul class="sub-menu-m">
-						<li><a href="/">Homepage 1</a></li>
-						<li><a href="home-02.html">Homepage 2</a></li>
-						<li><a href="home-03.html">Homepage 3</a></li>
-					</ul>
-					<span class="arrow-main-menu-m">
-						<i class="fa fa-angle-right" aria-hidden="true"></i>
-					</span>
+					<a href="/">Inicio</a>
 				</li>
 
 				<li>
-					<a href="/nosotros/">Shop</a>
+					<a href="/nosotros/">Nosotros</a>
+				</li>
+
+
+				<li>
+					<a href="/tienda/">Tienda</a>
 				</li>
 
 				<li>
-					<a href="shoping-cart.html" class="label1 rs1" data-label1="hot">Features</a>
-				</li>
-
-				<li>
-					<a href="blog.html">Blog</a>
-				</li>
-
-				<li>
-					<a href="/tienda/">About</a>
-				</li>
-
-				<li>
-					<a href="/contacto/">Contact</a>
+					<a href="/contacto/">Contacto</a>
 				</li>
 			</ul>
 		</div>
@@ -251,7 +239,8 @@
 			<div class="header-cart-content flex-w js-pscroll">
 				<ul class="header-cart-wrapitem w-full carrito">
 					{% for item in cart %}
-					<li class="header-cart-item flex-w flex-t m-b-12">
+					<li class="header-cart-item flex-w flex-t m-b-12 {{item.product.id}}{{item.talla|replace}}">
+						<input type="hidden" value="{{ item.talla }}" class="tallacart" name="">
 						<div class="header-cart-item-img" id="{{item.product.id}}{{item.talla|replace}}">
 							<img class="imagencarro" src="{{ item.product.imagenes.first.imagen.url }}" alt="IMG">
 						</div>
@@ -279,7 +268,7 @@
 							View Cart
 						</a>-->
 
-						<a href="shoping-cart.html" class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-b-10">
+						<a href="/pagar/" class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-b-10">
 							Pagar
 						</a>
 					</div>
@@ -299,140 +288,95 @@
 	<footer class="bg3 p-t-75 p-b-32">
 		<div class="container">
 			<div class="row">
-				<div class="col-sm-6 col-lg-3 p-b-50">
+				<div class="col-sm-4 p-b-50">
 					<h4 class="stext-301 cl0 p-b-30">
-						Categories
+						Categorias
+					</h4>
+
+					<ul>
+						{% for x, categoria in request.session.categorias.items %}
+						<li class="p-b-10">
+							<a style="color:#FFF" href="/tienda/categoria/{{x}}/" class="stext-107 cl7 hov-cl1 trans-04">
+								{{categoria}}
+							</a>
+						</li>
+						{% endfor %}
+
+						
+					</ul>
+				</div>
+
+				<div  class="col-sm-3 p-b-50">
+					<h4 class="stext-301 cl0 p-b-30">
+						Secciones
 					</h4>
 
 					<ul>
 						<li class="p-b-10">
-							<a href="#" class="stext-107 cl7 hov-cl1 trans-04">
-								Women
+							<a style="color:#FFF" href="/" class="stext-107 cl7 hov-cl1 trans-04">
+								Inicio
 							</a>
 						</li>
 
 						<li class="p-b-10">
-							<a href="#" class="stext-107 cl7 hov-cl1 trans-04">
-								Men
+							<a style="color:#FFF" href="/nosotros/" class="stext-107 cl7 hov-cl1 trans-04">
+								Nosotros 
 							</a>
 						</li>
 
 						<li class="p-b-10">
-							<a href="#" class="stext-107 cl7 hov-cl1 trans-04">
-								Shoes
+							<a style="color:#FFF" href="/tienda/" class="stext-107 cl7 hov-cl1 trans-04">
+								Tienda
 							</a>
 						</li>
 
 						<li class="p-b-10">
-							<a href="#" class="stext-107 cl7 hov-cl1 trans-04">
-								Watches
+							<a style="color:#FFF" href="/contacto/" class="stext-107 cl7 hov-cl1 trans-04">
+								Contacto
+							</a>
+						</li>
+						<li class="p-b-10">
+							<a style="color:#FFF" href="/faqs/" class="stext-107 cl7 hov-cl1 trans-04">
+								faqs
 							</a>
 						</li>
 					</ul>
 				</div>
 
-				<div class="col-sm-6 col-lg-3 p-b-50">
+				<div style="color:#FFF" class="col-sm-5 p-b-50">
 					<h4 class="stext-301 cl0 p-b-30">
-						Help
+						Giro de la empresa
 					</h4>
 
-					<ul>
-						<li class="p-b-10">
-							<a href="#" class="stext-107 cl7 hov-cl1 trans-04">
-								Track Order
-							</a>
-						</li>
-
-						<li class="p-b-10">
-							<a href="#" class="stext-107 cl7 hov-cl1 trans-04">
-								Returns 
-							</a>
-						</li>
-
-						<li class="p-b-10">
-							<a href="#" class="stext-107 cl7 hov-cl1 trans-04">
-								Shipping
-							</a>
-						</li>
-
-						<li class="p-b-10">
-							<a href="#" class="stext-107 cl7 hov-cl1 trans-04">
-								FAQs
-							</a>
-						</li>
-					</ul>
-				</div>
-
-				<div class="col-sm-6 col-lg-3 p-b-50">
-					<h4 class="stext-301 cl0 p-b-30">
-						GET IN TOUCH
-					</h4>
-
-					<p class="stext-107 cl7 size-201">
-						Any questions? Let us know in store at 8th floor, 379 Hudson St, New York, NY 10018 or call us on (+1) 96 716 6879
+					<p  class="stext-107 cl7 size-201">
+						{{request.session.giro|safe}}
 					</p>
 
 					<div class="p-t-27">
-						<a href="#" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
+						<a href="https://www.facebook.com/LeBordeOficial/" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
 							<i class="fa fa-facebook"></i>
 						</a>
-
+						<!--
 						<a href="#" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
 							<i class="fa fa-instagram"></i>
 						</a>
 
 						<a href="#" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
 							<i class="fa fa-pinterest-p"></i>
-						</a>
+						</a>-->
 					</div>
 				</div>
-
-				<div class="col-sm-6 col-lg-3 p-b-50">
-					<h4 class="stext-301 cl0 p-b-30">
-						Newsletter
-					</h4>
-
-					<form>
-						<div class="wrap-input1 w-full p-b-4">
-							<input class="input1 bg-none plh1 stext-107 cl7" type="text" name="email" placeholder="email@example.com">
-							<div class="focus-input1 trans-04"></div>
-						</div>
-
-						<div class="p-t-18">
-							<button class="flex-c-m stext-101 cl0 size-103 bg1 bor1 hov-btn2 p-lr-15 trans-04">
-								Subscribe
-							</button>
-						</div>
-					</form>
-				</div>
-			</div>
 
 			<div class="p-t-40">
 				<div class="flex-c-m flex-w p-b-18">
 					<a href="#" class="m-all-1">
 						<img src="{% static 'sitio/images/icons/icon-pay-01.png' %}" alt="ICON-PAY">
 					</a>
-
-					<a href="#" class="m-all-1">
-						<img src="{% static 'sitio/images/icons/icon-pay-02.png' %}" alt="ICON-PAY">
-					</a>
-
-					<a href="#" class="m-all-1">
-						<img src="{% static 'sitio/images/icons/icon-pay-03.png' %}" alt="ICON-PAY">
-					</a>
-
-					<a href="#" class="m-all-1">
-						<img src="{% static 'sitio/images/icons/icon-pay-04.png' %}" alt="ICON-PAY">
-					</a>
-
-					<a href="#" class="m-all-1">
-						<img src="{% static 'sitio/images/icons/icon-pay-05.png' %}" alt="ICON-PAY">
-					</a>
 				</div>
 
 				<p class="stext-107 cl6 txt-center">
 					<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+Copyright &copy;<script>document.write(new Date().getFullYear());</script> Todos los derechos reservados | Este template fue hecho con <i class="fa fa-heart-o" aria-hidden="true"></i> Por <a href="https://colorlib.com" target="_blank">Colorlib</a>
 <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
 
 				</p>
@@ -555,9 +499,10 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	<script>
 	$(".carrito").on('click','div.header-cart-item-img', function(){
         var id = $(this).attr("id");
-        var talla = $(this).parent().find('span.tallacart').html();
+        var talla = $(this).parent().find('input.tallacart').val();
+        var elem = $("."+id);
         id = id.replace(talla.replace(" ",""),"");
-        var elem = $(this).parent();
+        
         $.ajax({
                      url : '/eliminarCarrito/', // the endpoint,commonly same url
                      type : "POST", // http method
@@ -625,5 +570,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
         e.preventDefault();
     });
 	</script>
+	{% load sweetify %}
+	{% sweetify %}
 </body>
 </html>
