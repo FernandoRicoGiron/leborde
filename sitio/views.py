@@ -14,11 +14,26 @@ from django.conf import settings
 from django.core import serializers
 from django.contrib.auth.hashers import check_password
 from paypal.standard.forms import PayPalPaymentsForm
+from paypal.standard.models import ST_PP_COMPLETED
+from paypal.standard.ipn.signals import valid_ipn_received
 import json
 import goslate
 import smtplib
 import sweetify
 import datetime
+
+@csrf_exempt
+def ipn(sender, *args, **kwargs):
+	datos = sender
+	if datos.payment_status == "Completed":
+		print(datos.num_cart_items)
+		print(datos.mc_gross)
+		print(datos.item_name_1)
+		# for x in datos:
+		# 	print(datos["item_name_"+str(x)])
+	return HttpResponse("Hola")
+
+valid_ipn_received.connect(ipn)
 
 def variables(request):
 	# Empresa
@@ -391,8 +406,8 @@ def pagarpaypal(request):
 		"telefono":datos.telefono,
 		"nombre":request.user.first_name+" "+request.user.last_name}
 		paypal_dict = {
-			"business": "eduardo@cacaonativa.com",
-			"receiver_email":"eduardo@cacaonativa.com",
+			"business": "riicoo28@gmail.com",
+			"receiver_email":"riicoo28@gmail.com",
 			"payer_email":request.user.email,
 			"address_override":1,
 			"country":"MX",

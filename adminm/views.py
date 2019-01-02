@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from ecommerce.models import *
 from administracion.models import *
 from sitio.models import *
-from django.http import JsonResponse, HttpResponse, HttpRequest
+from django.http import JsonResponse, HttpResponse, HttpRequest, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from datetime import datetime, timedelta, date
 from django.contrib.auth.decorators import login_required
@@ -18,7 +18,24 @@ import operator
 import json
 import collections
 
+def admin_session(request):
+	empresa = Empresa.objects.last()
+	return render(request, "login.html", {"empresa":empresa})
+
+def iniciardashboard(request):
+	usuario = request.POST.get("usuario")
+	password = request.POST.get("contraseña")
+	user = authenticate(request, username=usuario, password=password)
+	if user is not None and user.is_staff:
+		login(request, user)
+		return redirect("/dashboard/")
+	else:
+		sweetify.error(request, 'Usuario o contraseña incorrecto o puede que este usuario no tenga los permisos necesarios para acceder al dashboard', persistent=':(')
+		return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
+	
+
 # Create your views here.
+@login_required(login_url='/dashboard/admin_session/')
 def index(request):
 	año = datetime.now(tz=timezone.utc)
 	ventas = Venta.objects.filter(fecha__month=año.month)

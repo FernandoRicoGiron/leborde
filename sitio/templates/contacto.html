@@ -54,6 +54,7 @@
 							<span class="lnr lnr-map-marker"></span>
 						</span>
 
+						{% if empresa.direccion %}
 						<div class="size-212 p-t-2">
 							<span class="mtext-110 cl2">
 								Dirección
@@ -63,6 +64,7 @@
 								{{empresa.direccion}}
 							</p>
 						</div>
+						{% endif %}
 					</div>
 
 					<div class="flex-w w-full p-b-42">

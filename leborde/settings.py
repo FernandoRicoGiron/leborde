@@ -25,7 +25,7 @@ SECRET_KEY = 'uhajcswr-7!mre&h#$t8jpytbu@9g8!1kt)q7el!^0@zu6(4ue'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -156,3 +156,4 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 # Conekta private API Key
 CONEKTA_PRIVATE_KEY = 'key_RAxYKoV19Kg4TpDoamExqQ'
+PAYPAL_TEST = True

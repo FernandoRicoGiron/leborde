@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <link rel="stylesheet" type="text/css" href="{% static 'login/css/bootstrap.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'login/css/mdb.css' %}">
+</head>
+<body>
+  <!-- Material form login -->
+  <div style="margin-top:6%;" class="container">
+  <div class="row justify-content-center">
+<div class="card col-md-5 align-self-center">
+
+  <h5 style="background-color:#BC0C4C" class="card-header white-text text-center py-4">
+    <img width="40" src="{{ empresa.logo.url }}">
+    <strong>{{empresa.nombre}}</strong>
+  </h5>
+
+  <!--Card content-->
+  
+  <div class="card-body px-lg-5 pt-0  ">
+
+    <!-- Form -->
+    <form action="/dashboard/iniciardashboard/" method="POST" class="text-center" style="color: #757575;">
+      {% csrf_token %}
+
+      <!-- Email -->
+      <div class="md-form">
+        <input type="text" id="materialLoginFormEmail" class="form-control" name="usuario" placeholder="Usuario">
+      </div>
+
+      <!-- Password -->
+      <div class="md-form">
+        <input type="password" id="materialLoginFormPassword" class="form-control" name="contraseña" placeholder="Contraseña">
+      </div>
+
+
+      <!-- Sign in button -->
+      <button class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect z-depth-0" type="submit">Acceder</button>
+
+     
+    </form>
+    <!-- Form -->
+
+    </div>
+  </div>
+
+</div>
+<!-- Material form login -->
+</div>
+<script src="{% static 'sitio/vendor/sweetalert/sweetalert.min.js' %}"></script>
+{% load sweetify %}
+{% sweetify %}
+</body>
+</html>

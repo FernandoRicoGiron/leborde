@@ -30,6 +30,7 @@ urlpatterns = [
     # PAYPAL
     path('pagadopaypal/', vi.pagadopaypal, name="pagadopaypal"),
     path('errorpagadopaypal/', vi.errorpagadopaypal, name="errorpagadopaypal"),
-    path("pagar/paypal/", vi.pagarpaypal, name="paypalpag")
+    path("pagar/paypal/", vi.pagarpaypal, name="paypalpag"),
+    path("ipn/", vi.ipn, name="webhook")
 
 ]

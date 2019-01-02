@@ -8,6 +8,8 @@ from .metodos.perfil import *
 
 urlpatterns = [
     path('', vi.index),
+    path('admin_session/', vi.admin_session),
+    path('iniciardashboard/', vi.iniciardashboard),
     # Productos
     path('showproductos/', productos.showproductos),
     path('showmodificarproductos/', productos.showmodificarproductos),
