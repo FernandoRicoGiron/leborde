@@ -211,6 +211,7 @@ function seccionInputs2(campos, json) {
                       '<thead class=" text-primary">'+                        
                         '<th>Imagen</th>'+                      
                         '<th>Nombre</th>'+
+                        '<th>Talla</th>'+
                         '<th>Cantidad</th>'+
                         '<th>Precio</th>'+
                         '<th>Total</th>'+
@@ -251,6 +252,7 @@ function seccionInputs2(campos, json) {
 					datos=val;
 					tablepedidos.row.add( ['<center><image class="center-items mdl-grid" style="width:80px;" src="'+datos.imagen+'"></center>',
 						datos.nombre,
+						datos.talla,
 						datos.cantidad,
 						"$ "+datos.precio,
 						"$ "+datos.total,

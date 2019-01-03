@@ -53,6 +53,7 @@ class Producto_Pedido(models.Model):
 	producto = models.ForeignKey("ecommerce.Producto", on_delete=models.CASCADE)
 	cantidad = models.IntegerField(default=0)
 	pedido = models.ForeignKey(Pedido, on_delete=models.CASCADE)
+	talla = models.CharField(max_length=100)
 
 	def __str__(self):
 		return self.producto.nombre

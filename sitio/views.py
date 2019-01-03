@@ -15,6 +15,7 @@ from django.core import serializers
 from django.contrib.auth.hashers import check_password
 from paypal.standard.forms import PayPalPaymentsForm
 from paypal.standard.models import ST_PP_COMPLETED
+from paypal.standard.ipn.models import PayPalIPN
 from paypal.standard.ipn.signals import valid_ipn_received
 import json
 import goslate
@@ -22,16 +23,57 @@ import smtplib
 import sweetify
 import datetime
 
+# @csrf_exempt
+# def prueba(request):
+# 	ipn = PayPalIPN.objects.last()
+	
+# 	return JsonResponse(data, safe=False)
+
 @csrf_exempt
 def ipn(sender, *args, **kwargs):
 	datos = sender
 	if datos.payment_status == "Completed":
-		print(datos.num_cart_items)
-		print(datos.mc_gross)
-		print(datos.item_name_1)
+		num_pedido = Num_Pedido.objects.first()
+		data = '{"'+datos.query.replace("&",'","').replace("=",'":"')+'"}'
+		data  = json.loads(data)
+		print(data["payer_email"].replace("%40","@"))
+		usuario = User.objects.get(email=data["payer_email"].replace("%40","@"))
+		pedido = Pedido.objects.create(usuario = usuario,
+			total = datos.mc_gross-datos.mc_fee,
+			fecha = datetime.datetime.now(),
+			nombre = "Pedido #" + str(num_pedido.pedido),
+			estado_pedido = "2",
+			telefono = "",
+			pais = data["address_country"],
+			estado = data["address_state"],
+			ciudad = data["address_city"],
+			direccion = data["address_street"],
+			codigopostal = data["address_zip"],
+			email = data["payer_email"],)
+		for x in range(int(datos.num_cart_items)-1):
+			string = data["item_name"+str(x+1)]
+			print('{"'+string.replace("id%3A",'id":"').replace("%2CN%3A",'","N":"').replace("%2CT%3A",'","T":"')+'"}')
+			js = json.loads('{"'+string.replace("id%3A",'id":"').replace("%2CN%3A",'","N":"').replace("%2CT%3A",'","T":"')+'"}')
+			id = int(js["id"])
+			talla = js["T"]
+			nombre = js["N"]
+			cantidad = int(data["quantity"+str(x+1)])
+			producto = Producto.objects.get(id=id)
+			Producto_Pedido.objects.create(producto=producto,
+				cantidad=cantidad,
+				pedido=pedido,
+				talla=talla,)
+		Venta.objects.create(usuario=usuario,
+			fecha=datetime.datetime.now(),
+			monto=datos.mc_gross-datos.mc_fee,
+			pedido=pedido)
+
+			
+
+		# print(json.loads("{"+sender.query.replace("&",",")+"}"))
 		# for x in datos:
 		# 	print(datos["item_name_"+str(x)])
-	return HttpResponse("Hola")
+	return HttpResponse(data)
 
 valid_ipn_received.connect(ipn)
 
@@ -354,7 +396,7 @@ def pagarpaypal(request):
 	productos = {}
 	cont = 1
 	for item in cart:
-		productos["item_name_"+str(cont)] = item.product.nombre + " " + item.talla
+		productos["item_name_"+str(cont)] = "id:"+ str(item.product.id) + ",N:"+ item.product.nombre + ",T:" + item.talla
 		productos["amount_"+str(cont)] = item.unit_price
 		productos["quantity_"+str(cont)] = item.quantity			
 		cont += 1

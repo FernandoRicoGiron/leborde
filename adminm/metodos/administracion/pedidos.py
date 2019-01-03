@@ -37,6 +37,7 @@ def showmodificarpedidos(request):
 		listaproductos[producto.id]={"id":producto.id,
 			"imagen":producto.producto.imagenes.first().imagen.url,
 			"nombre":producto.producto.nombre,
+			"talla":producto.talla,
 			"cantidad":producto.cantidad,
 			"precio":producto.producto.precio.amount,
 			"total":producto.producto.precio.amount*producto.cantidad}

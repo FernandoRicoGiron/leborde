@@ -3,6 +3,7 @@ from django.conf.urls import include
 from . import views as vi
 
 urlpatterns = [
+    # path('prueba/', vi.prueba),
     path('', vi.index),
     path('nosotros/', vi.nosotros),
     re_path('tienda/categoria/(?P<id>\d+)/', vi.categoria),
