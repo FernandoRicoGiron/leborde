@@ -21,6 +21,7 @@ urlpatterns = [
     path('login/', vi.iniciarsesion),
     path('logout/', vi.cerrarsesion),
     path('recuperarcontraseña/', vi.recuperarcontraseña),
+    re_path('modificarcontra/(?P<token>[0-9A-Za-z_\-]+)/', vi.modificarcontra),
     path('cambiarpassword/', vi.cambiarpassword),
 	path('modificarcontraseña/', vi.modificarcontra),
     path('perfil/', vi.perfil),

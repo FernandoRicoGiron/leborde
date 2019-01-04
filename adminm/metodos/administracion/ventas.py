@@ -77,7 +77,7 @@ def showventas(request):
 			listaventas["domingo"] = listaventas["domingo"] + venta.monto.amount
 	
 		listventas[venta.id] = {"id":venta.id,
-			"nombre":venta.usuario.first_name + " " + venta.usuario.last_name,
+			"nombre":venta.usuario,
 			"fecha":venta.fecha,
 			"total":venta.monto.amount}
 		totalventas += venta.monto.amount
@@ -116,7 +116,7 @@ def showventasanterior(request):
 			listaventas["domingo"] = listaventas["domingo"] + venta.monto.amount
 
 		listventas[venta.id] = {"id":venta.id,
-			"nombre":venta.usuario.first_name + " " + venta.usuario.last_name,
+			"nombre":venta.usuario,
 			"fecha":venta.fecha,
 			"total":venta.monto.amount}
 		totalventas += venta.monto.amount
@@ -154,7 +154,7 @@ def showventassiguiente(request):
 			listaventas["domingo"] = listaventas["domingo"] + venta.monto.amount
 
 		listventas[venta.id] = {"id":venta.id,
-			"nombre":venta.usuario.first_name + " " + venta.usuario.last_name,
+			"nombre":venta.usuario,
 			"fecha":venta.fecha,
 			"total":venta.monto.amount}
 		totalventas += venta.monto.amount
@@ -209,7 +209,7 @@ def showventasmensual(request):
 			listaventas["diciembre"] = listaventas["diciembre"] + venta.monto.amount
 
 		listventas[venta.id] = {"id":venta.id,
-			"nombre":venta.usuario.first_name + " " + venta.usuario.last_name,
+			"nombre":venta.usuario,
 			"fecha":venta.fecha,
 			"total":venta.monto.amount}
 		totalventas += venta.monto.amount
@@ -262,7 +262,7 @@ def showventasanteriormes(request):
 			listaventas["diciembre"] = listaventas["diciembre"] + venta.monto.amount
 
 		listventas[venta.id] = {"id":venta.id,
-			"nombre":venta.usuario.first_name + " " + venta.usuario.last_name,
+			"nombre":venta.usuario,
 			"fecha":venta.fecha,
 			"total":venta.monto.amount}
 		totalventas += venta.monto.amount
@@ -315,7 +315,7 @@ def showventassiguientemes(request):
 			listaventas["diciembre"] = listaventas["diciembre"] + venta.monto.amount
 
 		listventas[venta.id] = {"id":venta.id,
-			"nombre":venta.usuario.first_name + " " + venta.usuario.last_name,
+			"nombre":venta.usuario,
 			"fecha":venta.fecha,
 			"total":venta.monto.amount}
 		totalventas += venta.monto.amount

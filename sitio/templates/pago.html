@@ -9,7 +9,7 @@
 	</h2>
 </section>	
 	<!-- Shoping Cart -->
-	<form action="/pagar/paypal/" method="POST" class="bg0 p-t-75 p-b-85">
+	<form id="formpago" action="/pagar/paypal/" method="POST" class="bg0 p-t-75 p-b-85">
 		{% csrf_token %}
 		<div class="container">
 			<div class="row">
@@ -109,13 +109,14 @@
 									<div id="ingdatosenvio" class="col-sm-12" style="display:none">
 									{% endif %}
 										<div class="row">
+											
 											<div class="bor8 bg0 m-b-12 col-md-4">
 												<div class="w-full-ssm">
 													<span class="stext-110 cl2">
 														Nombre de quien recibira el pedido:
 													</span>
 												</div>
-												<input class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="nombrerev" placeholder="Nombre del que recibira el producto">
+												<input id="nombre"  class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="nombrerev" placeholder="Nombre del que recibira el producto">
 											</div>
 
 											<div class="bor8 bg0 m-b-12 col-md-4">
@@ -124,7 +125,7 @@
 														Email:
 													</span>
 												</div>
-												<input class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="email" placeholder="Email">
+												<input id="email"  class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="email" placeholder="Email">
 											</div>
 											
 											<div class="bor8 bg0 m-b-12 col-md-4">
@@ -133,43 +134,7 @@
 														Telefono:
 													</span>
 												</div>
-												<input class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="telefono" placeholder="Numero de telefono">
-											</div>
-											
-											<div class="bor8 bg0 m-b-12 col-md-4">
-												<div class="w-full-ssm">
-													<span class="stext-110 cl2">
-														Dirección:
-													</span>
-												</div>
-												<input class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="direccion" placeholder="Dirección">
-											</div>
-											
-											<div class="bor8 bg0 m-b-12 col-md-4">
-												<div class="w-full-ssm">
-													<span class="stext-110 cl2">
-														Ciudad:
-													</span>
-												</div>
-												<input class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="ciudad" placeholder="Ciudad">
-											</div>
-											
-											<div class="bor8 bg0 m-b-12 col-md-4">
-												<div class="w-full-ssm">
-													<span class="stext-110 cl2">
-														Estado:
-													</span>
-												</div>
-												<input class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="estado" placeholder="Estado">
-											</div>
-											
-											<div class="bor8 bg0 m-b-12 col-md-4">
-												<div class="w-full-ssm">
-													<span class="stext-110 cl2">
-														Pais:
-													</span>
-												</div>
-												<input class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="pais" placeholder="Pais">
+												<input id="telefono"  class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="telefono" placeholder="Numero de telefono">
 											</div>
 
 											<div class="bor8 bg0 m-b-12 col-md-4">
@@ -178,8 +143,75 @@
 														Codigo Postal:
 													</span>
 												</div>
-												<input class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="codigo" placeholder="Codigo Postal">
+												<input id="codigo_postal"  class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="codigo" placeholder="Codigo Postal">
 											</div>
+
+											<div class="bor8 bg0 m-b-12 col-md-4">
+												<div class="w-full-ssm">
+													<span class="stext-110 cl2">
+														Colonia:
+													</span>
+												</div>
+												<select  id="colonia" class="stext-111 cl8 plh3 size-111 p-lr-15" name="colonia">
+													<option disabled selected value='Seleccione una opción'>Seleccione una opcion</option>
+												</select>
+											</div>
+
+											<div class="bor8 bg0 m-b-12 col-md-4">
+												<div class="w-full-ssm">
+													<span class="stext-110 cl2">
+														Calle:
+													</span>
+												</div>
+												<input id="direccion"  class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="direccion" placeholder="Calle">
+											</div>
+											<div class="bor8 bg0 m-b-12 col-md-4">
+												<div class="w-full-ssm">
+													<span class="stext-110 cl2">
+														No. Exterior:
+													</span>
+												</div>
+												<input id="exterior"  class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="exterior" placeholder="Calle">
+											</div>
+											<div class="bor8 bg0 m-b-12 col-md-4">
+												<div class="w-full-ssm">
+													<span class="stext-110 cl2">
+														No. Interior (Opcional):
+													</span>
+												</div>
+												<input id="interior"  class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="interior" placeholder="Calle">
+											</div>
+											<div class="bor8 bg0 m-b-12 col-md-4">
+												<div class="w-full-ssm">
+													<span class="stext-110 cl2">
+														Pais:
+													</span>
+												</div>
+												<input  readonly="" id="pais" class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="pais" placeholder="Pais" value="México">
+											</div>
+
+											<div class="bor8 bg0 m-b-12 col-md-4">
+												<div class="w-full-ssm">
+													<span class="stext-110 cl2">
+														Estado:
+													</span>
+												</div>
+												<input readonly="" id="estado" class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="estado" placeholder="Estado">
+											</div>
+
+											<div class="bor8 bg0 m-b-12 col-md-4">
+												<div class="w-full-ssm">
+													<span class="stext-110 cl2">
+														Ciudad:
+													</span>
+												</div>
+												<input readonly="" id="ciudad" class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="ciudad" placeholder="Ciudad">
+											</div>
+											
+											
+											
+
+											
 										</div>
 										
 									</div>
@@ -198,7 +230,7 @@
 							</div>
 						</div>
 
-						<button class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
+						<button id="botonsubmit" class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
 							Proceder al pago
 						</button>
 					</div>
@@ -218,10 +250,47 @@
 $("#tipoenvio").on('change', function(event) {
 	if ($(this).val() == 2) {
 		$("#ingdatosenvio").show();
+		$("#nombre").prop('required',true);
+		$("#email").prop('required',true);
+		$("#telefono").prop('required',true);
+		$("#codigo_postal").prop('required',true);
+		$("#direccion").prop('required',true);
+		$("#exterior").prop('required',true);
+		$("#pais").prop('required',true);
+		$("#estado").prop('required',true);
+		$("#colonia").prop('required',true);
 	}
 	else{
 		$("#ingdatosenvio").hide();
+		$("#nombre").removeAttr('required');
+		$("#email").removeAttr('required');
+		$("#telefono").removeAttr('required');
+		$("#codigo_postal").removeAttr('required');
+		$("#direccion").removeAttr('required');
+		$("#exterior").removeAttr('required');
+		$("#pais").removeAttr('required');
+		$("#estado").removeAttr('required');
+		$("#colonia").removeAttr('required');
 	}
+});
+
+$("#codigo_postal").keyup(function(event) {
+	codigo = $(this).val();
+	$.ajax({
+		             url : 'https://api-codigos-postales.herokuapp.com/v2/codigo_postal/'+codigo, // the endpoint,commonly same url
+		             type : "GET", // http method
+		             data : {}, // data sent with the post request
+		     success : function(json) {
+		     	console.log(json)
+		     	$("#ciudad").val(json.municipio);
+		     	$("#estado").val(json.estado);
+		     	valores = "<option disabled selected value='Seleccione una opción'>Seleccione una opcion</option>"
+		     	$.each(json.colonias, function(index, val) {
+		     		valores += "<option value='"+val+"'>"+val+"</option>";
+		     	});
+		     	$("#colonia").html(valores);
+		     }
+		 });
 });
 </script>
 

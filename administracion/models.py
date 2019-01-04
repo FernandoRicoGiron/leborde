@@ -32,7 +32,7 @@ ESTADO_MENSAJE = (
 
 # Pedido
 class Pedido(models.Model):
-	usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+	usuario = models.CharField(max_length=200, blank=True, null=True)
 	total = MoneyField(max_digits=14, decimal_places=2, default_currency='MXN')
 	fecha = models.DateTimeField(blank=True, null=True)
 	nombre = models.CharField(max_length=100, blank=True, null=True)
@@ -46,7 +46,7 @@ class Pedido(models.Model):
 	email = models.CharField(max_length=100, blank=True, null=True)
 
 	def __str__(self):
-		return self.usuario.username
+		return self.usuario
 
 # Productos pedido
 class Producto_Pedido(models.Model):
@@ -93,10 +93,10 @@ class Mensaje(models.Model):
 
 # Ventas
 class Venta(models.Model):
-	usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+	usuario = models.CharField(max_length=200, blank=True, null=True)
 	fecha = models.DateTimeField()
 	monto = MoneyField(max_digits=14, decimal_places=2, default_currency='MXN')
 	pedido = models.ForeignKey(Pedido, on_delete=models.CASCADE)
 
 	def __str__(self):
-		return self.usuario.username
+		return self.usuario

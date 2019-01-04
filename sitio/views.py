@@ -36,20 +36,20 @@ def ipn(sender, *args, **kwargs):
 		num_pedido = Num_Pedido.objects.first()
 		data = '{"'+datos.query.replace("&",'","').replace("=",'":"')+'"}'
 		data  = json.loads(data)
-		print(data["payer_email"].replace("%40","@"))
-		usuario = User.objects.get(email=data["payer_email"].replace("%40","@"))
-		pedido = Pedido.objects.create(usuario = usuario,
+		email = data["payer_email"].replace("%40","@")
+		# usuario = User.objects.get(email=data["payer_email"].replace("%40","@"))
+		pedido = Pedido.objects.create(usuario = data["address_name"].replace("+"," "),
 			total = datos.mc_gross-datos.mc_fee,
 			fecha = datetime.datetime.now(),
-			nombre = "Pedido #" + str(num_pedido.pedido),
+			nombre = "Pedido #" + str(num_pedido.pedido-1),
 			estado_pedido = "2",
 			telefono = "",
-			pais = data["address_country"],
-			estado = data["address_state"],
-			ciudad = data["address_city"],
-			direccion = data["address_street"],
-			codigopostal = data["address_zip"],
-			email = data["payer_email"],)
+			pais = data["address_country"].replace("+"," "),
+			estado = data["address_state"].replace("+"," "),
+			ciudad = data["address_city"].replace("+"," "),
+			direccion = data["address_street"].replace("+"," "),
+			codigopostal = data["address_zip"].replace("+"," "),
+			email = email,)
 		for x in range(int(datos.num_cart_items)-1):
 			string = data["item_name"+str(x+1)]
 			print('{"'+string.replace("id%3A",'id":"').replace("%2CN%3A",'","N":"').replace("%2CT%3A",'","T":"')+'"}')
@@ -63,7 +63,7 @@ def ipn(sender, *args, **kwargs):
 				cantidad=cantidad,
 				pedido=pedido,
 				talla=talla,)
-		Venta.objects.create(usuario=usuario,
+		Venta.objects.create(usuario=data["address_name"].replace("+"," "),
 			fecha=datetime.datetime.now(),
 			monto=datos.mc_gross-datos.mc_fee,
 			pedido=pedido)
@@ -188,10 +188,16 @@ def mensajecontacto(request):
 	send_mail(
 			'Contacto Leborde ' + request.POST.get("asunto"),
 			'La persona '+ request.POST.get("nombre") + ' con el correo '+request.POST.get("correo") + " desea saber la siguiente informacion:\n" + request.POST.get("asunto") + '\n' +request.POST.get("mensaje"),
-			request.POST.get("email"),
+			request.POST.get("correo"),
 			['riicoo28@gmail.com'],
 			fail_silently=False,
 		)
+	Mensaje.objects.create(nombre = request.POST.get("nombre"),
+		asunto = request.POST.get("asunto"),
+		email = request.POST.get("correo"),
+		mensaje = request.POST.get("mensaje"),
+		estado ="Sin leer")
+	sweetify.error(request, 'El mensaje ha sido enviado nuestro equipo se pondra en contacto con usted', persistent=':(')
 	return redirect("/contacto/")
 
 # Autentificacion
@@ -258,36 +264,61 @@ def recuperarcontraseña(request):
 	cart = Cart(request)
 	email = request.POST.get("email")
 	username = request.POST.get("username")
-	if User.objects.filter(email=email, username=username).exists():
-		user = User.objects.get(email=email, username=username)
-		datos = Cliente.objects.get(user=user)
+	if User.objects.filter(email=email).exists():
+		user = User.objects.get(email=email)
+		datos = Cliente.objects.get(usuario=user)
 		datos.token_req = request.POST.get("token")
 		datos.save()
 		cart = Cart(request)
-		email = EmailMessage('Recuperar Contraseña', 'Ingresa al siguiente url para modificar tu contraseña \n http://127.0.0.1:8000/modificarcontra/' + request.POST.get("token"),to = [request.POST.get("email")])
-		email.send()
-		error = False
+		send_mail(
+			'Recuperar contraseña Leborde',
+			'Ingresa al siguiente url para modificar tu contraseña \n http://127.0.0.1:8000/modificarcontra/' + request.POST.get("token"),
+			user.email,
+			[user.email],
+			fail_silently=False,
+		)
+		sweetify.success(request, 'Nesecitas iniciar sesion para acceder a esta seccion', persistent=':(')
+	if User.objects.filter(username=username).exists():
+		user = User.objects.get(username=username)
+		datos = Cliente.objects.get(usuario=user)
+		datos.token_req = request.POST.get("token")
+		datos.save()
+		cart = Cart(request)
+		send_mail(
+			'Recuperar contraseña Leborde',
+			'Ingresa al siguiente url para modificar tu contraseña \n http://127.0.0.1:8000/modificarcontra/' + request.POST.get("token"),
+			user.email,
+			[user.email],
+			fail_silently=False,
+		)
+		sweetify.success(request, 'Se ha enviado un enlace a su correo', persistent=':(')
 	else:
-		error = True
-	return render(request, 'envioderecu.html', {"cart":cart, "errorusu":error,})
+		sweetify.error(request, 'El usuario o el correo no existe', persistent=':(')
+	return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
 
 @csrf_exempt
 def modificarcontra(request, token):
 	if Cliente.objects.filter(token_req=token).exists():
-		error = False
+		return render(request, 'modificarcontra.html', {"token":token,})
 	else:
-		error = True
-	return render(request, 'modificarcontra.html', {"error":error,"token":token,})
+		sweetify.error(request, 'Lo siento el token para modificar contraseña no es valido', persistent=':(')
+		return redirect("/")
+	
 
 @csrf_exempt
 def cambiarpassword(request):
 	datos = Cliente.objects.get(token_req=request.POST.get("token"))
-	user = datos.user
-	user.set_password(request.POST.get("password"))
-	user.save()
-	datos.token_req = ""
-	datos.save()
-	return render(request, 'modificadacontra.html', {})
+	user = datos.usuario
+	if request.POST.get("password") == request.POST.get("confirm-password"):
+		user.set_password(request.POST.get("password"))
+		user.save()
+		datos.token_req = ""
+		datos.save()
+		sweetify.success(request, 'Su contraseña ha sido modificada correctamente', persistent=':(')
+		return redirect("/")
+	else:
+		sweetify.success(request, 'Verifique que sus contraseñas coincidan', persistent=':(')
+		return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
 
 @login_required(login_url='/')	
 def perfil(request):
@@ -414,7 +445,7 @@ def pagarpaypal(request):
 		"pais":request.POST.get("pais"),
 		"ciudad":request.POST.get("ciudad"),
 		"estado":request.POST.get("estado"),
-		"direccion":request.POST.get("direccion"),
+		"direccion":request.POST.get("colonia")+" "+request.POST.get("direccion")+ " " + request.POST.get("exterior") + " " + request.POST.get("interior"),
 		"codigo":request.POST.get("codigo"),
 		"telefono":request.POST.get("telefono"),
 		"nombre":request.POST.get("nombrerev")}
@@ -426,7 +457,7 @@ def pagarpaypal(request):
 			"country":"MX",
 			"city":request.POST.get("ciudad"),
 			"state":request.POST.get("estado"),
-			"address1":request.POST.get("direccion"),
+			"address1":request.POST.get("colonia")+" "+request.POST.get("direccion")+ " " + request.POST.get("exterior") + " " + request.POST.get("interior") ,
 			"zip":request.POST.get("codigo"),
 			"contact_phone":request.POST.get("telefono"),
 			"first_name":request.POST.get("nombrerev"),

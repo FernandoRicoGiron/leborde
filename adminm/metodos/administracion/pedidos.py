@@ -21,11 +21,7 @@ def showpedidos(request):
 	pedidos = Pedido.objects.all().order_by("-id")
 	usuarios = User.objects.all()
 	pedidos = serializers.serialize('json', pedidos)
-	listusuarios = {}
-	for usuario in usuarios:
-		listusuarios[usuario.id] = {"id":usuario.id,
-			"nombre":usuario.first_name + " " + usuario.last_name}
-	data = {"pedidos":pedidos, "usuarios":listusuarios}
+	data = {"pedidos":pedidos}
 	return JsonResponse(data, safe=False)
 
 @csrf_exempt
@@ -45,9 +41,8 @@ def showmodificarpedidos(request):
 		"productos":{"tipo":"pedido", "label":"Pedido", "valor":listaproductos},
 		"categorias":{"tipo":"select3","valor":"estadopedido", "sel":pedido.estado_pedido, "label":"Estado del pedido:", "opciones":{'1':'Pago Pendiente','2':'Pagado',"3":'En Camino',"4":'Entregado'}, "name":"estadopedido"},
 		"label1":{"tipo":"label","label":" Datos del cliente"},
-		"nombre":{"tipo":"char","valor":pedido.usuario.first_name,"label":"Nombre:", "name":"nombre"},
-		"apellido":{"tipo":"char","valor":pedido.usuario.last_name,"label":"Apellido:", "name":"apellido"},
-		"email":{"tipo":"char","valor":pedido.usuario.email,"label":"Correo Electrónico:", "name":"email"},
+		"usuario":{"tipo":"char","valor":pedido.usuario,"label":"Usuario:", "name":"usuario"},
+		"email":{"tipo":"char","valor":pedido.email,"label":"Correo Electrónico:", "name":"email"},
 		"telefono":{"tipo":"char","valor":pedido.telefono,"label":"Telefono:", "name":"telefono"},
 		"label2":{"tipo":"label","label":" Datos de envio"},
 		"direccion":{"tipo":"char","valor":pedido.direccion,"label":"Dirección:", "name":"direccion"},
@@ -74,9 +69,13 @@ def modificarpedido(request):
 	pedido.estado_pedido = request.POST.get("estadopedido")
 	pedido.save()
 	print(request.POST.get("estadopedido"))
-	if request.POST.get("estadopedido") == "2":
-		print("Si entro")
-		venta = Venta.objects.create(usuario=pedido.usuario, fecha=datetime.now(), monto=pedido.total, pedido=pedido)
+	if request.POST.get("estadopedido") == "2" or request.POST.get("estadopedido") == "3" or request.POST.get("estadopedido") == "4":
+		if not Venta.objects.filter(usuario=pedido.usuario, monto=pedido.total, pedido=pedido).exists():
+			venta = Venta.objects.create(usuario=pedido.usuario, fecha=datetime.now(), monto=pedido.total, pedido=pedido)
+	if request.POST.get("estadopedido") == "1":
+		if Venta.objects.filter(usuario=pedido.usuario, monto=pedido.total, pedido=pedido).exists():
+			venta = Venta.objects.get(usuario=pedido.usuario, monto=pedido.total, pedido=pedido)
+			venta.delete()
 	return JsonResponse("Correcto", safe=False)
 
 @csrf_exempt

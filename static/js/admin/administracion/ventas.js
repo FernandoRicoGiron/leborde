@@ -16,6 +16,8 @@ $("#mostrarVentas").on("click", function () {
                 success: function(json) { // on success..
                 	ventas = json.ventas;
                 	listaventas = json.listaventas
+                	$("#myChart").remove();
+                	$("#secciondeventas").append('<canvas id="myChart" style="width:100%; max-height:450px;"></canvas>')
                 	var ctx = document.getElementById("myChart").getContext('2d');
 					var myChart = new Chart(ctx, {
 					    type: 'line',
@@ -109,6 +111,8 @@ $("#ventasanterior").on("click", function () {
 						$("#fechah4").html("Ventas del año : "+json.año);
 					}
                 	
+                	$("#myChart").remove();
+                	$("#secciondeventas").append('<canvas id="myChart" style="width:100%; max-height:450px;"></canvas>')
                 	var ctx = document.getElementById("myChart").getContext('2d');
 					var myChart = new Chart(ctx, {
 					    type: 'line',
@@ -201,6 +205,8 @@ $("#ventassiguiente").on("click", function () {
 						$("#fechah4").html("Ventas del año : "+json.año);
 					}
                 	
+                	$("#myChart").remove();
+                	$("#secciondeventas").append('<canvas id="myChart" style="width:100%; max-height:450px;"></canvas>')
                 	var ctx = document.getElementById("myChart").getContext('2d');
 					var myChart = new Chart(ctx, {
 					    type: 'line',
@@ -281,6 +287,8 @@ $("#changemensual").on("click", function () {
                 success: function(json) { // on success..
                 	ventas = json.ventas;
                 	listaventas = json.listaventas
+                	$("#myChart").remove();
+                	$("#secciondeventas").append('<canvas id="myChart" style="width:100%; max-height:450px;"></canvas>')
                 	var ctx = document.getElementById("myChart").getContext('2d');
 					var myChart = new Chart(ctx, {
 					    type: 'line',
