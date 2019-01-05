@@ -16,7 +16,19 @@
                   <input type="hidden" name="date" id="urlventas" value="showventas/">
                   <div class="row">
 
-                    <div class="col-md-6">
+                    <div class="col-md-6" id="rangodate" >
+                      <div class="row">
+                         <div class="form-group col-md-6">
+                          <label class="">Fecha Inicio</label>
+                          <input id="fechainicio" type="date" class="form-control" value="" placeholder="Fecha Inicio">
+                        </div>
+                        <div class="form-group col-md-6">
+                          <label class="">Fecha Final</label>
+                          <input id="fechafinal" type="date" class="form-control" value="">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6" id="antsig" style="display:none">
                       <button id="ventasanterior" class="btn btn-success">Semana anterior</button>
                       <button id="ventassiguiente" class="btn btn-success" disabled>Semana siguiente</button>
                     </div>
@@ -28,6 +40,7 @@
                           <h6 class="dropdown-header">Mostrar por</h6>
                           <a id="changesemanal" class="dropdown-item" href="#">Dia</a>
                           <a id="changemensual" class="dropdown-item" href="#">Mes</a>
+                          <a id="changerange" class="dropdown-item" href="#">Rango de fechas</a>
                         </div>
                     </div>
                       

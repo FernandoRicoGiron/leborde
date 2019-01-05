@@ -102,9 +102,19 @@
 										</div>
 									</div>
 
+									
+									{% if producto.inventario == 0 %}
+									<h4 class="mtext-105 cl2 js-name-detail p-b-14">
+										Agotado
+									</h4>
+									<a href="#" data-toggle="modal" data-target="#pedido" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">
+										solicitar sobre pedido
+									</a>
+									{% else %}
 									<a href="javascript:agregarCarrito()" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">
 										Agregar al carrito
 									</a>
+									{% endif %}
 								</div>
 							</div>	
 						</div>
@@ -165,6 +175,39 @@
 		</div>
 	</section>
 
+
+	<div class="modal fade" id="pedido" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="exampleModalLabel">Deja tus datos para que nuestro equipo se ponga en contacto contigo</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body">
+		        <form>
+		          <div class="form-group">
+		            <label for="recipient-name" class="col-form-label">Nombre:</label>
+		            <input required="" type="text" class="form-control" id="">
+		          </div>
+		          <div class="form-group">
+		            <label for="recipient-name" class="col-form-label">Email:</label>
+		            <input required="" type="text" class="form-control" id="recipient-name">
+		          </div>
+		          <div class="form-group">
+		            <label for="recipient-name" class="col-form-label">Numero de telefono:</label>
+		            <input required="" type="text" class="form-control" id="recipient-name">
+		          </div>
+		        </form>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+		        <button type="button" class="btn btn-primary">Enviar</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
 	{% endblock %}
 
 	{% block js %}

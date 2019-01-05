@@ -62,6 +62,7 @@ urlpatterns = [
     path('showventasmensual/', ventas.showventasmensual),
     path('showventasanteriormes/', ventas.showventasanteriormes),
     path('showventassiguientemes/', ventas.showventassiguientemes),
+    path('showventasrange/', ventas.showventasrange),
     # Mensajes
     path('showmensajes/', mensajes.showmensajes),
     path('showmodificarmensajes/', mensajes.showmodificarmensajes),

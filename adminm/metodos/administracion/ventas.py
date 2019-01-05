@@ -321,3 +321,33 @@ def showventassiguientemes(request):
 		totalventas += venta.monto.amount
 	data = {"ventas":listaventas, "año":año, "listaventas":listventas, "totalventas":totalventas}
 	return JsonResponse(data, safe=False)
+
+# Rango de Fechas
+# Mes
+@csrf_exempt
+def showventasrange(request):
+	año = datetime.now(tz=timezone.utc)
+	inicio = request.POST.get("inicio")
+	final = request.POST.get("final")
+	inicio = datetime.strptime(str(inicio).replace("-"," "), '%Y %m %d')
+	final = datetime.strptime(str(final).replace("-"," "), '%Y %m %d')
+	ventas = Venta.objects.filter(fecha__range=[inicio,final])
+	totalventas = 0
+	arraydates = []
+	ventasfechas = {}
+	listventas = {}
+	date_generated = [inicio + timedelta(days=x) for x in range(0, (final-inicio).days)]
+	for d in date_generated:
+		ventasfechas[d.strftime("%d-%m-%Y")] = 0
+		arraydates.append(d.strftime("%d-%m-%Y"))
+	for venta in ventas:
+		for x,y in ventasfechas.items():
+			if venta.fecha.strftime("%d-%m-%Y") == x:
+				ventasfechas[x] = y+venta.monto.amount
+		listventas[venta.id] = {"id":venta.id,
+			"nombre":venta.usuario,
+			"fecha":venta.fecha,
+			"total":venta.monto.amount}
+		totalventas += venta.monto.amount
+	data = {"ventas":ventasfechas, "listaventas":listventas, "año":año.year, "totalventas":totalventas,"fechas":arraydates}
+	return JsonResponse(data, safe=False)
