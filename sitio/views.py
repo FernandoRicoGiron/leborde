@@ -34,36 +34,12 @@ def ipn(sender, *args, **kwargs):
 	datos = sender
 	if datos.payment_status == "Completed":
 		num_pedido = Num_Pedido.objects.first()
-		data = '{"'+datos.query.replace("&",'","').replace("=",'":"')+'"}'
-		data  = json.loads(data)
-		email = data["payer_email"].replace("%40","@")
-		# usuario = User.objects.get(email=data["payer_email"].replace("%40","@"))
-		pedido = Pedido.objects.create(usuario = data["address_name"].replace("+"," "),
-			total = datos.mc_gross-datos.mc_fee,
-			fecha = datetime.datetime.now(),
-			nombre = "Pedido #" + str(num_pedido.pedido-1),
-			estado_pedido = "2",
-			telefono = "",
-			pais = data["address_country"].replace("+"," "),
-			estado = data["address_state"].replace("+"," "),
-			ciudad = data["address_city"].replace("+"," "),
-			direccion = data["address_street"].replace("+"," "),
-			codigopostal = data["address_zip"].replace("+"," "),
-			email = email,)
-		for x in range(int(datos.num_cart_items)-1):
-			string = data["item_name"+str(x+1)]
-			print('{"'+string.replace("id%3A",'id":"').replace("%2CN%3A",'","N":"').replace("%2CT%3A",'","T":"')+'"}')
-			js = json.loads('{"'+string.replace("id%3A",'id":"').replace("%2CN%3A",'","N":"').replace("%2CT%3A",'","T":"')+'"}')
-			id = int(js["id"])
-			talla = js["T"]
-			nombre = js["N"]
-			cantidad = int(data["quantity"+str(x+1)])
-			producto = Producto.objects.get(id=id)
-			Producto_Pedido.objects.create(producto=producto,
-				cantidad=cantidad,
-				pedido=pedido,
-				talla=talla,)
-		Venta.objects.create(usuario=data["address_name"].replace("+"," "),
+		pedido = Pedido.objects.get(nombre = "Pedido #" + str(datos.invoice))
+		pedido.total = datos.mc_gross-datos.mc_fee
+		pedido.estado_pedido = "2"
+		pedido.save()
+		
+		Venta.objects.create(usuario=pedido.usuario,
 			fecha=datetime.datetime.now(),
 			monto=datos.mc_gross-datos.mc_fee,
 			pedido=pedido)
@@ -73,7 +49,7 @@ def ipn(sender, *args, **kwargs):
 		# print(json.loads("{"+sender.query.replace("&",",")+"}"))
 		# for x in datos:
 		# 	print(datos["item_name_"+str(x)])
-	return HttpResponse(data)
+	return HttpResponse("correcto")
 
 valid_ipn_received.connect(ipn)
 
@@ -171,9 +147,19 @@ def producto(request, id):
 	variables(request)
 	producto = Producto.objects.get(id=id)
 	pro_re = Producto.objects.filter(categoria=producto.categoria)
+	envio = Envio.objects.last()
+	estadodatos = False
+	if request.user.is_authenticated:
+		cliente = Cliente.objects.get(usuario=request.user)
+		if cliente.telefono != "null" and cliente.direccion != "null" and cliente.ciudad != "null" and cliente.estado != "null" and cliente.pais != "null" and cliente.codigopostal != "null":
+			estadodatos = True
+		else:
+			estadodatos = "No cuenta con datos de envio"
 	return render(request, 'producto.html', {"cart":cart,
 										"producto":producto,
-										"pro_re":pro_re
+										"pro_re":pro_re,
+										"envio":envio.costo.amount,
+										"estadodatos":estadodatos
 										})
 
 def contacto(request):
@@ -423,7 +409,7 @@ def pagarpaypal(request):
 	envio = Envio.objects.last()
 	datos = Cliente.objects.get(usuario=request.user)
 	cart = Cart(request)
-	suma = cart.summary()+envio.costo.amount
+	
 	productos = {}
 	cont = 1
 	for item in cart:
@@ -431,8 +417,14 @@ def pagarpaypal(request):
 		productos["amount_"+str(cont)] = item.unit_price
 		productos["quantity_"+str(cont)] = item.quantity			
 		cont += 1
+
 	productos["item_name_"+str(cont)] = "Envio"
-	productos["amount_"+str(cont)] = ("%.2f" % envio.costo)
+	if request.POST.get("ciudad") != "Tuxtla Gutiérrez":
+		productos["amount_"+str(cont)] = ("%.2f" % envio.costo)
+		suma = cart.summary()+envio.costo.amount
+	else:
+		productos["amount_"+str(cont)] = 0.00
+		suma = cart.summary()
 	productos["quantity_"+str(cont)] = 1
 
 	pedido = Num_Pedido.objects.first()
@@ -469,6 +461,18 @@ def pagarpaypal(request):
 			"return": request.build_absolute_uri(reverse('pagadopaypal')),
 			"cancel_return": request.build_absolute_uri(reverse('errorpagadopaypal')),
 		}
+		pedido = Pedido.objects.create(usuario = request.user,
+				total =suma,
+				fecha = datetime.datetime.now(),
+				nombre = "Pedido #" + str(pedido.pedido),
+				estado_pedido = "1",
+				telefono = request.POST.get("telefono"),
+				pais = request.POST.get("pais"),
+				estado = request.POST.get("estado"),
+				ciudad = request.POST.get("ciudad"),
+				direccion = request.POST.get("colonia") + " " +request.POST.get("direccion") + " " + request.POST.get("exterior") + " " + request.POST.get("interior"),
+				codigopostal = request.POST.get("codigo"),
+				email = request.POST.get("email"),)
 	else:
 		envio = {"email":request.user.email,
 		"pais":datos.pais,
@@ -498,8 +502,172 @@ def pagarpaypal(request):
 			"return": request.build_absolute_uri(reverse('pagadopaypal')),
 			"cancel_return": request.build_absolute_uri(reverse('errorpagadopaypal')),
 		}
+		pedido = Pedido.objects.create(usuario = request.user,
+				total = suma,
+				fecha = datetime.datetime.now(),
+				nombre = "Pedido #" + str(pedido.pedido),
+				estado_pedido = "1",
+				telefono = datos.telefono,
+				pais = datos.pais,
+				estado = datos.estado,
+				ciudad = datos.ciudad,
+				direccion = datos.direccion,
+				codigopostal = datos.codigopostal,
+				email = request.user.email,)
+	for x in cart:
+		Producto_Pedido.objects.create(producto=x.product,
+				cantidad=x.quantity,
+				pedido=pedido,
+				talla=x.talla,)
 	dic = paypal_dict.update(productos)
 	# Create the instance.
 	form = PayPalPaymentsForm(initial=paypal_dict)
 	context = {"form": form, "cart":cart, "denvio":envio, "envio":Envio.objects.last(), "suma":("%.2f" % suma), "total":Envio.objects.last().costo.amount+cart.summary(),}
 	return render(request, "pagopaypal.html", context)
+
+# Pedidos cuando no hay existencia
+def pedido(request):
+	producto = Producto.objects.get(id=request.POST.get("idprod"))
+	cantidad = request.POST.get("cantidad")
+	talla = request.POST.get("talla")
+	envio = Envio.objects.last()
+	num_pedido = Num_Pedido.objects.first()
+	num_pedido.pedido += 1
+	num_pedido.save()
+	total = producto.precio * cantidad
+	print(request.POST.get("enviomod"))
+	if request.POST.get("enviomod") == "2":
+		if request.POST.get("ciudad") != "Tuxtla Gutiérrez":
+			total = total + envio.costo.amount
+		pedido = Pedido.objects.create(usuario = request.user,
+				total = total,
+				fecha = datetime.datetime.now(),
+				nombre = "Pedido #" + str(num_pedido.pedido),
+				estado_pedido = "1",
+				telefono = request.POST.get("telefono"),
+				pais = request.POST.get("pais"),
+				estado = request.POST.get("estado"),
+				ciudad = request.POST.get("ciudad"),
+				direccion = request.POST.get("colonia") + " " +request.POST.get("calle") + " " + request.POST.get("exterior") + " " + request.POST.get("interior"),
+				codigopostal = request.POST.get("codigo"),
+				email = request.POST.get("email"),)
+	else:
+		cliente = Cliente.objects.get(usuario = request.user)
+		if cliente.ciudad != "Tuxtla Gutiérrez":
+			total = total + envio.costo.amount
+		pedido = Pedido.objects.create(usuario = request.user,
+				total = total,
+				fecha = datetime.datetime.now(),
+				nombre = "Pedido #" + str(num_pedido.pedido),
+				estado_pedido = "1",
+				telefono = cliente.telefono,
+				pais = cliente.pais,
+				estado = cliente.estado,
+				ciudad = cliente.ciudad,
+				direccion = cliente.direccion,
+				codigopostal = cliente.codigopostal,
+				email = request.user.email,)
+
+	Producto_Pedido.objects.create(producto=producto,
+				cantidad=cantidad,
+				pedido=pedido,
+				talla=talla,)
+	plan = "Total a pagar"
+	precio = total
+	logo = Empresa.objects.last()
+	cart = {"1":{"nombre":producto.nombre,
+				"precio":producto.precio.amount,
+				"cantidad":cantidad,
+				"talla":talla,
+				"total":precio,
+				"imagen":producto.imagenes.first().imagen.url},
+				"2":{"nombre":"Envio",
+				"precio":envio.costo.amount,
+				"cantidad":1,
+				"talla":"",
+				"total":envio.costo.amount,
+				"imagen":""}}
+	pdf= render_pdf("pagos.html",{"plan":plan, "precio":precio, "logo":logo.logo.url, "ncuenta":logo.numero_de_cuenta, "cart":cart})
+	return HttpResponse(pdf,content_type="application/pdf")
+
+def pedido2(request):
+	# producto = Producto.objects.get(id=request.POST.get("idprod"))
+	print(request.POST)
+	cantidad = request.POST.get("cantidad")
+	talla = request.POST.get("talla")
+	envio = Envio.objects.last()
+	num_pedido = Num_Pedido.objects.first()
+	num_pedido.pedido += 1
+	num_pedido.save()
+	cart = Cart(request)
+	arreglo = {}
+	cont = 1
+	total = 0
+	for x in cart:
+		total += x.total_price
+		
+
+	if request.POST.get("enviomod") == "2":
+		if request.POST.get("ciudad") != "Tuxtla Gutiérrez":
+			total = total + envio.costo.amount
+		pedido = Pedido.objects.create(usuario = request.user,
+				total = total,
+				fecha = datetime.datetime.now(),
+				nombre = "Pedido #" + str(num_pedido.pedido),
+				estado_pedido = "1",
+				telefono = request.POST.get("telefono"),
+				pais = request.POST.get("pais"),
+				estado = request.POST.get("estado"),
+				ciudad = request.POST.get("ciudad"),
+				direccion = request.POST.get("colonia") + " " +request.POST.get("direccion") + " " + request.POST.get("exterior") + " " + request.POST.get("interior"),
+				codigopostal = request.POST.get("codigo"),
+				email = request.POST.get("email"),)
+	else:
+		cliente = Cliente.objects.get(usuario = request.user)
+		if cliente.ciudad != "Tuxtla Gutiérrez":
+			total = total + envio.costo.amount
+		pedido = Pedido.objects.create(usuario = request.user,
+				total = total,
+				fecha = datetime.datetime.now(),
+				nombre = "Pedido #" + str(num_pedido.pedido),
+				estado_pedido = "1",
+				telefono = cliente.telefono,
+				pais = cliente.pais,
+				estado = cliente.estado,
+				ciudad = cliente.ciudad,
+				direccion = cliente.direccion,
+				codigopostal = cliente.codigopostal,
+				email = request.user.email,)
+
+	for x in cart:
+		Producto_Pedido.objects.create(producto=x.product,
+				cantidad=x.quantity,
+				pedido=pedido,
+				talla=x.talla,)
+		arreglo[cont] = {"nombre":x.product.nombre,
+			"precio":x.product.precio.amount,
+			"cantidad":x.quantity,
+			"talla":x.talla,
+			"total":x.total_price,
+			"imagen":x.product.imagenes.first().imagen.url}
+		cont += 1
+	arreglo[cont] = {"nombre":"Envio",
+			"precio":envio.costo.amount,
+			"cantidad":1,
+			"talla":"",
+			"total":envio.costo.amount,
+			"imagen":""}
+
+	plan = "Total a pagar"
+	precio = total
+	logo = Empresa.objects.last()
+	
+	pdf= render_pdf("pagos.html",{"plan":plan, "precio":precio, "logo":logo.logo.url, "ncuenta":logo.numero_de_cuenta, "cart":arreglo})
+	return HttpResponse(pdf,content_type="application/pdf")
+
+def listapedidos(request):
+	cart = Cart(request)
+	variables(request)
+	pedidos = Pedido.objects.filter(usuario=request.user)
+	return render(request, 'pedidos.html', {"cart":cart, "pedidos":pedidos})
+

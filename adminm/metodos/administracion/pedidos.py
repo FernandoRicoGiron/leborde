@@ -37,11 +37,16 @@ def showmodificarpedidos(request):
 			"cantidad":producto.cantidad,
 			"precio":producto.producto.precio.amount,
 			"total":producto.producto.precio.amount*producto.cantidad}
+	if pedido.comprobante:
+		comprobante = pedido.comprobante.url
+	else:
+		comprobante = ""
 	data = {"label3":{"tipo":"label","label":"Pedido"},
 		"productos":{"tipo":"pedido", "label":"Pedido", "valor":listaproductos},
-		"categorias":{"tipo":"select3","valor":"estadopedido", "sel":pedido.estado_pedido, "label":"Estado del pedido:", "opciones":{'1':'Pago Pendiente','2':'Pagado',"3":'En Camino',"4":'Entregado'}, "name":"estadopedido"},
+		"estadopedido":{"tipo":"select3","valor":"estadopedido", "sel":pedido.estado_pedido, "label":"Estado del pedido:", "opciones":{'1':'Pago Pendiente','2':'Pagado',"3":'En Camino',"4":'Entregado'}, "name":"estadopedido"},
+		"comprobante":{"tipo":"imagen2","valor":comprobante,"label":"Comprobante:", "name":"comprobante"},
 		"label1":{"tipo":"label","label":" Datos del cliente"},
-		"usuario":{"tipo":"char","valor":pedido.usuario,"label":"Usuario:", "name":"usuario"},
+		"usuario":{"tipo":"char","valor":pedido.usuario.first_name + " " + pedido.usuario.last_name,"label":"Usuario:", "name":"usuario"},
 		"email":{"tipo":"char","valor":pedido.email,"label":"Correo Electrónico:", "name":"email"},
 		"telefono":{"tipo":"char","valor":pedido.telefono,"label":"Telefono:", "name":"telefono"},
 		"label2":{"tipo":"label","label":" Datos de envio"},
@@ -67,8 +72,9 @@ def agregarpedido(request):
 def modificarpedido(request):
 	pedido = Pedido.objects.get(id=request.POST.get("idpedido"))
 	pedido.estado_pedido = request.POST.get("estadopedido")
+	if "comprobante" in request.FILES:
+		pedido.comprobante = request.FILES["comprobante"]
 	pedido.save()
-	print(request.POST.get("estadopedido"))
 	if request.POST.get("estadopedido") == "2" or request.POST.get("estadopedido") == "3" or request.POST.get("estadopedido") == "4":
 		if not Venta.objects.filter(usuario=pedido.usuario, monto=pedido.total, pedido=pedido).exists():
 			venta = Venta.objects.create(usuario=pedido.usuario, fecha=datetime.now(), monto=pedido.total, pedido=pedido)

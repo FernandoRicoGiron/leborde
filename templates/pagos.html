@@ -1,0 +1,104 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		@page {
+        
+        background-image: "{% static 'img/f3.jpg'%}";
+        size: a4 portrait;
+        @frame header_frame {           /* Static Frame */
+            -pdf-frame-content: header_content;
+            left: 50pt; width: 512pt; top: 20pt; height: 40pt;
+            /*-pdf-frame-border: 1;*/ 
+        }
+        @frame content_frame {          /* Content Frame */
+            left: 80pt; width: 432pt; top: 80pt; height: 682pt;
+            /*-pdf-frame-border: 1;    /* for debugging the layout */
+        }
+        @frame footer_frame {           /* Another static Frame */
+            -pdf-frame-content: footer_content;
+            left: 50pt; width: 512pt; top: 792pt; height: 30pt;
+           /*-pdf-frame-border: 1; */
+        }
+
+
+
+        
+    }
+
+     h1.titulo {
+         
+           font-size: 15pt;
+           
+           margin-bottom: 1cm;
+
+        }
+      h2.achedos{
+
+      font-size: 13pt;
+      margin: 1cm;
+
+    }
+
+	</style>
+</head>
+<body>
+	<!-- Content for Static Frame 'header_frame' -->
+    <div id="header_content">
+      
+   <img src="{{ logo }}"><h1>Leborde</h1>
+
+    </div>
+
+    <!-- Content for Static Frame 'footer_frame' -->
+    <div id="footer_content">
+
+
+
+    </div>
+    <div>
+    	<h1 class="titulo">{{plan}}  $ {{precio}}</h1>
+    </div>
+<center>
+    <table>
+        <thead>
+            <th>Producto</th>
+            <th>Precio</th>
+            <th>Cantidad</th>
+            <th>Talla</th>
+            <th>Total</th>
+        </thead>
+        <tbody>
+            {% for x,item in cart.items %}
+            <tr>
+                <td>{{ item.nombre }}</td>
+                <td>$ {{ item.precio }}</td>
+                <td>
+                    {{ item.cantidad }}
+                </td>
+                <td>{{ item.talla }}</td>
+                <td>$ {{ item.total }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            
+        </tfoot>
+    </table>
+
+</center>
+
+<center>
+    <div>
+    	<h2 class="achedos">Puede realizar su pago en:</h2>
+    </div>
+
+    <div>
+    	<img src="{% static 'sitio/images/Sitio/oxxo.png' %}">
+    	<h2 class="achedos">Numero de cuenta: {{ncuenta}}</h2>
+    </div>
+   </center>
+</body>
+</html>

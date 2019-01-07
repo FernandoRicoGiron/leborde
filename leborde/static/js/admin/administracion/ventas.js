@@ -16,6 +16,8 @@ $("#mostrarVentas").on("click", function () {
                 success: function(json) { // on success..
                 	ventas = json.ventas;
                 	listaventas = json.listaventas
+                	$("#myChart").remove();
+                	$("#secciondeventas").append('<canvas id="myChart" style="width:100%; max-height:450px;"></canvas>')
                 	var ctx = document.getElementById("myChart").getContext('2d');
 					var myChart = new Chart(ctx, {
 					    type: 'line',
@@ -109,6 +111,8 @@ $("#ventasanterior").on("click", function () {
 						$("#fechah4").html("Ventas del año : "+json.año);
 					}
                 	
+                	$("#myChart").remove();
+                	$("#secciondeventas").append('<canvas id="myChart" style="width:100%; max-height:450px;"></canvas>')
                 	var ctx = document.getElementById("myChart").getContext('2d');
 					var myChart = new Chart(ctx, {
 					    type: 'line',
@@ -201,6 +205,8 @@ $("#ventassiguiente").on("click", function () {
 						$("#fechah4").html("Ventas del año : "+json.año);
 					}
                 	
+                	$("#myChart").remove();
+                	$("#secciondeventas").append('<canvas id="myChart" style="width:100%; max-height:450px;"></canvas>')
                 	var ctx = document.getElementById("myChart").getContext('2d');
 					var myChart = new Chart(ctx, {
 					    type: 'line',
@@ -259,14 +265,22 @@ $("#ventassiguiente").on("click", function () {
             }
 })
 
+$("#changerange").on("click", function () {
+	$("#antsig").hide();
+	$("#rangodate").show();
+})
 
 $("#changesemanal").on("click", function () {
+	$("#antsig").show();
+	$("#rangodate").hide();
 	$("#ventassiguiente").html("Semana siguiente");
 	$("#ventasanterior").html("Semana anterior");
 	$("#mostrarVentas").click();
 })
 
 $("#changemensual").on("click", function () {
+	$("#antsig").show();
+	$("#rangodate").hide();
 	$("#ventassiguiente").html("Mes siguiente");
 	$("#ventasanterior").html("Mes anterior");
 	$("#mostrarVentas").click();
@@ -281,6 +295,8 @@ $("#changemensual").on("click", function () {
                 success: function(json) { // on success..
                 	ventas = json.ventas;
                 	listaventas = json.listaventas
+                	$("#myChart").remove();
+                	$("#secciondeventas").append('<canvas id="myChart" style="width:100%; max-height:450px;"></canvas>')
                 	var ctx = document.getElementById("myChart").getContext('2d');
 					var myChart = new Chart(ctx, {
 					    type: 'line',
@@ -338,3 +354,77 @@ $("#changemensual").on("click", function () {
 $("#changeanual").on("click", function () {
 	$("#mostrarVentas").click();
 })
+
+$("#fechafinal, #fechainicio").on('change', function(event) {
+	var table = $('#TablaVentas').DataTable();
+	table.clear().draw();
+	inicio = $("#fechainicio").val()
+	final = $("#fechafinal").val()
+	if (inicio <= final) {
+		$.ajax({ // create an AJAX call...
+	                data: {inicio:inicio, final:final}, // get the form data
+	                type: 'POST', // GET or POST
+	                url: 'showventasrange/', // the file to call
+	                success: function(json) { // on success..
+	                	ventas = json.ventas;
+	                	ventasval = [];
+	                	$.each(ventas, function(index, val) {
+	                		 ventasval.push(val)
+	                	});
+	                	$("#myChart").remove();
+	                	$("#secciondeventas").append('<canvas id="myChart" style="width:100%; max-height:450px;"></canvas>')
+	                	var ctx = document.getElementById("myChart").getContext('2d');
+						var myChart = new Chart(ctx, {
+						    type: 'line',
+						    data: {
+						        labels: json.fechas,
+						        datasets: [{
+						            label: "Ventas",
+						            data: ventasval,
+						            borderColor: [
+						                'rgba(67, 160, 71, 1)',
+						            ],
+						            pointBackgroundColor: 'rgba(67, 160, 71, 1)',
+						        }]
+
+						    },
+						    options: {
+						    	legend: {
+						            display: true,
+						            labels: {
+						                usePointStyle: true,
+						            }
+						        },
+						        scales: {
+						            yAxes: [{
+						                ticks: {
+						                    beginAtZero:true,
+						                    callback: function(value, index, values) {
+						                        return '$ ' + value;
+						                    }
+						                }
+						            }]
+						        }
+						    }
+						});
+	                    $("#fechah4").html("Ventas de : "+inicio+" hasta : "+final);
+	                    //  Tabla
+	                    $.each( json.listaventas, function( key, value ) {
+
+	 						var date = new Date(value.fecha);
+	 						// $.each( datos.imagenes, function( key, value ) {console.log(value)})
+							table.row.add( [value.id,
+								(date.getDate()).toString()+"/"+(date.getMonth()+1).toString()+"/"+(date.getFullYear()).toString()+" "+(date.getHours()).toString()+":"+(date.getMinutes()).toString()+":"+(date.getSeconds()).toString(),
+								value.nombre,
+								"$"+value.total,
+	                  		] ).node().id = value.pk;
+					});
+						table.draw();
+						$("#ventastabla").html("Ventas : $ "+json.totalventas)
+	                }
+	            });
+		}
+		else{
+			swal("verifica que la fecha final no sea mayor a la inicial")
+		}
+});

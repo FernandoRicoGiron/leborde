@@ -95,15 +95,15 @@
 
 									<div style="width:100%" class="rs1-select2 rs2-select2 bor8 bg0 m-b-12 m-t-9 col-sm-12">
 										<select id="tipoenvio" class="js-select2" name="enviomod">
-											{% if estadodatos %}
-											<option value="1">Usar mis datos de envio</option>
+											{% if estadodatos == True %}
+											<option selected value="1">Usar mis datos de envio</option>
 											{% endif %}
 											<option value="2">Ingresar datos de envio</option>
 										</select>
 										<div class="dropDownSelect2"></div>
 									</div>
 
-									{% if not estadodatos %}
+									{% if not estadodatos == True %}
 									<div id="ingdatosenvio" class="col-sm-12">
 									{% else %}
 									<div id="ingdatosenvio" class="col-sm-12" style="display:none">
@@ -230,9 +230,26 @@
 							</div>
 						</div>
 
-						<button id="botonsubmit" class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
-							Proceder al pago
-						</button>
+						
+							
+						<div class="row" >
+						<div class="bor8 bg0 m-b-12 col-md-6">
+							<div class="w-full-ssm">
+								<span class="stext-110 cl2">
+									Pagar en Oxxo:
+								</span>
+							</div>
+							<a href="#" id="pagoxxo"><img width="200" src="{% static 'sitio/images/Sitio/oxxo.png' %}"></a>
+						</div>
+						<div class="bor8 bg0 m-b-12 col-md-6">
+							<div class="w-full-ssm">
+								<span class="stext-110 cl2">
+									Pagar en PayPal:
+								</span>
+							</div>
+							<button id="botonsubmit" style="width:200px; height:200px; background-image:url({% static 'sitio/images/Sitio/paypal.jpg' %}); background-repeat: no-repeat; background-size: 200px;"></button>
+						</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -247,6 +264,11 @@
 {% block js %}
 
 <script type="text/javascript">
+$("#pagoxxo").on('click', function(event) {
+	$("#formpago").attr('action', '/crearpedido2/');
+	$("#formpago").submit();
+});
+
 $("#tipoenvio").on('change', function(event) {
 	if ($(this).val() == 2) {
 		$("#ingdatosenvio").show();

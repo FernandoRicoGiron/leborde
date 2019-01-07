@@ -95,7 +95,7 @@
 											<i class="fs-16 zmdi zmdi-minus"></i>
 										</div>
 
-										<input class="mtext-104 cl3 txt-center num-product cant" type="number" name="num-product" value="1">
+										<input id="prodcant" class="mtext-104 cl3 txt-center num-product cant" type="number" name="num-product" value="1">
 
 										<div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
 											<i class="fs-16 zmdi zmdi-plus"></i>
@@ -176,34 +176,92 @@
 	</section>
 
 
-	<div class="modal fade" id="pedido" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		  <div class="modal-dialog" role="document">
+	<div class="modal fade bd-example-modal-lg" id="pedido" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		  <div class="modal-dialog modal-lg" role="document">
 		    <div class="modal-content">
 		      <div class="modal-header">
-		        <h5 class="modal-title" id="exampleModalLabel">Deja tus datos para que nuestro equipo se ponga en contacto contigo</h5>
+		        <h4 class="modal-title" id="exampleModalLabel">Deja tus datos para que nuestro equipo se ponga en contacto contigo</h4>
 		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 		          <span aria-hidden="true">&times;</span>
 		        </button>
 		      </div>
 		      <div class="modal-body">
-		        <form>
-		          <div class="form-group">
-		            <label for="recipient-name" class="col-form-label">Nombre:</label>
-		            <input required="" type="text" class="form-control" id="">
-		          </div>
-		          <div class="form-group">
-		            <label for="recipient-name" class="col-form-label">Email:</label>
-		            <input required="" type="text" class="form-control" id="recipient-name">
-		          </div>
-		          <div class="form-group">
-		            <label for="recipient-name" class="col-form-label">Numero de telefono:</label>
-		            <input required="" type="text" class="form-control" id="recipient-name">
+		        <form id="formpedido" action="/crearpedido/" method="POST">
+		        	{% csrf_token %}
+		        	<input id="idprod" name="idprod" type="hidden" class="form-control" value="{{producto.id}}">
+		        	<input id="cantidadhide" name="cantidad" type="hidden" class="form-control" value="1">
+		        	<input id="tallahide" name="talla" type="hidden" class="form-control" value="{{producto.tallas.first}}">
+
+		        	<div class="form-group">
+			        	<select id="tipoenvio" class="js-select2" name="enviomod">
+							{% if estadodatos == True %}
+								<option selected value="1">Usar mis datos de envio</option>
+							{% endif %}
+							<option value="2">Ingresar datos de envio</option>
+						</select>
+						<div class="dropDownSelect2"></div>
+					</div>
+
+					{% if not estadodatos == True %}
+						<div id="ingdatosenvio" class="row">
+					{% else %}
+						<div id="ingdatosenvio" class="row" style="display:none;">
+						
+					{% endif %}
+			          <div class="form-group col-sm-6">
+			            <label for="recipient-name" class="col-form-label">Nombre Completo:</label>
+			            <input id="nombre" name="nombrerev" required="" type="text" class="form-control" id="">
+			          </div>
+			          <div class="form-group col-sm-6">
+			            <label for="recipient-name" class="col-form-label">Email:</label>
+			            <input id="email" name="email" required="" type="text" class="form-control" id="recipient-name">
+			          </div>
+			          <div class="form-group col-sm-6">
+			            <label for="recipient-name" class="col-form-label">Numero de telefono:</label>
+			            <input id="telefono" name="telefono" required="" type="text" class="form-control" id="recipient-name">
+			          </div>
+			          <div class="form-group col-sm-6">
+			            <label for="recipient-name" class="col-form-label">Codigo Postal:</label>
+			            <input id="codigo_postal" name="codigo" required="" type="text" class="form-control" id="recipient-name">
+			          </div>
+			          <div class="form-group col-sm-6">
+			            <label for="recipient-name" class="col-form-label">Colonia:</label>
+			            <select  id="colonia" class="stext-111 cl8 plh3 size-111 p-lr-15" name="colonia">
+							<option disabled selected value='Seleccione una opción'>Seleccione una opcion</option>
+						</select>
+			          </div>
+			          <div class="form-group col-sm-6">
+			            <label for="recipient-name" class="col-form-label">Calle:</label>
+			            <input id="calle" name="calle" required="" type="text" class="form-control" id="recipient-name">
+			          </div>
+			          <div class="form-group col-sm-6">
+			            <label for="recipient-name" class="col-form-label">No. Exterior:</label>
+			            <input id="exterior" name="exterior" required="" type="text" class="form-control" id="recipient-name">
+			          </div>
+			          <div class="form-group col-sm-6">
+			            <label for="recipient-name" class="col-form-label">No. Interior:</label>
+			            <input id="interior" name="interior" required="" type="text" class="form-control" id="recipient-name">
+			          </div>
+			          <div class="form-group col-sm-6">
+			            <label for="recipient-name" class="col-form-label">Pais:</label>
+			            <input value="México" readonly="" id="pais" name="pais" required="" type="text" class="form-control" id="recipient-name">
+			          </div>
+			          <div class="form-group col-sm-6">
+			            <label for="recipient-name" class="col-form-label">Estado:</label>
+			            <input readonly="" id="estado" name="estado" required="" type="text" class="form-control" id="recipient-name">
+			          </div>
+			          <div class="form-group col-sm-6">
+			            <label for="recipient-name" class="col-form-label">Ciudad:</label>
+			            <input readonly="" id="ciudad" name="ciudad" required="" type="text" class="form-control" id="recipient-name">
+			          </div>
 		          </div>
 		        </form>
+		        <h5 style="width:100%">El costo de envio fuera de Tuxtla Gutierrez Chiapas es de ${{envio}} (Puede variar el dia que el producto se encuentre en existencia)</h5>
 		      </div>
 		      <div class="modal-footer">
-		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-		        <button type="button" class="btn btn-primary">Enviar</button>
+		      	
+		        <button type="button" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" data-dismiss="modal">Cerrar</button>
+		        <button type="button" id="submitform" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">Enviar</button>
 		      </div>
 		    </div>
 		  </div>
@@ -253,6 +311,89 @@
 		     
 		   });
 		}
+	</script>
+
+	<script type="text/javascript">
+	$("#submitform").on('click', function(event) {
+		$("#formpedido").submit();
+	});
+	$(".talla").on('change', function(event) {
+		cantidad = $("#prodcant").val()
+		talla = $(".talla").val()
+		$("#cantidadhide").val(cantidad)
+		$("#tallahide").val(talla)
+	});
+	$("#prodcant").on('keyup', function(event) {
+		cantidad = $("#prodcant").val()
+		talla = $(".talla").val()
+		$("#cantidadhide").val(cantidad)
+		$("#tallahide").val(talla)
+	});
+
+	$(".btn-num-product-up").on('click', function(event) {
+		cantidad = parseInt($("#prodcant").val()) + 1
+		talla = $(".talla").val()
+		$("#cantidadhide").val(cantidad)
+		$("#tallahide").val(talla)
+	});
+
+	$(".btn-num-product-down").on('click', function(event) {
+		if (parseInt($("#prodcant").val()) > 0) {
+			cantidad = parseInt($("#prodcant").val()) - 1
+		}
+		else{
+			cantidad = parseInt($("#prodcant").val())
+		}
+		talla = $(".talla").val()
+		$("#cantidadhide").val(cantidad)
+		$("#tallahide").val(talla)
+	});
+
+	$("#tipoenvio").on('change', function(event) {
+		if ($(this).val() == 2) {
+			$("#ingdatosenvio").show();
+			$("#nombre").prop('required',true);
+			$("#email").prop('required',true);
+			$("#telefono").prop('required',true);
+			$("#codigo_postal").prop('required',true);
+			$("#direccion").prop('required',true);
+			$("#exterior").prop('required',true);
+			$("#pais").prop('required',true);
+			$("#estado").prop('required',true);
+			$("#colonia").prop('required',true);
+		}
+		else{
+			$("#ingdatosenvio").hide();
+			$("#nombre").removeAttr('required');
+			$("#email").removeAttr('required');
+			$("#telefono").removeAttr('required');
+			$("#codigo_postal").removeAttr('required');
+			$("#direccion").removeAttr('required');
+			$("#exterior").removeAttr('required');
+			$("#pais").removeAttr('required');
+			$("#estado").removeAttr('required');
+			$("#colonia").removeAttr('required');
+		}
+	});
+
+	$("#codigo_postal").keyup(function(event) {
+		codigo = $(this).val();
+		$.ajax({
+			             url : 'https://api-codigos-postales.herokuapp.com/v2/codigo_postal/'+codigo, // the endpoint,commonly same url
+			             type : "GET", // http method
+			             data : {}, // data sent with the post request
+			     success : function(json) {
+			     	console.log(json)
+			     	$("#ciudad").val(json.municipio);
+			     	$("#estado").val(json.estado);
+			     	valores = "<option disabled selected value='Seleccione una opción'>Seleccione una opcion</option>"
+			     	$.each(json.colonias, function(index, val) {
+			     		valores += "<option value='"+val+"'>"+val+"</option>";
+			     	});
+			     	$("#colonia").html(valores);
+			     }
+			 });
+	});
 	</script>
 
 	{% endblock %}

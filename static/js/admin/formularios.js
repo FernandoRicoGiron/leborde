@@ -125,9 +125,9 @@ function seccionInputs(campos, json) {
 			file = '<div class="col-md-7">'+
 						'<div class="form-group">'+
 						  '<label class="bmd-label-floating">'+label+'</label>'+
-			              '<span class="btn btn-info btn-file" ><input style="z-index: 10000;" type="file" id="files2" name="'+name+'" accept="image/jpeg, image/png"/><p style="z-index: -10000; margin-bottom:0">Seleccione la imagen que representa a la colección</p></span></a>'+
+			              '<span class="btn btn-info btn-file" ><input style="z-index: 10000;" type="file" id="files2" name="'+name+'" accept="image/jpeg, image/png"/><p style="z-index: -10000; margin-bottom:0">Seleccione una imagen</p></span></a>'+
 			            '</div>'+
-			            '<div id="list" class="row" style=""></div>'+
+			            '<div id="list" style="max-width:400px;" class="row" style=""></div>'+
 		            '</div>';
 		    // alert(file)
 		    $("#"+campos).append(file)

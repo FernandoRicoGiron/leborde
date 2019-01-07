@@ -33,6 +33,10 @@ urlpatterns = [
     path('pagadopaypal/', vi.pagadopaypal, name="pagadopaypal"),
     path('errorpagadopaypal/', vi.errorpagadopaypal, name="errorpagadopaypal"),
     path("pagar/paypal/", vi.pagarpaypal, name="paypalpag"),
-    path("ipn/", vi.ipn, name="webhook")
-
+    path("ipn/", vi.ipn, name="webhook"),
+    # pedidos
+    path('crearpedido/', vi.pedido, name="pedido"),
+    path('crearpedido2/', vi.pedido2, name="pedido2"),
+    path('pedidos/', vi.listapedidos, name="listapedidos"),
+    re_path('subircomprobante/(?P<id>\d+)/', vi.producto),
 ]
