@@ -37,48 +37,53 @@ def iniciardashboard(request):
 # Create your views here.
 @login_required(login_url='/dashboard/admin_session/')
 def index(request):
-	año = datetime.now(tz=timezone.utc)
-	ventas = Venta.objects.filter(fecha__month=año.month)
-	sumapedidos = Pedido.objects.filter(fecha__month=año.month)
-	productos_mas = Producto_Pedido.objects.all().order_by("producto")
-	sumascantidades = {}
-	productoen2 = ""
-	for producto in productos_mas:
-		productoen = producto.producto
-		if productoen == productoen2:
-			sumascantidades[producto.producto.id] = sumascantidades[producto.producto.id] + producto.cantidad
-		else:
-			sumascantidades[producto.producto.id] = producto.cantidad
-			productoen2 = producto.producto
+	if request.user.is_staff:
+		año = datetime.now(tz=timezone.utc)
+		ventas = Venta.objects.filter(fecha__month=año.month)
+		sumapedidos = Pedido.objects.filter(fecha__month=año.month)
+		productos_mas = Producto_Pedido.objects.all().order_by("producto")
+		sumascantidades = {}
+		productoen2 = ""
+		for producto in productos_mas:
+			productoen = producto.producto
+			if productoen == productoen2:
+				sumascantidades[producto.producto.id] = sumascantidades[producto.producto.id] + producto.cantidad
+			else:
+				sumascantidades[producto.producto.id] = producto.cantidad
+				productoen2 = producto.producto
 
-	maspedidos = {"1":"","2":"","3":"","4":"","5":""}
-	if len(sumascantidades) > 0:
-		maximo = max(sumascantidades.items(), key=operator.itemgetter(1))[0]
-		maspedidos["1"] = Producto.objects.get(id = maximo)
-		del sumascantidades[maximo]
-	if len(sumascantidades) > 1:
-		maximo = max(sumascantidades.items(), key=operator.itemgetter(1))[0]
-		maspedidos["2"] = Producto.objects.get(id = maximo)
-		del sumascantidades[maximo]
-	if len(sumascantidades) > 2:
-		maximo = max(sumascantidades.items(), key=operator.itemgetter(1))[0]
-		maspedidos["3"] = Producto.objects.get(id = maximo)
-		del sumascantidades[maximo]
-	if len(sumascantidades) > 3:
-		maximo = max(sumascantidades.items(), key=operator.itemgetter(1))[0]
-		maspedidos["4"] = Producto.objects.get(id = maximo)
-		del sumascantidades[maximo]
-	if len(sumascantidades) > 4:
-		maximo = max(sumascantidades.items(), key=operator.itemgetter(1))[0]
-		maspedidos["5"] = Producto.objects.get(id = maximo)
-		del sumascantidades[maximo]
+		maspedidos = {"1":"","2":"","3":"","4":"","5":""}
+		if len(sumascantidades) > 0:
+			maximo = max(sumascantidades.items(), key=operator.itemgetter(1))[0]
+			maspedidos["1"] = Producto.objects.get(id = maximo)
+			del sumascantidades[maximo]
+		if len(sumascantidades) > 1:
+			maximo = max(sumascantidades.items(), key=operator.itemgetter(1))[0]
+			maspedidos["2"] = Producto.objects.get(id = maximo)
+			del sumascantidades[maximo]
+		if len(sumascantidades) > 2:
+			maximo = max(sumascantidades.items(), key=operator.itemgetter(1))[0]
+			maspedidos["3"] = Producto.objects.get(id = maximo)
+			del sumascantidades[maximo]
+		if len(sumascantidades) > 3:
+			maximo = max(sumascantidades.items(), key=operator.itemgetter(1))[0]
+			maspedidos["4"] = Producto.objects.get(id = maximo)
+			del sumascantidades[maximo]
+		if len(sumascantidades) > 4:
+			maximo = max(sumascantidades.items(), key=operator.itemgetter(1))[0]
+			maspedidos["5"] = Producto.objects.get(id = maximo)
+			del sumascantidades[maximo]
 
-	print(maspedidos)
+		print(maspedidos)
 
 
-	sumaventas = 0
-	for venta in ventas:
-		sumaventas += venta.monto.amount
+		sumaventas = 0
+		for venta in ventas:
+			sumaventas += venta.monto.amount
 
-	ultimospedidos = Pedido.objects.all()[:5]
-	return render(request, "admin.html", {"ventas":sumaventas, "sumapedidos":len(sumapedidos), "maspedidos":maspedidos, "ultimospedidos":ultimospedidos})
+		ultimospedidos = Pedido.objects.all()[:5]
+		return render(request, "admin.html", {"ventas":sumaventas, "sumapedidos":len(sumapedidos), "maspedidos":maspedidos, "ultimospedidos":ultimospedidos})
+	else:
+		logout(request)
+		sweetify.error(request, 'Este usuario no cuenta con los permisos necesarios para acceder a esta sección', persistent=':(')
+		return redirect("/dashboard/admin_session/")

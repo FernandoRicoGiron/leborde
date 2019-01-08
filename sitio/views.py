@@ -671,3 +671,13 @@ def listapedidos(request):
 	pedidos = Pedido.objects.filter(usuario=request.user)
 	return render(request, 'pedidos.html', {"cart":cart, "pedidos":pedidos})
 
+def subircomprobante(request, id):
+	if "comprobante" in request.FILES:
+		pedido = Pedido.objects.get(id=id)
+		pedido.comprobante = request.FILES["comprobante"]
+		pedido.save()
+		sweetify.success(request, 'Gracias por subir su comprobante de pago si todo esta correcto su pedido llegara de 3 a 5 dias habiles', persistent=':(')
+		return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
+	else:
+		sweetify.error(request, 'Seleccione una imagen por favor', persistent=':(')
+		return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
