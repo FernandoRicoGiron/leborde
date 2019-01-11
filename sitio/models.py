@@ -56,6 +56,7 @@ class Empresa(models.Model):
 	historia = RichTextField()
 	giro_de_la_empresa = RichTextField()
 	numero_de_cuenta = models.CharField(max_length=50)
+	link_encuesta = models.URLField(blank=True, null=True)
 
 	def __str__(self):
 		return self.nombre

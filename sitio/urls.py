@@ -39,4 +39,5 @@ urlpatterns = [
     path('crearpedido2/', vi.pedido2, name="pedido2"),
     path('pedidos/', vi.listapedidos, name="listapedidos"),
     re_path('subircomprobante/(?P<id>\d+)/', vi.subircomprobante),
+    re_path('voucher/(?P<id>\d+)/', vi.voucher),
 ]

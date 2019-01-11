@@ -44,7 +44,14 @@ def ipn(sender, *args, **kwargs):
 			monto=datos.mc_gross-datos.mc_fee,
 			pedido=pedido)
 
-			
+		empresa = Empresa.objects.last()
+		send_mail(
+			'Encuesta de servicio '+empresa.nombre,
+			'Gracias por comprar en '+empresa.nombre+" su pago se ha completado correctamente, le agradeceriamos que se tome un momento de su tiempo para llenar la siguiente encuesta\n\n"+empresa.link_encuesta,
+			empresa.correo,
+			[pedido.email],
+			fail_silently=False,
+		)
 
 		# print(json.loads("{"+sender.query.replace("&",",")+"}"))
 		# for x in datos:
@@ -681,3 +688,21 @@ def subircomprobante(request, id):
 	else:
 		sweetify.error(request, 'Seleccione una imagen por favor', persistent=':(')
 		return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
+
+def voucher(request, id):
+	total = 0
+	pedido = Pedido.objects.get(id=id)
+	plan = "Total a pagar"
+	precio = pedido.total
+	logo = Empresa.objects.last()
+	productos = Producto_Pedido.objects.filter(pedido=pedido)
+	arreglo = {}
+	for x in productos:
+		arreglo[x.id] = {"nombre":x.producto.nombre,
+			"precio":x.producto.precio.amount,
+			"cantidad":x.cantidad,
+			"talla":x.talla,
+			"total":x.cantidad*x.producto.precio,
+			"imagen":x.producto.imagenes.first().imagen.url}
+	pdf= render_pdf("pagos.html",{"plan":plan, "precio":precio, "logo":logo.logo.url, "ncuenta":logo.numero_de_cuenta, "cart":arreglo})
+	return HttpResponse(pdf,content_type="application/pdf")

@@ -23,6 +23,7 @@ def showmodificardatos(request):
 	dato = Empresa.objects.last()
 	data = {"nombre":{"tipo":"char","valor":dato.nombre,"label":"Nombre:", "name":"nombre"},
 		"num_cuenta":{"tipo":"char","valor":dato.numero_de_cuenta,"label":"Número de cuenta:", "name":"numero_de_cuenta"},
+		"formulario":{"tipo":"char","valor":dato.link_encuesta,"label":"Link a encuesta de servicio:", "name":"link_encuesta"},
 		"direccion":{"tipo":"char","valor":dato.direccion,"label":"Dirección:", "name":"direccion"},
 		"telefono":{"tipo":"char","valor":dato.telefono,"label":"Telefono:", "name":"telefono"},
 		"correo":{"tipo":"char","valor":dato.correo,"label":"Correo electronico:", "name":"correo"},
@@ -52,7 +53,8 @@ def modificardato(request):
 				valores=request.POST.get("valores"),
 				historia=request.POST.get("historia"),
 				giro_de_la_empresa=request.POST.get("giro"),
-				numero_de_cuenta=request.POST.get("numero_de_cuenta"))
+				numero_de_cuenta=request.POST.get("numero_de_cuenta"),
+				link_encuesta=request.POST.get("link_encuesta"))
 	else:
 		dato = Empresa.objects.create(nombre=request.POST.get("nombre"),
 				direccion=request.POST.get("direccion"),
@@ -64,5 +66,6 @@ def modificardato(request):
 				valores=request.POST.get("valores"),
 				historia=request.POST.get("historia"),
 				giro_de_la_empresa=request.POST.get("giro"),
-				numero_de_cuenta=request.POST.get("numero_de_cuenta"))
+				numero_de_cuenta=request.POST.get("numero_de_cuenta"),
+				link_encuesta=request.POST.get("link_encuesta"))
 	return JsonResponse("Correcto", safe=False)

@@ -265,8 +265,52 @@
 
 <script type="text/javascript">
 $("#pagoxxo").on('click', function(event) {
-	$("#formpago").attr('action', '/crearpedido2/');
-	$("#formpago").submit();
+	var nombre = $("#nombre").val();
+	var email = $("#email").val();
+	var telefono = $("#telefono").val();
+	var codigo = $("#codigo_postal").val();
+	var direccion = $("#direccion").val();
+	var exterior = $("#exterior").val();
+	var pais = $("#pais").val();
+	var estado = $("#estado").val();
+	var colonia = $("#colonia").val();
+	var tipoenvio = $("#tipoenvio").val();
+	alert(tipoenvio)
+	if (tipoenvio == 2){
+		if (nombre!="" & email!="" & telefono!="" & codigo!="" & direccion!="" & exterior!="" & pais!="" & estado!="" & colonia!="Seleccione una opción") {
+			$("#formpago").attr('action', '/crearpedido2/');
+			$("#formpago").submit();
+		}
+		else{
+			swal("Ingrese los datos de envio por favor")
+		}
+	}
+	else{
+		$("#formpago").attr('action', '/crearpedido2/');
+		$("#formpago").submit();
+	}
+});
+
+$("#formpago").on('submit', function(event) {
+	var nombre = $("#nombre").val();
+	var email = $("#email").val();
+	var telefono = $("#telefono").val();
+	var codigo = $("#codigo_postal").val();
+	var direccion = $("#direccion").val();
+	var exterior = $("#exterior").val();
+	var pais = $("#pais").val();
+	var estado = $("#estado").val();
+	var colonia = $("#colonia").val();
+	var tipoenvio = $("#tipoenvio").val();
+	if (tipoenvio == 2) {
+		if (nombre!="" & email!="" & telefono!="" & codigo!="" & direccion!="" & exterior!="" & pais!="" & estado!="" & colonia!="Seleccione una opción") {
+			return true;
+		}
+		else{
+			swal("Ingrese los datos de envio por favor");
+			return false;
+		}
+	}
 });
 
 $("#tipoenvio").on('change', function(event) {

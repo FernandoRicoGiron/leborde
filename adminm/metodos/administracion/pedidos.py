@@ -12,6 +12,7 @@ from django.db.models import Q
 from functools import reduce
 from django.core import serializers
 from django.contrib.auth.models import User
+from django.core.mail import EmailMessage, send_mail
 import sweetify
 import operator
 import json
@@ -78,6 +79,14 @@ def modificarpedido(request):
 	if request.POST.get("estadopedido") == "2" or request.POST.get("estadopedido") == "3" or request.POST.get("estadopedido") == "4":
 		if not Venta.objects.filter(usuario=pedido.usuario, monto=pedido.total, pedido=pedido).exists():
 			venta = Venta.objects.create(usuario=pedido.usuario, fecha=datetime.now(), monto=pedido.total, pedido=pedido)
+			empresa = Empresa.objects.last()
+			send_mail(
+				'Encuesta de servicio '+empresa.nombre,
+				'Gracias por comprar en '+empresa.nombre+" su pago se ha completado correctamente, le agradeceriamos que se tome un momento de su tiempo para llenar la siguiente encuesta\n\n"+empresa.link_encuesta,
+				empresa.correo,
+				[pedido.email],
+				fail_silently=False,
+			)
 	if request.POST.get("estadopedido") == "1":
 		if Venta.objects.filter(usuario=pedido.usuario, monto=pedido.total, pedido=pedido).exists():
 			venta = Venta.objects.get(usuario=pedido.usuario, monto=pedido.total, pedido=pedido)

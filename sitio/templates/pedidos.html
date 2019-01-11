@@ -51,6 +51,7 @@ td{
 									<th class="column-4">Total</th>
 									<th class="column-5">Comprobante</th>
 									<th class="column-6">Enviar</th>
+									<th class="column-7">Voucher</th>
 								</tr>
 								{% for pedido in pedidos %}
 								<tr class="table_row {{item.product.id}}{{item.talla|replace}}">
@@ -58,6 +59,7 @@ td{
 									<td class="column-2">{{pedido.fecha|date:"d-m-y h:m"}} </td>
 									<td class="column-3">{% if pedido.estado_pedido == "1" %}Pago Pendiente{% elif pedido.estado_pedido == "2" %}Pagado{% elif pedido.estado_pedido == "3" %}En camino{% elif pedido.estado_pedido == "4" %}Entregado{%endif%}</td>
 									<td class="column-4">{{pedido.total}}</td>
+									{% if pedido.estado_pedido == "1" %}
 									<form action="/subircomprobante/{{pedido.id}}/" method="POST" class="bg0 p-t-75 p-b-85" enctype="multipart/form-data">
 									{% csrf_token %}
 									<td class="column-5">
@@ -75,9 +77,11 @@ td{
 									</td>
 
 									</form>
+									
 									<td style="width:100px" class="column-6">
-										<a href="">Descargar baucher de pago</a>
+										<a target="_blank" class="flex-c-m  cl0  bg1 bor1 hov-btn1 p-lr-15 trans-04" href="/voucher/{{pedido.id}}/">Descargar voucher de pago</a>
 									</td>
+									{% endif %}
 								</tr>
 								{% endfor %}
 
