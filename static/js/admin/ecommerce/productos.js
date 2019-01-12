@@ -340,3 +340,4 @@ $("#TablaProductos").on('click', 'button.eliminarProducto', function(event) {
 $(".botonCancelar").on('click', function() {
 	irAtras()
 });
+

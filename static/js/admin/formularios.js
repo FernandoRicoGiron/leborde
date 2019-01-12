@@ -79,6 +79,20 @@ function seccionInputs(campos, json) {
 	                    '</div>'+
 	                  '</div>';
 		}
+		else if(tipo == "intdinamic"){
+
+			input = ""
+			$.each(valor, function(index, val) {
+				 input += '<div class="col-md-6 intdinamic" id="intdinamic'+val.valor2+'">'+
+	                    '<div class="form-group">'+
+	                      '<label class="bmd-label-floating">'+val.label+'</label>'+
+	                      '<input name="inventario'+val.valor2+'" type="number" class="form-control inputdinamic" value="'+val.valor+'">'+
+	                      '<input name="talla'+val.valor2+'" type="hidden" class="form-control inputdinamic" value="'+val.valor2+'">'+
+	                    '</div>'+
+	                  '</div>';
+			});
+			
+		}
 		else if(tipo == "select"){
 			opciones = JSON.parse(value.opciones);
 			opt = "";
@@ -149,10 +163,10 @@ function seccionInputs(campos, json) {
 			});
 			
 
-			input = '<div class="col-md-6">'+
+			input = '<div class="col-md-6" id="multiselectdinamic">'+
 	                    '<div class="form-group">'+
 	                      '<label class="bmd-label-floating">'+label+'</label>'+
-	                      '<select searchable="Buscar Aquí.." multiple name="'+name+'" class="form-control mdb-select">'+
+	                      '<select  searchable="Buscar Aquí.." multiple name="'+name+'" class="form-control mdb-select">'+
 	                      	opt+
 	                      '</select>'
 	                    '</div>'+
@@ -162,6 +176,45 @@ function seccionInputs(campos, json) {
 	        	enableFiltering: true,
 	            includeSelectAllOption: true,
 	            buttonWidth: '100%',
+	            onDeselectAll: function () {
+			        $(".intdinamic").remove()
+	            },
+	            onSelectAll: function () {
+	            	if ($("#formagregar").attr('action') == "agregarproducto/" | $("#formmodificar").attr('action') == "modificarproducto/") {
+		                var brands = $('.mdb-select option:selected');
+				        $(brands).each(function(index, brand){
+				        	$("#intdinamic"+brand.value).remove()
+				            input = '<div class="col-md-6 intdinamic" id="intdinamic'+brand.value+'">'+
+			                    '<div class="form-group">'+
+			                      '<label class="bmd-label-floating">Inventario de '+brand.text+'</label>'+
+			                      '<input name="inventario'+brand.value+'" type="number" class="form-control inputdinamic" value="'+0+'">'+
+			                      '<input name="talla'+brand.value+'" type="hidden" class="form-control inputdinamic" value="'+brand.value+'">'+
+			                    '</div>'+
+			                  '</div>';
+
+			                  $("#multiselectdinamic").after(input);
+				        });
+				    }
+	            },
+	            onChange: function(option, checked, select) {
+	            	if ($("#formagregar").attr('action') == "agregarproducto/" | $("#formmodificar").attr('action') == "modificarproducto/") {
+						
+						if (checked) {
+							input = '<div class="col-md-6 intdinamic" id="intdinamic'+option.val()+'">'+
+		                    '<div class="form-group">'+
+		                      '<label class="bmd-label-floating">Inventario de '+option.html()+'</label>'+
+		                      '<input name="inventario'+option.val()+'" type="number" class="form-control inputdinamic" value="'+0+'">'+
+		                      '<input name="talla'+option.val()+'" type="hidden" class="form-control inputdinamic" value="'+option.val()+'">'+
+		                    '</div>'+
+		                  '</div>';
+
+		                  $("#multiselectdinamic").after(input);
+	                  }
+	                  else{
+	                  	$("#intdinamic"+option.val()).remove()
+	                  }
+					}
+				}
 	        });
 	        
 	        

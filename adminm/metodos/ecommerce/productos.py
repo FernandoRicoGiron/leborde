@@ -35,16 +35,25 @@ def showmodificarproductos(request):
 	imagenes = {}
 	for imagen in producto.imagenes.all():
 		imagenes[imagen.id] = {"id":imagen.id, "url":imagen.imagen.url}
+
+	inventario_tallas = {}
+	inv_tallas = Inventario_Talla.objects.filter(producto=producto)
+	cont = 0
+	for talla in inv_tallas:
+		inventario_tallas[talla.id] = {"valor":talla.cantidad, "valor2":talla.talla.id,"label":"Inventario de " + talla.talla.nombre + " :", "name":"inventario"+str(talla.id),}
+
 	data = {"nombre":{"tipo":"char","valor":producto.nombre,"label":"Nombre:", "name":"nombre"},
 		"descripcion":{"tipo":"text","valor":producto.descripcion,"label":"Descripción:", "name":"descripcion"},
 		"popular":{"tipo":"bolean","valor":producto.popular,"label":"¿Es un producto popular?", "name":"popular"},
 		"precio":{"tipo":"money","valor":producto.precio.amount,"label":"Precio:", "name":"precio"},
 		"precio_oferta":{"tipo":"money","valor":producto.precio_oferta.amount,"label":"Precio Oferta:", "name":"precio_oferta"},
-		"inventario":{"tipo":"int","valor":producto.inventario,"label":"Inventario:", "name":"inventario"},
 		"categorias":{"tipo":"select","valor":producto.categoria.nombre, "sel":producto.categoria.id, "label":"Categoria:", "opciones":serializers.serialize('json', Categoria.objects.all()), "name":"categoria"},
 		"tallas":{"tipo":"multiselect","valor":"","label":"Tallas:", "sel":serializers.serialize('json', producto.tallas.all()), "opciones":serializers.serialize('json', Talla.objects.all()), "name":"tallas"},
+		"inventario_tallas":{"tipo":"intdinamic","valor":inventario_tallas,},
 		"imagenes":{"tipo":"imagen","valor":imagenes,"label":"Imagenes del producto: ", "name":"imagenes"},
 		}
+	# print(data)
+
 	return JsonResponse(data, safe=False)
 
 @csrf_exempt
@@ -54,7 +63,7 @@ def showagregarproductos(request):
 		"popular":{"tipo":"bolean","valor":"","label":"¿Es un producto popular?", "name":"popular"},
 		"precio":{"tipo":"money","valor":"","label":"Precio:", "name":"precio"},
 		"precio_oferta":{"tipo":"money","valor":"","label":"Precio Oferta:", "name":"precio_oferta"},
-		"inventario":{"tipo":"int","valor":"","label":"Inventario:", "name":"inventario"},
+		# "inventario":{"tipo":"int","valor":"","label":"Inventario:", "name":"inventario"},
 		"categorias":{"tipo":"select","valor":"","label":"Categoria:", "sel":"", "opciones":serializers.serialize('json', Categoria.objects.all()), "name":"categoria"},
 		"tallas":{"tipo":"multiselect","valor":"","label":"Tallas:", "sel":"", "opciones":serializers.serialize('json', Talla.objects.all()), "name":"tallas"},
 		"imagenes":{"tipo":"imagen","valor":"","label":"Imagenes:","name":"imagenes"},
@@ -63,6 +72,7 @@ def showagregarproductos(request):
 
 @csrf_exempt
 def agregarproducto(request):
+	print(request.POST)
 	idimagenes = request.POST.getlist("idimagenes")
 	listatallas = request.POST.getlist("tallas")
 	tallas = Talla.objects.filter(id__in=listatallas)
@@ -71,25 +81,36 @@ def agregarproducto(request):
 			popular=True
 		else:
 			popular=False
-		
+		sumainventario = 0
+		for x in request.POST.getlist("tallas"):
+			
+			valor = request.POST.get("inventario"+str(x))
+			sumainventario += int(valor)
 		categoria = Categoria.objects.get(id=request.POST.get("categoria"))
 		producto = Producto.objects.create(nombre=request.POST.get("nombre"),
 			descripcion=request.POST.get("descripcion"),
 			precio=request.POST.get("precio"),
 			precio_oferta=request.POST.get("precio_oferta"),
 			popular=popular,
-			inventario=request.POST.get("inventario"),
+			inventario=sumainventario,
 			categoria=categoria)
 		producto.tallas.add(*tallas)
 		for imagenid in idimagenes:
 			imagen = Imagen.objects.get(id=imagenid)
 			producto.imagenes.add(imagen)
+
+		for x in request.POST.getlist("tallas"):
+			inventario = request.POST["inventario"+str(x)]
+			talla = request.POST["talla"+str(x)]
+			talla = Talla.objects.get(id=talla)
+			Inventario_Talla.objects.create(producto=producto, talla=talla, cantidad=inventario)
 		return JsonResponse("Correcto", safe=False)
 	else:
 		return JsonResponse("Verifique que ingreso todos los datos por favor", safe=False)
 
 @csrf_exempt
 def modificarproducto(request):
+	print(request.POST)
 	producto = Producto.objects.get(id=request.POST.get("idproducto"))
 	idimagenes = request.POST.getlist("idimagenes")
 	idimagenesnu = request.POST.getlist("idimagenesnu")
@@ -101,14 +122,17 @@ def modificarproducto(request):
 		else:
 			popular=False
 		categoria = Categoria.objects.get(id=request.POST.get("categoria"))
-
+		sumainventario = 0
+		for x in request.POST.getlist("tallas"):
+			valor = request.POST.get("inventario"+str(x))
+			sumainventario += int(valor)
 		producto.tallas.clear()
 		producto.nombre=request.POST.get("nombre")
 		producto.descripcion=request.POST.get("descripcion")
 		producto.precio=request.POST.get("precio")
 		producto.precio_oferta=request.POST.get("precio_oferta")
 		producto.popular=popular
-		producto.inventario=request.POST.get("inventario")
+		producto.inventario=sumainventario
 		producto.categoria=categoria
 		producto.tallas.add(*tallas)
 
@@ -122,6 +146,13 @@ def modificarproducto(request):
 			imagen = Imagen.objects.get(id=imagenid)
 			producto.imagenes.add(imagen)
 		producto.save()
+
+		Inventario_Talla.objects.filter(producto=producto).delete()
+		for x in request.POST.getlist("tallas"):
+			inventario = request.POST["inventario"+str(x)]
+			talla = request.POST["talla"+str(x)]
+			talla = Talla.objects.get(id=talla)
+			Inventario_Talla.objects.create(producto=producto, talla=talla, cantidad=inventario)
 		return JsonResponse("Correcto", safe=False)
 	else:
 		return JsonResponse("Verifique que ingreso todos los datos por favor", safe=False)

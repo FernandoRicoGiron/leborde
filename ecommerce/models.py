@@ -48,12 +48,20 @@ class Producto(models.Model):
 	precio_oferta = MoneyField(max_digits=14, decimal_places=2, default_currency='MXN')
 	popular = models.BooleanField(default=False)
 	imagenes = models.ManyToManyField(Imagen)
-	inventario = models.IntegerField()
+	inventario = models.IntegerField(default=0)
 	categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
 	tallas = models.ManyToManyField(Talla, blank=True)
 
 	def __str__(self):
 		return self.nombre
+
+class Inventario_Talla(models.Model):
+	producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+	talla = models.ForeignKey(Talla, on_delete=models.CASCADE)
+	cantidad = models.IntegerField(default=0)
+
+	def __str__(self):
+		return self.producto.nombre
 
 class Ficha_Tecnica(models.Model):
 	dato = models.CharField(max_length=50)
