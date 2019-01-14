@@ -38,6 +38,14 @@ def ipn(sender, *args, **kwargs):
 		pedido.total = datos.mc_gross-datos.mc_fee
 		pedido.estado_pedido = "2"
 		pedido.save()
+
+		productos = Producto_Pedido.objects.filter(pedido=pedido)
+
+		for producto in productos:
+			talla = Talla.objects.get(nombre = producto.talla)
+			talla = Inventario_Talla.objects.get(producto=producto.producto, talla=talla)
+			talla.cantidad -= producto.cantidad
+			talla.save()
 		
 		Venta.objects.create(usuario=pedido.usuario,
 			fecha=datetime.datetime.now(),
@@ -153,6 +161,7 @@ def producto(request, id):
 	cart = Cart(request)
 	variables(request)
 	producto = Producto.objects.get(id=id)
+	tallas_prod = Inventario_Talla.objects.filter(producto=producto)
 	pro_re = Producto.objects.filter(categoria=producto.categoria)
 	envio = Envio.objects.last()
 	estadodatos = False
@@ -166,8 +175,15 @@ def producto(request, id):
 										"producto":producto,
 										"pro_re":pro_re,
 										"envio":envio.costo.amount,
-										"estadodatos":estadodatos
+										"estadodatos":estadodatos,
+										"tallas":tallas_prod
 										})
+@csrf_exempt
+def checktalla(request):
+	talla = Talla.objects.get(id = request.POST.get("talla"))
+	producto = Producto.objects.get(id=request.POST.get("producto"))
+	talla = Inventario_Talla.objects.get(producto=producto, talla=talla)
+	return JsonResponse(talla.cantidad, safe=False)
 
 def contacto(request):
 	cart = Cart(request)

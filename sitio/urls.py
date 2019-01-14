@@ -10,6 +10,7 @@ urlpatterns = [
     re_path('tienda/coleccion/(?P<id>\d+)/', vi.coleccion),
     re_path('tienda/(?P<id>\d+)/', vi.producto),
     path('tienda/', vi.tienda),
+    path('checktalla/', vi.checktalla),
     path('contacto/', vi.contacto),
     path('mensajecontacto/', vi.mensajecontacto),
     path('faqs/', vi.faqs),

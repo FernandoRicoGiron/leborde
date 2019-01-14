@@ -57,8 +57,8 @@
 								<div class="size-204 respon6-next">
 									<div class="rs1-select2 bor8 bg0">
 										<select class="js-select2 talla" name="talla">
-											{% for talla in producto.tallas.all %}
-											<option value="{{talla.id}}">{{talla.nombre}}</option>
+											{% for talla in tallas %}
+											<option value="{{talla.talla.id}}">{{talla.talla.nombre}}</option>
 											{% endfor %}
 										</select>
 										<div class="dropDownSelect2"></div>
@@ -102,19 +102,20 @@
 										</div>
 									</div>
 
-									
-									{% if producto.inventario == 0 %}
-									<h4 class="mtext-105 cl2 js-name-detail p-b-14">
-										Agotado
-									</h4>
-									<a href="#" data-toggle="modal" data-target="#pedido" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">
-										solicitar sobre pedido
-									</a>
-									{% else %}
-									<a href="javascript:agregarCarrito()" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">
-										Agregar al carrito
-									</a>
-									{% endif %}
+									<div id="botoncompras">
+										{% if tallas.first.cantidad == 0 %}
+										<h4 class="mtext-105 cl2 js-name-detail p-b-14">
+											Agotado
+										</h4>
+										<a href="#" data-toggle="modal" data-target="#pedido" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">
+											solicitar sobre pedido
+										</a>
+										{% else %}
+										<a href="javascript:agregarCarrito()" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">
+											Agregar al carrito
+										</a>
+										{% endif %}
+									</div>
 								</div>
 							</div>	
 						</div>
@@ -322,6 +323,22 @@
 		talla = $(".talla").val()
 		$("#cantidadhide").val(cantidad)
 		$("#tallahide").val(talla)
+		producto = "{{producto.id}}"
+		$.ajax({
+			url: '/checktalla/',
+			type: 'POST',
+			data: {talla: talla, producto:producto},
+			success:function(json) {
+				if (json == 0) {
+					data = '<h4 class="mtext-105 cl2 js-name-detail p-b-14">Agotado</h4><a href="#" data-toggle="modal" data-target="#pedido" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">solicitar sobre pedido</a>'
+				}
+				else{
+					data = '<a href="javascript:agregarCarrito()" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">Agregar al carrito</a>'
+				}
+				$("#botoncompras").html(data)
+			},
+		})
+		
 	});
 	$("#prodcant").on('keyup', function(event) {
 		cantidad = $("#prodcant").val()
