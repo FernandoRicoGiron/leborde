@@ -35,7 +35,7 @@ $("#mostrarPedidos").on("click", function () {
  						// $.each( datos.imagenes, function( key, value ) {console.log(value)})
 						table.row.add( [value.pk,
 							(date.getDate()).toString()+"/"+(date.getMonth()+1).toString()+"/"+(date.getFullYear()).toString()+" "+(date.getHours()).toString()+":"+(date.getMinutes()).toString()+":"+(date.getSeconds()).toString(),
-							datos.usuario,
+							clientes[datos.usuario],
 							estadopedido,
 							"$"+datos.total,
 		                    '<button style="padding:10px;" type="button" rel="tooltip" class="modificarPedido btn btn-success" data-original-title="" title="">'+

@@ -387,7 +387,8 @@ def pago(request):
 	envio = Envio.objects.last()
 	variables(request)
 	cliente = Cliente.objects.get(usuario=request.user)
-	if cliente.telefono != "null" and cliente.direccion != "null" and cliente.ciudad != "null" and cliente.estado != "null" and cliente.pais != "null" and cliente.codigopostal != "null":
+	print(cliente.telefono)
+	if cliente.telefono != None and cliente.direccion != None and cliente.ciudad != None and cliente.estado != None and cliente.pais != None and cliente.codigopostal != None:
 		estadodatos = True
 	else:
 		estadodatos = "No cuenta con datos de envio"
@@ -621,7 +622,7 @@ def pedido(request):
 				"precio":producto.precio.amount,
 				"cantidad":cantidad,
 				"talla":talla,
-				"total":precio,
+				"total":producto.precio * cantidad,
 				"imagen":producto.imagenes.first().imagen.url},
 				"2":{"nombre":"Envio",
 				"precio":envio.costo.amount,
@@ -629,83 +630,86 @@ def pedido(request):
 				"talla":"",
 				"total":envio.costo.amount,
 				"imagen":""}}
+
 	pdf= render_pdf("pagos.html",{"plan":plan, "precio":precio, "logo":logo.logo.url, "ncuenta":logo.numero_de_cuenta, "cart":cart})
 	return HttpResponse(pdf,content_type="application/pdf")
 
 def pedido2(request):
-	# producto = Producto.objects.get(id=request.POST.get("idprod"))
-	print(request.POST)
-	cantidad = request.POST.get("cantidad")
-	talla = request.POST.get("talla")
-	envio = Envio.objects.last()
-	num_pedido = Num_Pedido.objects.first()
-	num_pedido.pedido += 1
-	num_pedido.save()
 	cart = Cart(request)
-	arreglo = {}
-	cont = 1
-	total = 0
-	for x in cart:
-		total += x.total_price
+	if cart.count() > 0:
+		cantidad = request.POST.get("cantidad")
+		talla = request.POST.get("talla")
+		envio = Envio.objects.last()
+		num_pedido = Num_Pedido.objects.first()
+		num_pedido.pedido += 1
+		num_pedido.save()
 		
+		arreglo = {}
+		cont = 1
+		total = 0
+		for x in cart:
+			total += x.total_price
+			
 
-	if request.POST.get("enviomod") == "2":
-		if request.POST.get("ciudad") != "Tuxtla Gutiérrez":
-			total = total + envio.costo.amount
-		pedido = Pedido.objects.create(usuario = request.user,
-				total = total,
-				fecha = datetime.datetime.now(),
-				nombre = "Pedido #" + str(num_pedido.pedido),
-				estado_pedido = "1",
-				telefono = request.POST.get("telefono"),
-				pais = request.POST.get("pais"),
-				estado = request.POST.get("estado"),
-				ciudad = request.POST.get("ciudad"),
-				direccion = request.POST.get("colonia") + " " +request.POST.get("direccion") + " " + request.POST.get("exterior") + " " + request.POST.get("interior"),
-				codigopostal = request.POST.get("codigo"),
-				email = request.POST.get("email"),)
+		if request.POST.get("enviomod") == "2":
+			if request.POST.get("ciudad") != "Tuxtla Gutiérrez":
+				total = total + envio.costo.amount
+			pedido = Pedido.objects.create(usuario = request.user,
+					total = total,
+					fecha = datetime.datetime.now(),
+					nombre = "Pedido #" + str(num_pedido.pedido),
+					estado_pedido = "1",
+					telefono = request.POST.get("telefono"),
+					pais = request.POST.get("pais"),
+					estado = request.POST.get("estado"),
+					ciudad = request.POST.get("ciudad"),
+					direccion = request.POST.get("colonia") + " " +request.POST.get("direccion") + " " + request.POST.get("exterior") + " " + request.POST.get("interior"),
+					codigopostal = request.POST.get("codigo"),
+					email = request.POST.get("email"),)
+		else:
+			cliente = Cliente.objects.get(usuario = request.user)
+			if cliente.ciudad != "Tuxtla Gutiérrez":
+				total = total + envio.costo.amount
+			pedido = Pedido.objects.create(usuario = request.user,
+					total = total,
+					fecha = datetime.datetime.now(),
+					nombre = "Pedido #" + str(num_pedido.pedido),
+					estado_pedido = "1",
+					telefono = cliente.telefono,
+					pais = cliente.pais,
+					estado = cliente.estado,
+					ciudad = cliente.ciudad,
+					direccion = cliente.direccion,
+					codigopostal = cliente.codigopostal,
+					email = request.user.email,)
+
+		for x in cart:
+			Producto_Pedido.objects.create(producto=x.product,
+					cantidad=x.quantity,
+					pedido=pedido,
+					talla=x.talla,)
+			arreglo[cont] = {"nombre":x.product.nombre,
+				"precio":x.product.precio.amount,
+				"cantidad":x.quantity,
+				"talla":x.talla,
+				"total":x.total_price,
+				"imagen":x.product.imagenes.first().imagen.url}
+			cont += 1
+		arreglo[cont] = {"nombre":"Envio",
+				"precio":envio.costo.amount,
+				"cantidad":1,
+				"talla":"",
+				"total":envio.costo.amount,
+				"imagen":""}
+
+		plan = "Total a pagar"
+		precio = total
+		logo = Empresa.objects.last()
+		cart.clear()
+		pdf= render_pdf("pagos.html",{"plan":plan, "precio":precio, "logo":logo.logo.url, "ncuenta":logo.numero_de_cuenta, "cart":arreglo})
+		return HttpResponse(pdf,content_type="application/pdf")
 	else:
-		cliente = Cliente.objects.get(usuario = request.user)
-		if cliente.ciudad != "Tuxtla Gutiérrez":
-			total = total + envio.costo.amount
-		pedido = Pedido.objects.create(usuario = request.user,
-				total = total,
-				fecha = datetime.datetime.now(),
-				nombre = "Pedido #" + str(num_pedido.pedido),
-				estado_pedido = "1",
-				telefono = cliente.telefono,
-				pais = cliente.pais,
-				estado = cliente.estado,
-				ciudad = cliente.ciudad,
-				direccion = cliente.direccion,
-				codigopostal = cliente.codigopostal,
-				email = request.user.email,)
-
-	for x in cart:
-		Producto_Pedido.objects.create(producto=x.product,
-				cantidad=x.quantity,
-				pedido=pedido,
-				talla=x.talla,)
-		arreglo[cont] = {"nombre":x.product.nombre,
-			"precio":x.product.precio.amount,
-			"cantidad":x.quantity,
-			"talla":x.talla,
-			"total":x.total_price,
-			"imagen":x.product.imagenes.first().imagen.url}
-		cont += 1
-	arreglo[cont] = {"nombre":"Envio",
-			"precio":envio.costo.amount,
-			"cantidad":1,
-			"talla":"",
-			"total":envio.costo.amount,
-			"imagen":""}
-
-	plan = "Total a pagar"
-	precio = total
-	logo = Empresa.objects.last()
-	
-	pdf= render_pdf("pagos.html",{"plan":plan, "precio":precio, "logo":logo.logo.url, "ncuenta":logo.numero_de_cuenta, "cart":arreglo})
-	return HttpResponse(pdf,content_type="application/pdf")
+		return redirect("/pagar/")
 
 def listapedidos(request):
 	cart = Cart(request)

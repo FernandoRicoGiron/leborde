@@ -22,7 +22,10 @@ def showpedidos(request):
 	pedidos = Pedido.objects.all().order_by("-id")
 	usuarios = User.objects.all()
 	pedidos = serializers.serialize('json', pedidos)
-	data = {"pedidos":pedidos}
+	lista = {}
+	for usuario in usuarios:
+		lista[usuario.id] = usuario.first_name + " " + usuario.last_name
+	data = {"pedidos":pedidos, "usuarios":lista}
 	return JsonResponse(data, safe=False)
 
 @csrf_exempt

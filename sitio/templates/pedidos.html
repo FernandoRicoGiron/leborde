@@ -4,7 +4,7 @@
 {% load tags %}
 
 <style type="text/css">
-input[type="file"]#mi-archivo {
+input[type="file"]{
 	 width: 0.1px;
 	 height: 0.1px;
 	 opacity: 0;
@@ -13,7 +13,7 @@ input[type="file"]#mi-archivo {
 	 /*visibility: hidden;*/
 	 z-index: -1;
 }
-label[for="mi-archivo"] {
+label {
  font-size: 14px;
  font-weight: 600;
  color: #fff;
@@ -45,7 +45,7 @@ td{
 						<div class="wrap-table-shopping-cart">
 							<table class="table-shopping-cart carrito">
 								<tr class="table_head">
-									<th class="column-1">No de order</th>
+									<th class="column-1">No de orden</th>
 									<th class="column-2">Fecha</th>
 									<th class="column-3">Estado</th>
 									<th class="column-4">Total</th>
@@ -64,10 +64,10 @@ td{
 									{% csrf_token %}
 									<td class="column-5">
 										<input value="{{pedido.id}}" type="hidden" name="id">
-										<span class="mi-archivo">
-											<input class="" id="mi-archivo" type="file" name="mi-archivo">
+										<span class="mi-archivo{{pedido.id}}">
+											<input class="" id="mi-archivo{{pedido.id}}" type="file" name="mi-archivo">
 										</span>
-										<label for="mi-archivo" class="flex-c-m  cl0  bg1 bor1 hov-btn1 p-lr-15 trans-04">
+										<label for="mi-archivo{{pedido.id}}" class="flex-c-m  cl0  bg1 bor1 hov-btn1 p-lr-15 trans-04">
 											<span>Subir comprobante</span>
 										</label>
 										
@@ -157,11 +157,11 @@ $("#codigo_postal").keyup(function(event) {
 <script type="application/javascript">
 jQuery('input[type=file]').change(function(){
  var filename = jQuery(this).val().split('\\').pop();
- var idname = jQuery(this).attr('id');
+ var idname = jQuery(this).attr('id').replace("mi-archivo","");
  console.log(jQuery(this));
  console.log(filename);
  console.log(idname);
- jQuery('span.'+idname).next().find('span').html(filename);
+ jQuery('span.mi-archivo'+idname).next().find('span').html(filename);
 });
 </script>
 {% endblock %}
