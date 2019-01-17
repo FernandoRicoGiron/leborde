@@ -336,7 +336,7 @@ def showventasrange(request):
 	arraydates = []
 	ventasfechas = {}
 	listventas = {}
-	date_generated = [inicio + timedelta(days=x) for x in range(0, (final-inicio).days)]
+	date_generated = [inicio + timedelta(days=x) for x in range(0, (final+timedelta(days=1)-inicio).days)]
 	for d in date_generated:
 		ventasfechas[d.strftime("%d-%m-%Y")] = 0
 		arraydates.append(d.strftime("%d-%m-%Y"))
