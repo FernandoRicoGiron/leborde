@@ -76,10 +76,16 @@ def variables(request):
 	request.session["giro"] = empresa.giro_de_la_empresa
 	# Categorias
 	categorias = Categoria.objects.all()
+	marcas = Marca.objects.all()
 	lista = {}
 	for categoria in categorias:
 		lista[categoria.id] = categoria.nombre
 	request.session["categorias"] = lista
+
+	lista = {}
+	for marca in marcas:
+		lista[marca.id] = {"nombre":marca.nombre, "imagen":marca.imagen.url}
+	request.session["marcas"] = lista
 	return request
 
 def index(request):
@@ -206,7 +212,7 @@ def mensajecontacto(request):
 		email = request.POST.get("correo"),
 		mensaje = request.POST.get("mensaje"),
 		estado ="Sin leer")
-	sweetify.error(request, 'El mensaje ha sido enviado nuestro equipo se pondra en contacto con usted', persistent=':(')
+	sweetify.error(request, 'El mensaje ha sido enviado nuestro equipo se pondrá en contacto con usted', persistent=':(')
 	return redirect("/contacto/")
 
 # Autentificacion
@@ -286,8 +292,8 @@ def recuperarcontraseña(request):
 			[user.email],
 			fail_silently=False,
 		)
-		sweetify.success(request, 'Nesecitas iniciar sesion para acceder a esta seccion', persistent=':(')
-	if User.objects.filter(username=username).exists():
+		sweetify.success(request, 'Se ha enviado un enlace a su correo', persistent=':(')
+	elif User.objects.filter(username=username).exists():
 		user = User.objects.get(username=username)
 		datos = Cliente.objects.get(usuario=user)
 		datos.token_req = request.POST.get("token")
@@ -421,11 +427,13 @@ def remove_from_cart(request):
 
 # PAYPAL
 def pagadopaypal(request):
+	cart = Cart(request)
+	cart.clear()
 	sweetify.success(request, 'El pago se ha completado correctamente, espere su pedido de 3 a 5 dias habiles', persistent=':(')
 	return redirect("/")
 
 def errorpagadopaypal(request):
-	sweetify.success(request, 'El pago no se a podido completar', persistent=':(')
+	sweetify.success(request, 'El pago no se ha podido completar', persistent=':(')
 	return redirect("/")
 
 def pagarpaypal(request):
@@ -454,7 +462,7 @@ def pagarpaypal(request):
 	pedido.pedido += 1
 	pedido.save()
 	# What you want the button to do.
-	
+	datoscomplete = False
 	if request.POST.get("enviomod") == "2":
 		envio = {"email":request.POST.get("email"),
 		"pais":request.POST.get("pais"),
@@ -484,7 +492,8 @@ def pagarpaypal(request):
 			"return": request.build_absolute_uri(reverse('pagadopaypal')),
 			"cancel_return": request.build_absolute_uri(reverse('errorpagadopaypal')),
 		}
-		pedido = Pedido.objects.create(usuario = request.user,
+		if envio["email"] != "" and envio["pais"] != "" and envio["ciudad"] != "" and envio["estado"] != "" and envio["direccion"] != "" and envio["codigo"] != "" and envio["telefono"] != "" and envio["nombre"] != "":
+			pedido = Pedido.objects.create(usuario = request.user,
 				total =suma,
 				fecha = datetime.datetime.now(),
 				nombre = "Pedido #" + str(pedido.pedido),
@@ -496,6 +505,8 @@ def pagarpaypal(request):
 				direccion = request.POST.get("colonia") + " " +request.POST.get("direccion") + " " + request.POST.get("exterior") + " " + request.POST.get("interior"),
 				codigopostal = request.POST.get("codigo"),
 				email = request.POST.get("email"),)
+			datoscomplete = True
+		
 	else:
 		envio = {"email":request.user.email,
 		"pais":datos.pais,
@@ -525,18 +536,20 @@ def pagarpaypal(request):
 			"return": request.build_absolute_uri(reverse('pagadopaypal')),
 			"cancel_return": request.build_absolute_uri(reverse('errorpagadopaypal')),
 		}
-		pedido = Pedido.objects.create(usuario = request.user,
-				total = suma,
-				fecha = datetime.datetime.now(),
-				nombre = "Pedido #" + str(pedido.pedido),
-				estado_pedido = "1",
-				telefono = datos.telefono,
-				pais = datos.pais,
-				estado = datos.estado,
-				ciudad = datos.ciudad,
-				direccion = datos.direccion,
-				codigopostal = datos.codigopostal,
-				email = request.user.email,)
+		if envio["email"] != "" and envio["pais"] != "" and envio["ciudad"] != "" and envio["estado"] != "" and envio["direccion"] != "" and envio["codigo"] != "" and envio["telefono"] != "" and envio["nombre"] != "":
+			pedido = Pedido.objects.create(usuario = request.user,
+					total = suma,
+					fecha = datetime.datetime.now(),
+					nombre = "Pedido #" + str(pedido.pedido),
+					estado_pedido = "1",
+					telefono = datos.telefono,
+					pais = datos.pais,
+					estado = datos.estado,
+					ciudad = datos.ciudad,
+					direccion = datos.direccion,
+					codigopostal = datos.codigopostal,
+					email = request.user.email,)
+			datoscomplete = True
 	for x in cart:
 		Producto_Pedido.objects.create(producto=x.product,
 				cantidad=x.quantity,
@@ -546,9 +559,15 @@ def pagarpaypal(request):
 	# Create the instance.
 	form = PayPalPaymentsForm(initial=paypal_dict)
 	context = {"form": form, "cart":cart, "denvio":envio, "envio":Envio.objects.last(), "suma":("%.2f" % suma), "total":Envio.objects.last().costo.amount+cart.summary(),}
-	return render(request, "pagopaypal.html", context)
+	
+	if datoscomplete:
+		return render(request, "pagopaypal.html", context)
+	else:
+		sweetify.success(request, 'Verifica que tus datos esten correctos', persistent=':(')
+		return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
 
 # Pedidos cuando no hay existencia
+@login_required(login_url='/req_sesion/')
 def pedido(request):
 	producto = Producto.objects.get(id=request.POST.get("idprod"))
 	cantidad = request.POST.get("cantidad")
@@ -561,7 +580,7 @@ def pedido(request):
 	print(request.POST.get("enviomod"))
 	if request.POST.get("enviomod") == "2":
 		if request.POST.get("ciudad") != "Tuxtla Gutiérrez":
-			total = total + envio.costo.amount
+			total = total + envio.costo
 		pedido = Pedido.objects.create(usuario = request.user,
 				total = total,
 				fecha = datetime.datetime.now(),
@@ -577,7 +596,7 @@ def pedido(request):
 	else:
 		cliente = Cliente.objects.get(usuario = request.user)
 		if cliente.ciudad != "Tuxtla Gutiérrez":
-			total = total + envio.costo.amount
+			total = total + envio.costo
 		pedido = Pedido.objects.create(usuario = request.user,
 				total = total,
 				fecha = datetime.datetime.now(),
@@ -695,9 +714,9 @@ def listapedidos(request):
 	return render(request, 'pedidos.html', {"cart":cart, "pedidos":pedidos})
 
 def subircomprobante(request, id):
-	if "comprobante" in request.FILES:
+	if "mi-archivo" in request.FILES:
 		pedido = Pedido.objects.get(id=id)
-		pedido.comprobante = request.FILES["comprobante"]
+		pedido.comprobante = request.FILES["mi-archivo"]
 		pedido.save()
 		sweetify.success(request, 'Gracias por subir su comprobante de pago si todo esta correcto su pedido llegara de 3 a 5 dias habiles', persistent=':(')
 		return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
@@ -720,5 +739,12 @@ def voucher(request, id):
 			"talla":x.talla,
 			"total":x.cantidad*x.producto.precio,
 			"imagen":x.producto.imagenes.first().imagen.url}
+	envio = Envio.objects.last()
+	arreglo["Envio"] = {"nombre":"envio",
+			"precio":envio.costo.amount,
+			"cantidad":1,
+			"talla":"",
+			"total":envio.costo.amount,
+			"imagen":""}
 	pdf= render_pdf("pagos.html",{"plan":plan, "precio":precio, "logo":logo.logo.url, "ncuenta":logo.numero_de_cuenta, "cart":arreglo})
 	return HttpResponse(pdf,content_type="application/pdf")

@@ -425,6 +425,8 @@ $("#fechafinal, #fechainicio").on('change', function(event) {
 	            });
 		}
 		else{
-			swal("verifica que la fecha final no sea mayor a la inicial")
+			if (inicio != "" & final != "") {
+				swal("verifica que la fecha final no sea mayor a la inicial")
+			}
 		}
 });
