@@ -27,6 +27,7 @@ def showproductos(request):
 		categorias[producto.categoria.id] = producto.categoria.nombre
 	productos = serializers.serialize('json', productos)
 	data = {"productos":productos, "imagenes":imagenes, "categorias":categorias}
+	data = OrderedDict(data)
 	return JsonResponse(data, safe=False)
 
 @csrf_exempt

@@ -1,5 +1,6 @@
 // Funcion generadora de inputs
 function seccionInputs(campos, json) {
+	console.log(json);
 	$.each( json, function( key, value ) {
 		tipo = value.tipo;
 		valor = value.valor;
