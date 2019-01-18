@@ -21,8 +21,8 @@ import json
 @csrf_exempt
 def showproductos(request):
 	productos = Producto.objects.all()
-	imagenes = SortedDict()
-	categorias = SortedDict()
+	imagenes = {}
+	categorias = {}
 	for producto in productos:
 		imagenes[producto.imagenes.first().id] = producto.imagenes.first().imagen.url
 		categorias[producto.categoria.id] = producto.categoria.nombre
@@ -33,16 +33,16 @@ def showproductos(request):
 @csrf_exempt
 def showmodificarproductos(request):
 	producto = Producto.objects.get(id=request.POST.get("id"))
-	imagenes = SortedDict()
+	imagenes = {}
 	for imagen in producto.imagenes.all():
 		imagenes[imagen.id] = {"id":imagen.id, "url":imagen.imagen.url}
 
-	inventario_tallas = SortedDict()
+	inventario_tallas = {}
 	inv_tallas = Inventario_Talla.objects.filter(producto=producto)
 	cont = 0
 	for talla in inv_tallas:
 		inventario_tallas[talla.id] = {"valor":talla.cantidad, "valor2":talla.talla.id,"label":"Inventario de " + talla.talla.nombre + " :", "name":"inventario"+str(talla.id),}
-
+	data = OrderedDict()
 	data = {"nombre":{"tipo":"char","valor":producto.nombre,"label":"Nombre:", "name":"nombre"},
 		"descripcion":{"tipo":"text","valor":producto.descripcion,"label":"Descripción:", "name":"descripcion"},
 		"popular":{"tipo":"bolean","valor":producto.popular,"label":"¿Es un producto popular?", "name":"popular"},
@@ -59,6 +59,7 @@ def showmodificarproductos(request):
 
 @csrf_exempt
 def showagregarproductos(request):
+	data = OrderedDict()
 	data = {"nombre":{"tipo":"char","valor":"","label":"Nombre:", "name":"nombre"},
 		"descripcion":{"tipo":"text","valor":"","label":"Descripción:", "name":"descripcion"},
 		"popular":{"tipo":"bolean","valor":"","label":"¿Es un producto popular?", "name":"popular"},
@@ -69,7 +70,6 @@ def showagregarproductos(request):
 		"tallas":{"tipo":"multiselect","valor":"","label":"Tallas:", "sel":"", "opciones":serializers.serialize('json', Talla.objects.all()), "name":"tallas"},
 		"imagenes":{"tipo":"imagen","valor":"","label":"Imagenes:","name":"imagenes"},
 		}
-	data = OrderedDict(data)
 	return JsonResponse(data, safe=False)
 
 @csrf_exempt
