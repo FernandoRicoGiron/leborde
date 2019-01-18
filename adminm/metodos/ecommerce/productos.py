@@ -12,7 +12,7 @@ from django.db.models import Q
 from functools import reduce
 from django.core import serializers
 from django.contrib.auth.models import User
-from django.utils.datastructures import SortedDict
+from collections import OrderedDict as SortedDict
 import sweetify
 import operator
 import json
