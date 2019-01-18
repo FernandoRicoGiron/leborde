@@ -21,11 +21,11 @@ import json
 @csrf_exempt
 def showmodificarcontraseña(request):
 	contraseña = Empresa.objects.last()
-	data = {"label":{"tipo":"label","label":" Modificar Contraseña"},
-		"nuevacontraseña":{"tipo":"pass","valor":"","label":"Nueva Contraseña:", "name":"contraseña"},
-		"recontraseña":{"tipo":"pass","valor":"","label":"Repetir Contraseña:", "name":"recontraseña"},
+	data = [{"tipo":"label","label":" Modificar Contraseña"},
+		{"tipo":"pass","valor":"","label":"Nueva Contraseña:", "name":"contraseña"},
+		{"tipo":"pass","valor":"","label":"Repetir Contraseña:", "name":"recontraseña"},
 		
-		}
+		]
 	return JsonResponse(data, safe=False)
 
 @csrf_exempt

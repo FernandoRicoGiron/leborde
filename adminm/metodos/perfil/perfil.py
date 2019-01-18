@@ -21,12 +21,12 @@ import json
 @csrf_exempt
 def showmodificarperfil(request):
 	perfil = request.user
-	data = {"usuario":{"tipo":"char","valor":perfil.get_username(),"label":"Nombre de usuario:", "name":"usuario"},
-		"nombre":{"tipo":"char","valor":perfil.first_name,"label":"Nombre:", "name":"nombre"},
-		"apellido":{"tipo":"char","valor":perfil.last_name,"label":"Apellido:", "name":"apellido"},
-		"email":{"tipo":"char","valor":perfil.email,"label":"Email:", "name":"email"},
+	data = [{"tipo":"char","valor":perfil.get_username(),"label":"Nombre de usuario:", "name":"usuario"},
+		{"tipo":"char","valor":perfil.first_name,"label":"Nombre:", "name":"nombre"},
+		{"tipo":"char","valor":perfil.last_name,"label":"Apellido:", "name":"apellido"},
+		{"tipo":"char","valor":perfil.email,"label":"Email:", "name":"email"},
 		
-		}
+		]
 	return JsonResponse(data, safe=False)
 
 @csrf_exempt

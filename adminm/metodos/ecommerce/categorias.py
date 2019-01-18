@@ -27,14 +27,14 @@ def showcategorias(request):
 @csrf_exempt
 def showmodificarcategorias(request):
 	categoria = Categoria.objects.get(id=request.POST.get("id"))
-	data = {"nombre":{"tipo":"char","valor":categoria.nombre,"label":"Nombre:", "name":"nombre"},
-		}
+	data = [{"tipo":"char","valor":categoria.nombre,"label":"Nombre:", "name":"nombre"},
+		]
 	return JsonResponse(data, safe=False)
 
 @csrf_exempt
 def showagregarcategorias(request):
-	data = {"nombre":{"tipo":"char","valor":"","label":"Nombre:", "name":"nombre"},
-		}
+	data = [{"tipo":"char","valor":"","label":"Nombre:", "name":"nombre"},
+		]
 	return JsonResponse(data, safe=False)
 
 @csrf_exempt

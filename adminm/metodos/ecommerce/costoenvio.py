@@ -21,9 +21,9 @@ import json
 @csrf_exempt
 def showmodificarenvio(request):
 	dato = Envio.objects.last()
-	data = {"costo":{"tipo":"money","valor":dato.costo.amount,"label":"Costo de Envios:", "name":"costo"},
+	data = [{"tipo":"money","valor":dato.costo.amount,"label":"Costo de Envios:", "name":"costo"},
 		
-		}
+		]
 	return JsonResponse(data, safe=False)
 
 @csrf_exempt

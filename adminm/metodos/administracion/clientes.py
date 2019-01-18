@@ -35,39 +35,39 @@ def showclientes(request):
 @csrf_exempt
 def showmodificarclientes(request):
 	cliente = Cliente.objects.get(id=request.POST.get("id"))
-	data = {"nombre":{"tipo":"char","valor":cliente.usuario.first_name,"label":"Nombre:", "name":"nombre"},
-		"apellido":{"tipo":"char","valor":cliente.usuario.last_name,"label":"Apellido:", "name":"apellido"},
-		"email":{"tipo":"char","valor":cliente.usuario.email,"label":"Correo Electrónico:", "name":"email"},
-		"telefono":{"tipo":"char","valor":cliente.telefono,"label":"Telefono:", "name":"telefono"},
-		"direccion":{"tipo":"char","valor":cliente.direccion,"label":"Dirección:", "name":"direccion"},
-		"ciudad":{"tipo":"char","valor":cliente.ciudad,"label":"Ciudad:", "name":"ciudad"},
-		"estado":{"tipo":"char","valor":cliente.estado,"label":"Estado:", "name":"estado"},
-		"pais":{"tipo":"char","valor":cliente.pais,"label":"País:", "name":"pais"},
-		"codigopostal":{"tipo":"char","valor":cliente.codigopostal,"label":"Codigo Postal:", "name":"codigopostal"},
-		"usuario":{"tipo":"char","valor":cliente.usuario.username,"label":"Nombre de usuario:", "name":"usuario"},
-		"label":{"tipo":"label","label":" Modificar Contraseña (Solo llenar si desea modificar la contraseña)"},
-		"nuevacontraseña":{"tipo":"pass","valor":"","label":"Nueva Contraseña:", "name":"contraseña"},
-		"recontraseña":{"tipo":"pass","valor":"","label":"Repetir Contraseña:", "name":"recontraseña"},
+	data = [{"tipo":"char","valor":cliente.usuario.first_name,"label":"Nombre:", "name":"nombre"},
+			{"tipo":"char","valor":cliente.usuario.last_name,"label":"Apellido:", "name":"apellido"},
+			{"tipo":"char","valor":cliente.usuario.email,"label":"Correo Electrónico:", "name":"email"},
+			{"tipo":"char","valor":cliente.telefono,"label":"Telefono:", "name":"telefono"},
+			{"tipo":"char","valor":cliente.direccion,"label":"Dirección:", "name":"direccion"},
+			{"tipo":"char","valor":cliente.ciudad,"label":"Ciudad:", "name":"ciudad"},
+			{"tipo":"char","valor":cliente.estado,"label":"Estado:", "name":"estado"},
+			{"tipo":"char","valor":cliente.pais,"label":"País:", "name":"pais"},
+			{"tipo":"char","valor":cliente.codigopostal,"label":"Codigo Postal:", "name":"codigopostal"},
+			{"tipo":"char","valor":cliente.usuario.username,"label":"Nombre de usuario:", "name":"usuario"},
+			{"tipo":"label","label":" Modificar Contraseña (Solo llenar si desea modificar la contraseña)"},
+			{"tipo":"pass","valor":"","label":"Nueva Contraseña:", "name":"contraseña"},
+			{"tipo":"pass","valor":"","label":"Repetir Contraseña:", "name":"recontraseña"},]
 		
-		}
+		
 	return JsonResponse(data, safe=False)
 
 @csrf_exempt
 def showagregarclientes(request):
-	data = {"nombre":{"tipo":"char","valor":"","label":"Nombre:", "name":"nombre"},
-		"apellido":{"tipo":"char","valor":"","label":"Apellido:", "name":"apellido"},
-		"email":{"tipo":"char","valor":"","label":"Correo Electrónico:", "name":"email"},
-		"telefono":{"tipo":"char","valor":"","label":"Telefono:", "name":"telefono"},
-		"direccion":{"tipo":"char","valor":"","label":"Dirección:", "name":"direccion"},
-		"ciudad":{"tipo":"char","valor":"","label":"Ciudad:", "name":"ciudad"},
-		"estado":{"tipo":"char","valor":"","label":"Estado:", "name":"estado"},
-		"pais":{"tipo":"char","valor":"","label":"País:", "name":"pais"},
-		"codigopostal":{"tipo":"char","valor":"","label":"Codigo Postal:", "name":"codigopostal"},
-		"usuario":{"tipo":"char","valor":"","label":"Nombre de usuario:", "name":"usuario"},
-		"contraseña":{"tipo":"pass","valor":"","label":" Contraseña:", "name":"contraseña"},
-		"recontraseña":{"tipo":"pass","valor":"","label":"Repetir Contraseña:", "name":"recontraseña"},
+	data = [{"tipo":"char","valor":"","label":"Nombre:", "name":"nombre"},
+			{"tipo":"char","valor":"","label":"Apellido:", "name":"apellido"},
+			{"tipo":"char","valor":"","label":"Correo Electrónico:", "name":"email"},
+			{"tipo":"char","valor":"","label":"Telefono:", "name":"telefono"},
+			{"tipo":"char","valor":"","label":"Dirección:", "name":"direccion"},
+			{"tipo":"char","valor":"","label":"Ciudad:", "name":"ciudad"},
+			{"tipo":"char","valor":"","label":"Estado:", "name":"estado"},
+			{"tipo":"char","valor":"","label":"País:", "name":"pais"},
+			{"tipo":"char","valor":"","label":"Codigo Postal:", "name":"codigopostal"},
+			{"tipo":"char","valor":"","label":"Nombre de usuario:", "name":"usuario"},
+			{"tipo":"pass","valor":"","label":" Contraseña:", "name":"contraseña"},
+			{"tipo":"pass","valor":"","label":"Repetir Contraseña:", "name":"recontraseña"},]
 		
-		}
+		
 	return JsonResponse(data, safe=False)
 
 @csrf_exempt

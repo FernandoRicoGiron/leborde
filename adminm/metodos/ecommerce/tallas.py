@@ -27,14 +27,14 @@ def showtallas(request):
 @csrf_exempt
 def showmodificartallas(request):
 	talla = Talla.objects.get(id=request.POST.get("id"))
-	data = {"nombre":{"tipo":"char","valor":talla.nombre,"label":"Nombre:", "name":"nombre"},
-		}
+	data = [{"tipo":"char","valor":talla.nombre,"label":"Nombre:", "name":"nombre"},
+		]
 	return JsonResponse(data, safe=False)
 
 @csrf_exempt
 def showagregartallas(request):
-	data = {"nombre":{"tipo":"char","valor":"","label":"Nombre:", "name":"nombre"},
-		}
+	data = [{"tipo":"char","valor":"","label":"Nombre:", "name":"nombre"},
+		]
 	return JsonResponse(data, safe=False)
 
 @csrf_exempt

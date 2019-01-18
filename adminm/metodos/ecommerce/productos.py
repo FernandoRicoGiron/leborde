@@ -42,16 +42,17 @@ def showmodificarproductos(request):
 	for talla in inv_tallas:
 		inventario_tallas[talla.id] = {"valor":talla.cantidad, "valor2":talla.talla.id,"label":"Inventario de " + talla.talla.nombre + " :", "name":"inventario"+str(talla.id),}
 
-	data = {"nombre":{"tipo":"char","valor":producto.nombre,"label":"Nombre:", "name":"nombre"},
-		"descripcion":{"tipo":"text","valor":producto.descripcion,"label":"Descripción:", "name":"descripcion"},
-		"popular":{"tipo":"bolean","valor":producto.popular,"label":"¿Es un producto popular?", "name":"popular"},
-		"precio":{"tipo":"money","valor":producto.precio.amount,"label":"Precio al publico:", "name":"precio"},
-		"precio_oferta":{"tipo":"money","valor":producto.precio_oferta.amount,"label":"Precio sin oferta:", "name":"precio_oferta"},
-		"categorias":{"tipo":"select","valor":producto.categoria.nombre, "sel":producto.categoria.id, "label":"Categoria:", "opciones":serializers.serialize('json', Categoria.objects.all()), "name":"categoria"},
-		"tallas":{"tipo":"multiselect","valor":"","label":"Tallas:", "sel":serializers.serialize('json', producto.tallas.all()), "opciones":serializers.serialize('json', Talla.objects.all()), "name":"tallas"},
-		"inventario_tallas":{"tipo":"intdinamic","valor":inventario_tallas,},
-		"imagenes":{"tipo":"imagen","valor":imagenes,"label":"Imagenes del producto: ", "name":"imagenes"},
-		}
+	data = [{"tipo":"char","valor":producto.nombre,"label":"Nombre:", "name":"nombre"},
+			{"tipo":"text","valor":producto.descripcion,"label":"Descripción:", "name":"descripcion"},
+			{"tipo":"bolean","valor":producto.popular,"label":"¿Es un producto popular?", "name":"popular"},
+			{"tipo":"money","valor":producto.precio.amount,"label":"Precio al publico:", "name":"precio"},
+			{"tipo":"money","valor":producto.precio_oferta.amount,"label":"Precio sin oferta:", "name":"precio_oferta"},
+			{"tipo":"select","valor":producto.categoria.nombre, "sel":producto.categoria.id, "label":"Categoria:", "opciones":serializers.serialize('json', Categoria.objects.all()), "name":"categoria"},
+			{"tipo":"multiselect","valor":"","label":"Tallas:", "sel":serializers.serialize('json', producto.tallas.all()), "opciones":serializers.serialize('json', Talla.objects.all()), "name":"tallas"},
+			{"tipo":"intdinamic","valor":inventario_tallas,},
+			{"tipo":"imagen","valor":imagenes,"label":"Imagenes del producto: ", "name":"imagenes"},
+			]
+		
 	# print(data)
 
 	return JsonResponse(data, safe=False)

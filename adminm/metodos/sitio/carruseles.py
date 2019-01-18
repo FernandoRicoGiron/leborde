@@ -27,18 +27,18 @@ def showcarruseles(request):
 @csrf_exempt
 def showmodificarcarruseles(request):
 	carrusel = Carrusel.objects.get(id=request.POST.get("id"))
-	data = {"texto":{"tipo":"char","valor":carrusel.texto,"label":"Texto:", "name":"texto"},
-		"url":{"tipo":"char","valor":carrusel.url,"label":"Url:", "name":"url"},
-		"imagen":{"tipo":"imagen2","valor":carrusel.imagen.url,"label":"Imagen:", "name":"imagen"},
-		}
+	data = [{"tipo":"char","valor":carrusel.texto,"label":"Texto:", "name":"texto"},
+		{"tipo":"char","valor":carrusel.url,"label":"Url:", "name":"url"},
+		{"tipo":"imagen2","valor":carrusel.imagen.url,"label":"Imagen:", "name":"imagen"},
+		]
 	return JsonResponse(data, safe=False)
 
 @csrf_exempt
 def showagregarcarruseles(request):
-	data = {"texto":{"tipo":"char","valor":"","label":"Texto:", "name":"texto"},
-		"url":{"tipo":"char","valor":"","label":"Url:", "name":"url"},
-		"imagen":{"tipo":"imagen2","valor":"","label":"Imagen:", "name":"imagen"},
-		}
+	data = [{"tipo":"char","valor":"","label":"Texto:", "name":"texto"},
+		{"tipo":"char","valor":"","label":"Url:", "name":"url"},
+		{"tipo":"imagen2","valor":"","label":"Imagen:", "name":"imagen"},
+		]
 	return JsonResponse(data, safe=False)
 
 @csrf_exempt

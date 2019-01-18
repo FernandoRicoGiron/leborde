@@ -27,16 +27,16 @@ def showpreguntas(request):
 @csrf_exempt
 def showmodificarpreguntas(request):
 	pregunta = FAQ.objects.get(id=request.POST.get("id"))
-	data = {"pregunta":{"tipo":"char","valor":pregunta.pregunta,"label":"Pregunta:", "name":"pregunta"},
-		"respuesta":{"tipo":"ckeditor","valor":pregunta.respuesta,"label":"Respuesta:", "name":"respuesta"},
-		}
+	data = [{"tipo":"char","valor":pregunta.pregunta,"label":"Pregunta:", "name":"pregunta"},
+		{"tipo":"ckeditor","valor":pregunta.respuesta,"label":"Respuesta:", "name":"respuesta"},
+		]
 	return JsonResponse(data, safe=False)
 
 @csrf_exempt
 def showagregarpreguntas(request):
-	data = {"pregunta":{"tipo":"char","valor":"","label":"Pregunta:", "name":"pregunta"},
-		"respuesta":{"tipo":"ckeditor","valor":"","label":"Respuesta:", "name":"respuesta"},
-		}
+	data = [{"tipo":"char","valor":"","label":"Pregunta:", "name":"pregunta"},
+		{"tipo":"ckeditor","valor":"","label":"Respuesta:", "name":"respuesta"},
+		]
 	return JsonResponse(data, safe=False)
 
 @csrf_exempt

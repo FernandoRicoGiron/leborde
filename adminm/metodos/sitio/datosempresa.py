@@ -21,20 +21,20 @@ import json
 @csrf_exempt
 def showmodificardatos(request):
 	dato = Empresa.objects.last()
-	data = {"nombre":{"tipo":"char","valor":dato.nombre,"label":"Nombre:", "name":"nombre"},
-		"num_cuenta":{"tipo":"char","valor":dato.numero_de_cuenta,"label":"Número de cuenta:", "name":"numero_de_cuenta"},
-		"formulario":{"tipo":"char","valor":dato.link_encuesta,"label":"Link a encuesta de servicio:", "name":"link_encuesta"},
-		"direccion":{"tipo":"char","valor":dato.direccion,"label":"Dirección:", "name":"direccion"},
-		"telefono":{"tipo":"char","valor":dato.telefono,"label":"Telefono:", "name":"telefono"},
-		"correo":{"tipo":"char","valor":dato.correo,"label":"Correo electronico:", "name":"correo"},
-		"logo":{"tipo":"imagen2","valor":dato.logo.url,"label":"Logo:", "name":"logo"},
-		"mision":{"tipo":"ckeditor","valor":dato.mision,"label":"Misión:", "name":"mision"},
-		"vision":{"tipo":"ckeditor","valor":dato.vision,"label":"Visión:", "name":"vision"},
-		"valores":{"tipo":"ckeditor","valor":dato.valores,"label":"Valores:", "name":"valores"},
-		"historia":{"tipo":"ckeditor","valor":dato.historia,"label":"Historia:", "name":"historia"},
-		"giro":{"tipo":"ckeditor","valor":dato.giro_de_la_empresa,"label":"Giro de la empresa:", "name":"giro"},
+	data = [{"tipo":"char","valor":dato.nombre,"label":"Nombre:", "name":"nombre"},
+		{"tipo":"char","valor":dato.numero_de_cuenta,"label":"Número de cuenta:", "name":"numero_de_cuenta"},
+		{"tipo":"char","valor":dato.link_encuesta,"label":"Link a encuesta de servicio:", "name":"link_encuesta"},
+		{"tipo":"char","valor":dato.direccion,"label":"Dirección:", "name":"direccion"},
+		{"tipo":"char","valor":dato.telefono,"label":"Telefono:", "name":"telefono"},
+		{"tipo":"char","valor":dato.correo,"label":"Correo electronico:", "name":"correo"},
+		{"tipo":"imagen2","valor":dato.logo.url,"label":"Logo:", "name":"logo"},
+		{"tipo":"ckeditor","valor":dato.mision,"label":"Misión:", "name":"mision"},
+		{"tipo":"ckeditor","valor":dato.vision,"label":"Visión:", "name":"vision"},
+		{"tipo":"ckeditor","valor":dato.valores,"label":"Valores:", "name":"valores"},
+		{"tipo":"ckeditor","valor":dato.historia,"label":"Historia:", "name":"historia"},
+		{"tipo":"ckeditor","valor":dato.giro_de_la_empresa,"label":"Giro de la empresa:", "name":"giro"},
 		
-		}
+		]
 	return JsonResponse(data, safe=False)
 
 @csrf_exempt

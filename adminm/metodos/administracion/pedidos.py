@@ -45,21 +45,21 @@ def showmodificarpedidos(request):
 		comprobante = pedido.comprobante.url
 	else:
 		comprobante = ""
-	data = {"label3":{"tipo":"label","label":"Pedido"},
-		"productos":{"tipo":"pedido", "label":"Pedido", "valor":listaproductos},
-		"estadopedido":{"tipo":"select3","valor":"estadopedido", "sel":pedido.estado_pedido, "label":"Estado del pedido:", "opciones":{'1':'Pago Pendiente','2':'Pagado',"3":'En Camino',"4":'Entregado'}, "name":"estadopedido"},
-		"comprobante":{"tipo":"imagen2","valor":comprobante,"label":"Comprobante:", "name":"comprobante"},
-		"label1":{"tipo":"label","label":" Datos del cliente"},
-		"usuario":{"tipo":"char","valor":pedido.usuario.first_name + " " + pedido.usuario.last_name,"label":"Usuario:", "name":"usuario"},
-		"email":{"tipo":"char","valor":pedido.email,"label":"Correo Electrónico:", "name":"email"},
-		"telefono":{"tipo":"char","valor":pedido.telefono,"label":"Telefono:", "name":"telefono"},
-		"label2":{"tipo":"label","label":" Datos de envio"},
-		"direccion":{"tipo":"char","valor":pedido.direccion,"label":"Dirección:", "name":"direccion"},
-		"ciudad":{"tipo":"char","valor":pedido.ciudad,"label":"Ciudad:", "name":"ciudad"},
-		"estado":{"tipo":"char","valor":pedido.estado,"label":"Estado:", "name":"estado"},
-		"pais":{"tipo":"char","valor":pedido.pais,"label":"País:", "name":"pais"},
-		"codigopostal":{"tipo":"char","valor":pedido.codigopostal,"label":"Codigo Postal:", "name":"codigopostal"},
-		}
+	data = [{"tipo":"label","label":"Pedido"},
+			{"tipo":"pedido", "label":"Pedido", "valor":listaproductos},
+			{"tipo":"select3","valor":"estadopedido", "sel":pedido.estado_pedido, "label":"Estado del pedido:", "opciones":{'1':'Pago Pendiente','2':'Pagado',"3":'En Camino',"4":'Entregado'}, "name":"estadopedido"},
+			{"tipo":"imagen2","valor":comprobante,"label":"Comprobante:", "name":"comprobante"},
+			{"tipo":"label","label":" Datos del cliente"},
+			{"tipo":"char","valor":pedido.usuario.first_name + " " + pedido.usuario.last_name,"label":"Usuario:", "name":"usuario"},
+			{"tipo":"char","valor":pedido.email,"label":"Correo Electrónico:", "name":"email"},
+			{"tipo":"char","valor":pedido.telefono,"label":"Telefono:", "name":"telefono"},
+			{"tipo":"label","label":" Datos de envio"},
+			{"tipo":"char","valor":pedido.direccion,"label":"Dirección:", "name":"direccion"},
+			{"tipo":"char","valor":pedido.ciudad,"label":"Ciudad:", "name":"ciudad"},
+			{"tipo":"char","valor":pedido.estado,"label":"Estado:", "name":"estado"},
+			{"tipo":"char","valor":pedido.pais,"label":"País:", "name":"pais"},
+			{"tipo":"char","valor":pedido.codigopostal,"label":"Codigo Postal:", "name":"codigopostal"},]
+		
 	return JsonResponse(data, safe=False)
 
 @csrf_exempt

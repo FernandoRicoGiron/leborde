@@ -27,18 +27,18 @@ def showcolecciones(request):
 def showmodificarcolecciones(request):
 	coleccion = Coleccion.objects.get(id=request.POST.get("id"))
 	print(request.POST.get("id"))
-	data = {"nombre":{"tipo":"char","valor":coleccion.nombre,"label":"Nombre:", "name":"nombre"},
-		"imagen":{"tipo":"imagen2","valor":coleccion.imagen_representativa.url,"label":"Imagen:", "name":"imagen"},
-		"categorias":{"tipo":"multiselect","valor":"","label":"Productos:", "sel":serializers.serialize('json', coleccion.productos.all()), "opciones":serializers.serialize('json', Producto.objects.all()), "name":"productos"},
-		}
+	data = [{"tipo":"char","valor":coleccion.nombre,"label":"Nombre:", "name":"nombre"},
+			{"tipo":"imagen2","valor":coleccion.imagen_representativa.url,"label":"Imagen:", "name":"imagen"},
+			{"tipo":"multiselect","valor":"","label":"Productos:", "sel":serializers.serialize('json', coleccion.productos.all()), "opciones":serializers.serialize('json', Producto.objects.all()), "name":"productos"},
+			]
 	return JsonResponse(data, safe=False)
 
 @csrf_exempt
 def showagregarcolecciones(request):
-	data = {"nombre":{"tipo":"char","valor":"","label":"Nombre:", "name":"nombre"},
-		"imagen":{"tipo":"imagen2","valor":"","label":"Imagen:", "name":"imagen"},
-		"categorias":{"tipo":"multiselect","valor":"","label":"Productos:", "sel":"", "opciones":serializers.serialize('json', Producto.objects.all()), "name":"productos"},
-		}
+	data = [{"tipo":"char","valor":"","label":"Nombre:", "name":"nombre"},
+			{"tipo":"imagen2","valor":"","label":"Imagen:", "name":"imagen"},
+			{"tipo":"multiselect","valor":"","label":"Productos:", "sel":"", "opciones":serializers.serialize('json', Producto.objects.all()), "name":"productos"},
+			]
 	return JsonResponse(data, safe=False)
 
 @csrf_exempt

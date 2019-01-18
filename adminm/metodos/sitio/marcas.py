@@ -27,16 +27,16 @@ def showmarcas(request):
 @csrf_exempt
 def showmodificarmarcas(request):
 	marca = Marca.objects.get(id=request.POST.get("id"))
-	data = {"nombre":{"tipo":"char","valor":marca.nombre,"label":"Texto:", "name":"nombre"},
-		"imagen":{"tipo":"imagen2","valor":marca.imagen.url,"label":"Imagen:", "name":"imagen"},
-		}
+	data = [{"tipo":"char","valor":marca.nombre,"label":"Texto:", "name":"nombre"},
+		{"tipo":"imagen2","valor":marca.imagen.url,"label":"Imagen:", "name":"imagen"},
+		]
 	return JsonResponse(data, safe=False)
 
 @csrf_exempt
 def showagregarmarcas(request):
-	data = {"nombre":{"tipo":"char","valor":"","label":"Texto:", "name":"nombre"},
-		"imagen":{"tipo":"imagen2","valor":"","label":"Imagen:", "name":"imagen"},
-		}
+	data = [{"tipo":"char","valor":"","label":"Texto:", "name":"nombre"},
+		{"tipo":"imagen2","valor":"","label":"Imagen:", "name":"imagen"},
+		]
 	return JsonResponse(data, safe=False)
 
 @csrf_exempt

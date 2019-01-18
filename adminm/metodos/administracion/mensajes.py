@@ -28,12 +28,12 @@ def showmensajes(request):
 @csrf_exempt
 def showmodificarmensajes(request):
 	mensaje = Mensaje.objects.get(id=request.POST.get("id"))
-	data = {"nombre":{"tipo":"char","valor":mensaje.nombre,"label":"Nombre:", "name":"nombre"},
-		"asunto":{"tipo":"char","valor":mensaje.asunto, "label":"Asusnto:", "name":"asunto"},
-		"email":{"tipo":"char","valor":mensaje.email,"label":"Correo Electrónico:", "name":"email"},
-		"mensaje":{"tipo":"text","valor":mensaje.mensaje,"label":"Mensaje:", "name":"mensajeusu"},
-		"contestar":{"tipo":"text2","valor":"","label":"Contestar:", "name":"mensaje"},
-		}
+	data = [{"tipo":"char","valor":mensaje.nombre,"label":"Nombre:", "name":"nombre"},
+			{"tipo":"char","valor":mensaje.asunto, "label":"Asusnto:", "name":"asunto"},
+			{"tipo":"char","valor":mensaje.email,"label":"Correo Electrónico:", "name":"email"},
+			{"tipo":"text","valor":mensaje.mensaje,"label":"Mensaje:", "name":"mensajeusu"},
+			{"tipo":"text2","valor":"","label":"Contestar:", "name":"mensaje"},
+			]
 	mensaje.estado = "Leido"
 	mensaje.save()
 	return JsonResponse(data, safe=False)
