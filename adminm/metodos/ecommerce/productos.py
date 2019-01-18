@@ -59,7 +59,6 @@ def showmodificarproductos(request):
 
 @csrf_exempt
 def showagregarproductos(request):
-	data = OrderedDict()
 	data = {"nombre":{"tipo":"char","valor":"","label":"Nombre:", "name":"nombre"},
 		"descripcion":{"tipo":"text","valor":"","label":"Descripción:", "name":"descripcion"},
 		"popular":{"tipo":"bolean","valor":"","label":"¿Es un producto popular?", "name":"popular"},
@@ -70,6 +69,7 @@ def showagregarproductos(request):
 		"tallas":{"tipo":"multiselect","valor":"","label":"Tallas:", "sel":"", "opciones":serializers.serialize('json', Talla.objects.all()), "name":"tallas"},
 		"imagenes":{"tipo":"imagen","valor":"","label":"Imagenes:","name":"imagenes"},
 		}
+	data = OrderedDict(data)
 	return JsonResponse(data, safe=False)
 
 @csrf_exempt
