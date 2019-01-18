@@ -12,6 +12,7 @@ from django.db.models import Q
 from functools import reduce
 from django.core import serializers
 from django.contrib.auth.models import User
+from django.utils.datastructures import SortedDict
 import sweetify
 import operator
 import json
@@ -20,8 +21,8 @@ import json
 @csrf_exempt
 def showproductos(request):
 	productos = Producto.objects.all()
-	imagenes = {}
-	categorias = {}
+	imagenes = SortedDict()
+	categorias = SortedDict()
 	for producto in productos:
 		imagenes[producto.imagenes.first().id] = producto.imagenes.first().imagen.url
 		categorias[producto.categoria.id] = producto.categoria.nombre
@@ -33,11 +34,11 @@ def showproductos(request):
 @csrf_exempt
 def showmodificarproductos(request):
 	producto = Producto.objects.get(id=request.POST.get("id"))
-	imagenes = {}
+	imagenes = SortedDict()
 	for imagen in producto.imagenes.all():
 		imagenes[imagen.id] = {"id":imagen.id, "url":imagen.imagen.url}
 
-	inventario_tallas = {}
+	inventario_tallas = SortedDict()
 	inv_tallas = Inventario_Talla.objects.filter(producto=producto)
 	cont = 0
 	for talla in inv_tallas:
