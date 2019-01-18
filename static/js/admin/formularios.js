@@ -2,6 +2,10 @@
 function seccionInputs(campos, json) {
 	console.log(json);
 	$.each( json, function( key, value ) {
+		$.each(value, function(index, val) {
+			 console.log(val);
+		});
+		
 		tipo = value.tipo;
 		valor = value.valor;
 		label = value.label;

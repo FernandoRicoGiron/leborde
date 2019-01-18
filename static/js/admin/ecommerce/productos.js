@@ -18,7 +18,6 @@ $("#mostrarProductos").on("click", function () {
                 type: 'POST', // GET or POST
                 url: 'showproductos/', // the file to call
                 success: function(json) { // on success..
-                	console.log(json)
                 	productos = JSON.parse(json.productos);
                 	imagenes = json.imagenes
                 	categorias = json.categorias

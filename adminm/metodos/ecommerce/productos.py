@@ -12,7 +12,6 @@ from django.db.models import Q
 from functools import reduce
 from django.core import serializers
 from django.contrib.auth.models import User
-from collections import OrderedDict
 import sweetify
 import operator
 import json
@@ -42,7 +41,7 @@ def showmodificarproductos(request):
 	cont = 0
 	for talla in inv_tallas:
 		inventario_tallas[talla.id] = {"valor":talla.cantidad, "valor2":talla.talla.id,"label":"Inventario de " + talla.talla.nombre + " :", "name":"inventario"+str(talla.id),}
-	data = OrderedDict()
+
 	data = {"nombre":{"tipo":"char","valor":producto.nombre,"label":"Nombre:", "name":"nombre"},
 		"descripcion":{"tipo":"text","valor":producto.descripcion,"label":"Descripción:", "name":"descripcion"},
 		"popular":{"tipo":"bolean","valor":producto.popular,"label":"¿Es un producto popular?", "name":"popular"},
@@ -59,17 +58,16 @@ def showmodificarproductos(request):
 
 @csrf_exempt
 def showagregarproductos(request):
-	data = OrderedDict()
-	data = {"nombre":{"tipo":"char","valor":"","label":"Nombre:", "name":"nombre"},
-		"descripcion":{"tipo":"text","valor":"","label":"Descripción:", "name":"descripcion"},
-		"popular":{"tipo":"bolean","valor":"","label":"¿Es un producto popular?", "name":"popular"},
-		"precio":{"tipo":"money","valor":"","label":"Precio al publico:", "name":"precio"},
-		"precio_oferta":{"tipo":"money","valor":"","label":"Precio sin oferta:", "name":"precio_oferta"},
-		# "inventario":{"tipo":"int","valor":"","label":"Inventario:", "name":"inventario"},
-		"categorias":{"tipo":"select","valor":"","label":"Categoria:", "sel":"", "opciones":serializers.serialize('json', Categoria.objects.all()), "name":"categoria"},
-		"tallas":{"tipo":"multiselect","valor":"","label":"Tallas:", "sel":"", "opciones":serializers.serialize('json', Talla.objects.all()), "name":"tallas"},
-		"imagenes":{"tipo":"imagen","valor":"","label":"Imagenes:","name":"imagenes"},
-		}
+	data = [{"tipo":"char","valor":"","label":"Nombre:", "name":"nombre"},
+			{"tipo":"text","valor":"","label":"Descripción:", "name":"descripcion"},
+			{"tipo":"bolean","valor":"","label":"¿Es un producto popular?", "name":"popular"},
+			{"tipo":"money","valor":"","label":"Precio al publico:", "name":"precio"},
+			{"tipo":"money","valor":"","label":"Precio sin oferta:", "name":"precio_oferta"},
+			# {"tipo":"int","valor":"","label":"Inventario:", "name":"inventario"},
+			{"tipo":"select","valor":"","label":"Categoria:", "sel":"", "opciones":serializers.serialize('json', Categoria.objects.all()), "name":"categoria"},
+			{"tipo":"multiselect","valor":"","label":"Tallas:", "sel":"", "opciones":serializers.serialize('json', Talla.objects.all()), "name":"tallas"},
+			{"tipo":"imagen","valor":"","label":"Imagenes:","name":"imagenes"},
+			]
 	return JsonResponse(data, safe=False)
 
 @csrf_exempt
