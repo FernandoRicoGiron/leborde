@@ -12,7 +12,7 @@ from django.db.models import Q
 from functools import reduce
 from django.core import serializers
 from django.contrib.auth.models import User
-from collections import OrderedDict as SortedDict
+from collections import OrderedDict
 import sweetify
 import operator
 import json
@@ -28,7 +28,6 @@ def showproductos(request):
 		categorias[producto.categoria.id] = producto.categoria.nombre
 	productos = serializers.serialize('json', productos)
 	data = {"productos":productos, "imagenes":imagenes, "categorias":categorias}
-	data = OrderedDict(data)
 	return JsonResponse(data, safe=False)
 
 @csrf_exempt
@@ -60,6 +59,7 @@ def showmodificarproductos(request):
 
 @csrf_exempt
 def showagregarproductos(request):
+	data = OrderedDict()
 	data = {"nombre":{"tipo":"char","valor":"","label":"Nombre:", "name":"nombre"},
 		"descripcion":{"tipo":"text","valor":"","label":"Descripción:", "name":"descripcion"},
 		"popular":{"tipo":"bolean","valor":"","label":"¿Es un producto popular?", "name":"popular"},
