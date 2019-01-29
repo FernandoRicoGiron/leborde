@@ -50,13 +50,18 @@ class Empresa(models.Model):
 	direccion = models.CharField(max_length=100)
 	telefono = models.CharField(max_length=100)
 	correo = models.CharField(max_length=100)
-	mision = RichTextField()
-	vision = RichTextField()
-	valores = RichTextField()
-	historia = RichTextField()
-	giro_de_la_empresa = RichTextField()
+	que_es = RichTextField(blank=True, null=True)
+	mision = RichTextField(blank=True, null=True)
+	vision = RichTextField(blank=True, null=True)
+	valores = RichTextField(blank=True, null=True)
+	historia = RichTextField(blank=True, null=True)
+	giro_de_la_empresa = RichTextField(blank=True, null=True)
 	numero_de_cuenta = models.CharField(max_length=50)
 	link_encuesta = models.URLField(blank=True, null=True)
+	facebook = models.URLField(blank=True, null=True)
+	twiter = models.URLField(blank=True, null=True)
+	instagram = models.URLField(blank=True, null=True)
+	youtube = models.URLField(blank=True, null=True)
 
 	def __str__(self):
 		return self.nombre

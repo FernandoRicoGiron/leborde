@@ -27,10 +27,17 @@ def showmodificardatos(request):
 		{"tipo":"char","valor":dato.direccion,"label":"Dirección:", "name":"direccion"},
 		{"tipo":"char","valor":dato.telefono,"label":"Telefono:", "name":"telefono"},
 		{"tipo":"char","valor":dato.correo,"label":"Correo electronico:", "name":"correo"},
+
+		{"tipo":"char","valor":dato.facebook,"label":"Link de Facebook:", "name":"facebook"},
+		{"tipo":"char","valor":dato.twiter,"label":"Link de Twitter:", "name":"twiter"},
+		{"tipo":"char","valor":dato.instagram,"label":"Link de Instagram:", "name":"instagram"},
+		{"tipo":"char","valor":dato.youtube,"label":"Link de Youtube:", "name":"youtube"},
+
 		{"tipo":"imagen2","valor":dato.logo.url,"label":"Logo:", "name":"logo"},
 		{"tipo":"ckeditor","valor":dato.mision,"label":"Misión:", "name":"mision"},
 		{"tipo":"ckeditor","valor":dato.vision,"label":"Visión:", "name":"vision"},
 		{"tipo":"ckeditor","valor":dato.valores,"label":"Valores:", "name":"valores"},
+		{"tipo":"ckeditor","valor":dato.que_es,"label":"¿Que es "+dato.nombre+"?:", "name":"que_es"},
 		{"tipo":"ckeditor","valor":dato.historia,"label":"Historia:", "name":"historia"},
 		{"tipo":"ckeditor","valor":dato.giro_de_la_empresa,"label":"Giro de la empresa:", "name":"giro"},
 		
@@ -52,9 +59,14 @@ def modificardato(request):
 				vision=request.POST.get("vision"),
 				valores=request.POST.get("valores"),
 				historia=request.POST.get("historia"),
+				que_es=request.POST.get("que_es"),
 				giro_de_la_empresa=request.POST.get("giro"),
 				numero_de_cuenta=request.POST.get("numero_de_cuenta"),
-				link_encuesta=request.POST.get("link_encuesta"))
+				link_encuesta=request.POST.get("link_encuesta"),
+				facebook=request.POST.get("facebook"),
+				twiter=request.POST.get("twiter"),
+				instagram=request.POST.get("instagram"),
+				youtube=request.POST.get("youtube"),)
 	else:
 		dato = Empresa.objects.create(nombre=request.POST.get("nombre"),
 				direccion=request.POST.get("direccion"),
@@ -65,7 +77,12 @@ def modificardato(request):
 				vision=request.POST.get("vision"),
 				valores=request.POST.get("valores"),
 				historia=request.POST.get("historia"),
+				que_es=request.POST.get("que_es"),
 				giro_de_la_empresa=request.POST.get("giro"),
 				numero_de_cuenta=request.POST.get("numero_de_cuenta"),
-				link_encuesta=request.POST.get("link_encuesta"))
+				link_encuesta=request.POST.get("link_encuesta"),
+				facebook=request.POST.get("facebook"),
+				twiter=request.POST.get("twiter"),
+				instagram=request.POST.get("instagram"),
+				youtube=request.POST.get("youtube"),)
 	return JsonResponse("Correcto", safe=False)

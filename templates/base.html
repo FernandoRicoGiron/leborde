@@ -482,6 +482,7 @@
 					</ul>
 				</div>
 
+				{% if request.session.giro|safe != "" %}
 				<div style="color:#FFF" class="col-sm-5 p-b-50">
 					<h4 class="stext-301 cl0 p-b-30">
 						Giro de la empresa
@@ -492,19 +493,56 @@
 					</p>
 
 					<div class="p-t-27">
-						<a href="https://www.facebook.com/LeBordeOficial/" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
+						{% if request.session.facebook %}
+						<a href="{{request.session.facebook}}" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
 							<i class="fa fa-facebook"></i>
 						</a>
-						<!--
-						<a href="#" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
+						{% elif request.session.twiter %}
+						<a href="{{request.session.twiter}}" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
+							<i class="fa fa-twitter"></i>
+						</a>
+						{% elif request.session.instagram %}
+						<a href="{{request.session.instagram}}" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
 							<i class="fa fa-instagram"></i>
 						</a>
-
-						<a href="#" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
-							<i class="fa fa-pinterest-p"></i>
-						</a>-->
+						{% elif request.session.youtube %}
+						<a href="{{request.session.youtube}}" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
+							<i class="fa fa-youtube"></i>
+						</a>
+						{% endif %}
 					</div>
 				</div>
+				{% else %}
+				<div style="color:#FFF" class="col-sm-5 p-b-50">
+					<h4 class="stext-301 cl0 p-b-30">
+						¿Que es {{request.session.nombreempresa}}?
+					</h4>
+
+					<p  class="stext-107 cl7 size-201">
+						{{request.session.que_es|safe}}
+					</p>
+
+					<div class="p-t-27">
+						{% if request.session.facebook %}
+						<a href="{{request.session.facebook}}" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
+							<i class="fa fa-facebook"></i>
+						</a>
+						{% elif request.session.twiter %}
+						<a href="{{request.session.twiter}}" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
+							<i class="fa fa-twitter"></i>
+						</a>
+						{% elif request.session.instagram %}
+						<a href="{{request.session.instagram}}" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
+							<i class="fa fa-instagram"></i>
+						</a>
+						{% elif request.session.youtube %}
+						<a href="{{request.session.youtube}}" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
+							<i class="fa fa-youtube"></i>
+						</a>
+						{% endif %}
+					</div>
+				</div>
+				{% endif %}
 
 			<div class="p-t-40">
 				<div class="flex-c-m flex-w p-b-18">

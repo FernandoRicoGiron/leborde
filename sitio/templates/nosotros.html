@@ -18,6 +18,39 @@ li{
 	<!-- Content page -->
 	<section class="bg0 p-t-75 p-b-120">
 		<div class="container">
+			{% if empresa.que_es|safe != ""%}
+			<div class="row">
+				<div class="col-md-12 col-lg-12">
+					<div class="p-t-7 p-r-85 p-r-15-lg p-r-0-md">
+						<h3 class="mtext-111 cl2 p-b-16">
+							¿Que es {{empresa.nombre}}?
+						</h3>
+
+						<p class="stext-113 cl6 p-b-26">
+							{{ empresa.que_es|safe }}
+						</p>
+					</div>
+				</div>
+			</div><br>
+			{%endif%}
+
+			{% if empresa.giro_de_la_empresa|safe != ""%}
+			<div class="row">
+				<div class="col-md-12 col-lg-12">
+					<div class="p-t-7 p-r-85 p-r-15-lg p-r-0-md">
+						<h3 class="mtext-111 cl2 p-b-16">
+							Giro de la empresa
+						</h3>
+
+						<p class="stext-113 cl6 p-b-26">
+							{{ empresa.giro_de_la_empresa|safe }}
+						</p>
+					</div>
+				</div>
+			</div><br>
+			{%endif%}
+
+			{% if empresa.historia|safe != ""%}
 			<div class="row">
 				<div class="col-md-12 col-lg-12">
 					<div class="p-t-7 p-r-85 p-r-15-lg p-r-0-md">
@@ -31,8 +64,9 @@ li{
 					</div>
 				</div>
 			</div><br>
+			{%endif%}
 			
-			
+			{% if empresa.mision|safe != "" %}
 				<div class="row">
 					<div class="col-md-12 col-lg-12">
 						<div class="p-t-7 p-r-85 p-r-15-lg p-r-0-md">
@@ -46,8 +80,8 @@ li{
 						</div>
 					</div>
 				</div><br>
-			
-
+			{%endif%}
+			{% if empresa.vision|safe != "" %}
 			<div class="row" >
 				<div class="col-md-12 col-lg-12">
 					<div class="p-t-7 p-r-85 p-r-15-lg p-r-0-md">
@@ -61,8 +95,8 @@ li{
 					</div>
 				</div>
 			</div><br>
-			
-
+			{%endif%}
+			{% if empresa.valores|safe != "" %}
 			<div class="row" >
 				<div class="col-md-12 col-lg-12">
 					<div class="p-t-7 p-r-85 p-r-15-lg p-r-0-md">
@@ -76,7 +110,7 @@ li{
 					</div>
 				</div>
 			</div><br>
-			
+			{%endif%}
 		</div>
 	</section>	
 	

@@ -74,6 +74,12 @@ def variables(request):
 	request.session["logo"] = empresa.logo.url
 	request.session["nombreempresa"] = empresa.nombre
 	request.session["giro"] = empresa.giro_de_la_empresa
+	request.session["que_es"] = empresa.que_es
+	# redes sociales
+	request.session["facebook"] = empresa.facebook
+	request.session["twiter"] = empresa.twiter
+	request.session["instagram"] = empresa.instagram
+	request.session["youtube"] = empresa.youtube
 	# Categorias
 	categorias = Categoria.objects.all()
 	marcas = Marca.objects.all()
