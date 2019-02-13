@@ -119,16 +119,20 @@ def nosotros(request):
 	cart = Cart(request)
 	variables(request)
 	empresa = Empresa.objects.last()
+	seccion = Secciones.objects.last()
 	return render(request, 'nosotros.html', {"cart":cart,
 										"empresa":empresa,
+										"seccion":{"titulo":seccion.tituloqs, "imagen":seccion.imagenqs.url}
 										})
 
 def faqs(request):
 	cart = Cart(request)
 	variables(request)
 	faqs = FAQ.objects.all()
+	seccion = Secciones.objects.last()
 	return render(request, 'faqs.html', {"cart":cart,
 										"faqs":faqs,
+										"seccion":{"titulo":seccion.titulopreguntas, "imagen":seccion.imagenpreguntas.url}
 										})
 
 def tienda(request):
@@ -137,10 +141,12 @@ def tienda(request):
 	categorias = Categoria.objects.all()
 	productos = Producto.objects.all()
 	colecciones = Coleccion.objects.all()
+	seccion = Secciones.objects.last()
 	return render(request, 'tienda.html', {"cart":cart,
 										"categorias":categorias,
 										"productos":productos,
-										"colecciones":colecciones
+										"colecciones":colecciones,
+										"seccion":{"titulo":seccion.titulot, "imagen":seccion.imagent.url}
 										})
 
 def categoria(request, id):
@@ -150,10 +156,12 @@ def categoria(request, id):
 	categoria = Categoria.objects.get(id=id)
 	productos = Producto.objects.filter(categoria=categoria)
 	colecciones = Coleccion.objects.all()
+	seccion = Secciones.objects.last()
 	return render(request, 'tienda.html', {"cart":cart,
 										"categorias":categorias,
 										"productos":productos,
-										"colecciones":colecciones
+										"colecciones":colecciones,
+										"seccion":{"titulo":seccion.titulot, "imagen":seccion.imagent.url}
 										})
 
 def coleccion(request, id):
@@ -163,10 +171,12 @@ def coleccion(request, id):
 	coleccion = Coleccion.objects.get(id=id)
 	productos = coleccion.productos.all()
 	colecciones = Coleccion.objects.all()
+	seccion = Secciones.objects.last()
 	return render(request, 'tienda.html', {"cart":cart,
 										"categorias":categorias,
 										"productos":productos,
-										"colecciones":colecciones
+										"colecciones":colecciones,
+										"seccion":{"titulo":seccion.titulot, "imagen":seccion.imagent.url}
 										})
 
 def producto(request, id):
@@ -201,8 +211,10 @@ def contacto(request):
 	cart = Cart(request)
 	variables(request)
 	empresa = Empresa.objects.last()
+	seccion = Secciones.objects.last()
 	return render(request, 'contacto.html', {"cart":cart,
-										"empresa":empresa
+										"empresa":empresa,
+										"seccion":{"titulo":seccion.tituloc, "imagen":seccion.imagenc.url}
 										})
 
 def mensajecontacto(request):
@@ -210,7 +222,7 @@ def mensajecontacto(request):
 			'Contacto Leborde ' + request.POST.get("asunto"),
 			'La persona '+ request.POST.get("nombre") + ' con el correo '+request.POST.get("correo") + " desea saber la siguiente informacion:\n" + request.POST.get("asunto") + '\n' +request.POST.get("mensaje"),
 			request.POST.get("correo"),
-			['riicoo28@gmail.com'],
+			['contacto@istmeña.com'],
 			fail_silently=False,
 		)
 	Mensaje.objects.create(nombre = request.POST.get("nombre"),
@@ -347,7 +359,10 @@ def perfil(request):
 	variables(request)
 	user = request.user
 	datos = Cliente.objects.get(usuario=user)
-	return render(request, 'datos.html', {"cart":cart, "datos":datos,})
+	seccion = Secciones.objects.last()
+	return render(request, 'datos.html', {"cart":cart,
+		"datos":datos,
+		"seccion":{"titulo":seccion.titulop, "imagen":seccion.imagenp.url}})
 
 @login_required(login_url='/')	
 def modificardatos(request):
@@ -399,7 +414,8 @@ def pago(request):
 	else:
 		estadodatos = "No cuenta con datos de envio"
 	if cart.count() > 0:
-		return render(request, 'pago.html', {"cart":cart, "envio":envio, "total":envio.costo.amount+cart.summary(), "estadodatos":estadodatos})
+		seccion = Secciones.objects.last()
+		return render(request, 'pago.html', {"cart":cart, "seccion":{"titulo":seccion.titulodp, "imagen":seccion.imagendp.url}, "envio":envio, "total":envio.costo.amount+cart.summary(), "estadodatos":estadodatos})
 	else:
 		sweetify.error(request, 'Agregue por lo menos un producto al carrito de compras', persistent=':(')
 		return redirect("/tienda/")
@@ -721,7 +737,10 @@ def listapedidos(request):
 	cart = Cart(request)
 	variables(request)
 	pedidos = Pedido.objects.filter(usuario=request.user)
-	return render(request, 'pedidos.html', {"cart":cart, "pedidos":pedidos})
+	seccion = Secciones.objects.last()
+	return render(request, 'pedidos.html', {"cart":cart,
+		"pedidos":pedidos,
+		"seccion":{"titulo":seccion.titulopedidos, "imagen":seccion.imagenpedidos.url}})
 
 def subircomprobante(request, id):
 	if "mi-archivo" in request.FILES:

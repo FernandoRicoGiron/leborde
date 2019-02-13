@@ -3,9 +3,9 @@
 {% block content %}
 
 	<!-- Title page -->
-	<section class="bg-img1 txt-center p-lr-15 p-tb-92" style="background-image: url({% static 'sitio/images/Sitio/coleccion3.jpg' %});">
+	<section class="bg-img1 txt-center p-lr-15 p-tb-92" style="background-image: url({{seccion.imagen}});">
 		<h2 class="ltext-105 cl0 txt-center">
-			Contacto
+			{{seccion.titulo}}
 		</h2>
 	</section>	
 
@@ -17,7 +17,7 @@
 					<form action="/mensajecontacto/"  method="POST">
 						{% csrf_token %}
 						<h4 class="mtext-105 cl2 txt-center p-b-30">
-							Envianos un mensaje
+							Envíanos un mensaje
 						</h4>
 
 						<div class="bor8 m-b-20 how-pos4-parent">
@@ -74,7 +74,7 @@
 
 						<div class="size-212 p-t-2">
 							<span class="mtext-110 cl2">
-								Llamanos a
+								Llámanos al telefono:
 							</span>
 
 							<p class="stext-115 cl1 size-213 p-t-18">

@@ -160,7 +160,19 @@
                         <li class="nav-item ">
                             <a class="nav-link" href="#" id="mostrarCarruseles">
                               <span class="sidebar-mini"> C </span>
-                              <span class="sidebar-normal"> Carrusel </span>
+                              <span class="sidebar-normal"> Carrusel Principal </span>
+                            </a>
+                        </li>
+                        <li class="nav-item ">
+                            <a class="nav-link" href="#" id="mostrarSEC">
+                              <span class="sidebar-mini"> S </span>
+                              <span class="sidebar-normal"> Secciones del sitio </span>
+                            </a>
+                        </li>
+                        <li class="nav-item ">
+                            <a class="nav-link" href="#" id="mostrarSEQS">
+                              <span class="sidebar-mini"> S </span>
+                              <span class="sidebar-normal">¿Quiénes Somos? </span>
                             </a>
                         </li>
                         <li class="nav-item ">
@@ -241,6 +253,7 @@
     {% include "sitio/carruseles.html" %}
     {% include "sitio/preguntas.html" %}
     {% include "sitio/marcas.html" %}
+    {% include "sitio/quienessomos.html" %}
     <footer class="footer">
         <div class="container-fluid">
           <nav class="float-left">
@@ -600,6 +613,33 @@
           // "scrollY": 450,
           // "scrollX": true,
       });
+
+        var table11 = $('#TablaQuienesSomos').DataTable({
+          language: {
+              "decimal": "",
+              "emptyTable": "No hay información",
+              "info": "Mostrando _START_ a _END_ de _TOTAL_ QuienesSomos",
+              "infoEmpty": "Mostrando 0 a 0 de 0 Tallas",
+              "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+              "infoPostFix": "",
+              "thousands": ",",
+              "lengthMenu": "Mostrar _MENU_",
+              "loadingRecords": "Cargando...",
+              "processing": "Procesando...",
+              "search": "",
+              "zeroRecords": "Sin resultados encontrados",
+              "paginate": {
+                  "first": "Primero",
+                  "last": "Ultimo",
+                  "next": "Siguiente",
+                  "previous": "Anterior"
+              }
+
+          },
+          // fixedHeader: true,
+          // "scrollY": 450,
+          // "scrollX": true,
+      });
         $('div.dataTables_filter input').addClass('form-control form-control-sm');
         $('div.dataTables_filter input').attr('placeholder','Buscar')
         $('div.dataTables_length select').addClass('custom-select custom-select-sm form-control form-control-sm');
@@ -622,6 +662,8 @@
   <script src="{% static 'js/admin/administracion/ventas.js' %}"></script>
   <script src="{% static 'js/admin/administracion/mensajes.js' %}"></script>
   <script src="{% static 'js/admin/sitio/datosempresa.js' %}"></script>
+  <script src="{% static 'js/admin/sitio/secciones.js' %}"></script>
+  <script src="{% static 'js/admin/sitio/quienessomos.js' %}"></script>
   <script src="{% static 'js/admin/sitio/carruseles.js' %}"></script>
   <script src="{% static 'js/admin/sitio/preguntas.js' %}"></script>
   <script src="{% static 'js/admin/sitio/marcas.js' %}"></script>

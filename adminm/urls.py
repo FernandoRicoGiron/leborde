@@ -81,6 +81,16 @@ urlpatterns = [
     path('eliminarcarrusel/', carruseles.eliminarcarrusel),
     path('modificarcarrusel/', carruseles.modificarcarrusel),
     path('agregarcarrusel/', carruseles.agregarcarrusel),
+    # Quienes Somos
+    path('showquienessomos/', quienessomos.showquienessomos),
+    path('showmodificarquienessomos/', quienessomos.showmodificarquienessomos),
+    path('showagregarquienessomos/', quienessomos.showagregarquienessomos),
+    path('eliminarquienessomos/', quienessomos.eliminarquisomos),
+    path('modificarquienessomos/', quienessomos.modificarquisomos),
+    path('agregarquienessomos/', quienessomos.agregarquisomos),
+    # Secciones
+    path('showmodificarsecciones/', imagenessecciones.showmodificarsecciones),
+    path('modificarseccion/', imagenessecciones.modificarseccion),
     # Preguntas
     path('showpreguntas/', preguntas.showpreguntas),
     path('showmodificarpreguntas/', preguntas.showmodificarpreguntas),

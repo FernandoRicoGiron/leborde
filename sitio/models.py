@@ -44,6 +44,25 @@ class FAQ(models.Model):
 	def __str__(self):
 		return self.pregunta
 
+class Secciones(models.Model):
+	tituloqs = models.CharField(max_length=200, default="¿Quiénes Somos?")
+	imagenqs = models.ImageField(upload_to="Secciones", blank=True, null=True, default="coleccion3.jpg")
+	titulot = models.CharField(max_length=200, default="Tienda")
+	imagent = models.ImageField(upload_to="Secciones", blank=True, null=True, default="coleccion3.jpg")
+	tituloc = models.CharField(max_length=200, default="Contacto")
+	imagenc = models.ImageField(upload_to="Secciones", blank=True, null=True, default="coleccion3.jpg")
+	titulodp = models.CharField(max_length=200, default="Datos para el pago")
+	imagendp = models.ImageField(upload_to="Secciones", blank=True, null=True, default="coleccion3.jpg")
+	titulop = models.CharField(max_length=200, default="Datos de perfil")
+	imagenp = models.ImageField(upload_to="Secciones", blank=True, null=True, default="coleccion3.jpg")
+	titulopedidos = models.CharField(max_length=200, default="Mis Pedidos")
+	imagenpedidos = models.ImageField(upload_to="Secciones", blank=True, null=True, default="coleccion3.jpg")
+	titulopreguntas = models.CharField(max_length=200, default="Preguntas Frecuentes")
+	imagenpreguntas = models.ImageField(upload_to="Secciones", blank=True, null=True, default="coleccion3.jpg")
+
+	def __str__(self):
+		return "Secciones del sitio"
+
 class Empresa(models.Model):
 	nombre = models.CharField(max_length=100)
 	logo = models.ImageField(upload_to="Logo")
@@ -62,6 +81,13 @@ class Empresa(models.Model):
 	twiter = models.URLField(blank=True, null=True)
 	instagram = models.URLField(blank=True, null=True)
 	youtube = models.URLField(blank=True, null=True)
+
+	def __str__(self):
+		return self.nombre
+
+class QuienesSomos(models.Model):
+	titulo = models.CharField(max_length=100)
+	texto = RichTextField(blank=True, null=True)
 
 	def __str__(self):
 		return self.nombre

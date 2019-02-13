@@ -146,13 +146,13 @@ function seccionInputs(campos, json) {
 						  '<label class="bmd-label-floating">'+label+'</label>'+
 			              '<span class="btn btn-info btn-file" ><input style="z-index: 10000;" type="file" id="files2" name="'+name+'" accept="image/jpeg, image/png"/><p style="z-index: -10000; margin-bottom:0">Seleccione una imagen</p></span></a>'+
 			            '</div>'+
-			            '<div id="list" style="max-width:400px;" class="row" style=""></div>'+
+			            '<div id="list'+name+'" style="max-width:400px;" class="row" style=""></div>'+
 		            '</div>';
 		    // alert(file)
 		    $("#"+campos).append(file)
 		    // document.getElementById('files').addEventListener('change', archivo, false);
 		    if (valor != "") {
-                document.getElementById("list").innerHTML = ['<div class="col-md-9" style=""><img style="max-width:100%" class="thumb" src="', valor,'"/></div>'].join('');
+                document.getElementById("list"+name+"").innerHTML = ['<div class="col-md-9" style=""><img style="max-width:100%" class="thumb" src="', valor,'"/></div>'].join('');
                 	
 		    }
 		    

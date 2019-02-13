@@ -5,6 +5,8 @@ __all__ = [
 "carruseles",
 "preguntas",
 "marcas",
+"imagenessecciones",
+"quienessomos"
 
 
 
