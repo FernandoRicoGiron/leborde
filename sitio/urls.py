@@ -13,6 +13,7 @@ urlpatterns = [
     path('checktalla/', vi.checktalla),
     path('contacto/', vi.contacto),
     path('mensajecontacto/', vi.mensajecontacto),
+    path('informacionproducto/', vi.mensajeinfopro),
     path('faqs/', vi.faqs),
     # Autentificacion
     path('modificardatos/', vi.modificardatos),

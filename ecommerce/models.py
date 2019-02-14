@@ -47,6 +47,7 @@ class Producto(models.Model):
 	precio = MoneyField(max_digits=14, decimal_places=2, default_currency='MXN')
 	precio_oferta = MoneyField(max_digits=14, decimal_places=2, default_currency='MXN')
 	popular = models.BooleanField(default=False)
+	en_tienda = models.BooleanField(default=True)
 	imagenes = models.ManyToManyField(Imagen)
 	inventario = models.IntegerField(default=0)
 	categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)

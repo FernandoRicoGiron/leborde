@@ -22,6 +22,7 @@ import goslate
 import smtplib
 import sweetify
 import datetime
+# from __future__ import unicode_literal
 
 # @csrf_exempt
 # def prueba(request):
@@ -141,7 +142,7 @@ def tienda(request):
 	cart = Cart(request)
 	variables(request)
 	categorias = Categoria.objects.all()
-	productos = Producto.objects.all()
+	productos = Producto.objects.filter(en_tienda=True)
 	colecciones = Coleccion.objects.all()
 	seccion = Secciones.objects.last()
 	return render(request, 'tienda.html', {"cart":cart,
@@ -156,7 +157,7 @@ def categoria(request, id):
 	variables(request)
 	categorias = Categoria.objects.all()
 	categoria = Categoria.objects.get(id=id)
-	productos = Producto.objects.filter(categoria=categoria)
+	productos = Producto.objects.filter(categoria=categoria, en_tienda=True)
 	colecciones = Coleccion.objects.all()
 	seccion = Secciones.objects.last()
 	return render(request, 'tienda.html', {"cart":cart,
@@ -171,17 +172,19 @@ def coleccion(request, id):
 	variables(request)
 	categorias = Categoria.objects.all()
 	coleccion = Coleccion.objects.get(id=id)
-	productos = coleccion.productos.all()
+	productos = coleccion.productos.filter(en_tienda=True)
 	colecciones = Coleccion.objects.all()
 	seccion = Secciones.objects.last()
 	return render(request, 'tienda.html', {"cart":cart,
 										"categorias":categorias,
 										"productos":productos,
 										"colecciones":colecciones,
-										"seccion":{"titulo":seccion.titulot, "imagen":seccion.imagent.url}
+										"seccion":{"titulo":seccion.titulot, "imagen":seccion.imagent.url},
+										"coleccion":coleccion,
 										})
 
 def producto(request, id):
+	empresa = Empresa.objects.last()
 	cart = Cart(request)
 	variables(request)
 	producto = Producto.objects.get(id=id)
@@ -200,7 +203,8 @@ def producto(request, id):
 										"pro_re":pro_re,
 										"envio":envio.costo.amount,
 										"estadodatos":estadodatos,
-										"tallas":tallas_prod
+										"tallas":tallas_prod,
+										"empresa":empresa
 										})
 @csrf_exempt
 def checktalla(request):
@@ -220,17 +224,19 @@ def contacto(request):
 										})
 
 def mensajecontacto(request):
+	empresa = Empresa.objects.last()
 	send_mail(
-			'Contacto Leborde ' + request.POST.get("asunto"),
-			'La persona '+ request.POST.get("nombre") + ' con el correo '+request.POST.get("correo") + " desea saber la siguiente informacion:\n" + request.POST.get("asunto") + '\n' +request.POST.get("mensaje"),
+			'Contacto ' + empresa.nombre +' ' + request.POST.get("asunto"),
+			'La persona '+ request.POST.get("nombre") + ' con el correo '+request.POST.get("correo") + " y numero de telefono: "+request.POST.get("telefono")+" desea saber la siguiente informacion:\n" + request.POST.get("asunto") + '\n' +request.POST.get("mensaje"),
 			request.POST.get("correo"),
-			['contacto@istmeña.com'],
+			[empresa.correo],
 			fail_silently=False,
 		)
 	Mensaje.objects.create(nombre = request.POST.get("nombre"),
 		asunto = request.POST.get("asunto"),
 		email = request.POST.get("correo"),
 		mensaje = request.POST.get("mensaje"),
+		telefono = request.POST.get("telefono"),
 		estado ="Sin leer")
 	sweetify.error(request, 'El mensaje ha sido enviado nuestro equipo se pondrá en contacto con usted', persistent=':(')
 	return redirect("/contacto/")
@@ -307,7 +313,7 @@ def recuperarcontraseña(request):
 		cart = Cart(request)
 		send_mail(
 			'Recuperar contraseña Leborde',
-			'Ingresa al siguiente url para modificar tu contraseña \n http://127.0.0.1:8000/modificarcontra/' + request.POST.get("token"),
+			'Ingresa al siguiente url para modificar tu contraseña \n http://istmeña.com/modificarcontra/' + request.POST.get("token"),
 			user.email,
 			[user.email],
 			fail_silently=False,
@@ -321,7 +327,7 @@ def recuperarcontraseña(request):
 		cart = Cart(request)
 		send_mail(
 			'Recuperar contraseña Leborde',
-			'Ingresa al siguiente url para modificar tu contraseña \n http://127.0.0.1:8000/modificarcontra/' + request.POST.get("token"),
+			'Ingresa al siguiente url para modificar tu contraseña \n http://istmeña.com/modificarcontra/' + request.POST.get("token"),
 			user.email,
 			[user.email],
 			fail_silently=False,
@@ -675,8 +681,8 @@ def pedido(request):
 				"talla":"",
 				"total":coenvio,
 				"imagen":""}}
-
-	pdf= render_pdf("pagos.html",{"plan":plan, "precio":precio, "logo":logo.logo.url, "ncuenta":logo.numero_de_cuenta, "cart":cart})
+	empresa = Empresa.objects.last()
+	pdf= render_pdf("pagos.html",{"empresa":empresa,"plan":plan, "precio":precio, "logo":logo.logo.url, "ncuenta":logo.numero_de_cuenta, "cart":cart})
 	return HttpResponse(pdf,content_type="application/pdf")
 
 def pedido2(request):
@@ -754,7 +760,8 @@ def pedido2(request):
 		precio = total
 		logo = Empresa.objects.last()
 		cart.clear()
-		pdf= render_pdf("pagos.html",{"plan":plan, "precio":precio, "logo":logo.logo.url, "ncuenta":logo.numero_de_cuenta, "cart":arreglo})
+		empresa = Empresa.objects.last()
+		pdf= render_pdf("pagos.html",{"empresa":empresa,"plan":plan, "precio":precio, "logo":logo.logo.url, "ncuenta":logo.numero_de_cuenta, "cart":arreglo})
 		return HttpResponse(pdf,content_type="application/pdf")
 	else:
 		return redirect("/pagar/")
@@ -773,13 +780,29 @@ def subircomprobante(request, id):
 		pedido = Pedido.objects.get(id=id)
 		pedido.comprobante = request.FILES["mi-archivo"]
 		pedido.save()
-		sweetify.success(request, 'Gracias por subir su comprobante de pago si todo esta correcto su pedido llegara de 3 a 5 dias habiles', persistent=':(')
+		empresa = Empresa.objects.last()
+		send_mail(
+			'Comprobante de pago '+empresa.nombre,
+			'El usuario '+request.user.username+' ha subido el comprobante de pago del pedido numero '+str(pedido.id),
+			empresa.correo,
+			[empresa.correo],
+			fail_silently=False,
+		)
+		send_mail(
+			'Comprobante de pago '+empresa.nombre,
+			'Su comprobante ha sido enviado correctamente si todo está correcto su pedido llegará de 3 a 5 días hábiles, si tiene alguna duda o consulta puede realizarla al whatsapp de servicio '+empresa.telefono+' o envia un correo a: '+empresa.correo+', será un placer atenderle',
+			empresa.correo,
+			[pedido.email],
+			fail_silently=False,
+		)
+		sweetify.success(request, 'Gracias por su compra, si todo está correcto su pedido llegará de 3 a 5 días hábiles, si tiene alguna duda o consulta puede realizarla al whatsapp de servicio '+empresa.telefono+' o envia un correo a: '+empresa.correo+', será un placer atenderle', persistent=':(')
 		return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
 	else:
 		sweetify.error(request, 'Seleccione una imagen por favor', persistent=':(')
 		return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
 
 def voucher(request, id):
+	empresa = Empresa.objects.last()
 	total = 0
 	pedido = Pedido.objects.get(id=id)
 	plan = "Total a pagar"
@@ -804,5 +827,31 @@ def voucher(request, id):
 			"talla":"",
 			"total":coenvio,
 			"imagen":""}
-	pdf= render_pdf("pagos.html",{"plan":plan, "precio":precio, "logo":logo.logo.url, "ncuenta":logo.numero_de_cuenta, "cart":arreglo})
+	pdf= render_pdf("pagos.html",{"empresa":empresa,"plan":plan, "precio":precio, "logo":logo.logo.url, "ncuenta":logo.numero_de_cuenta, "cart":arreglo})
 	return HttpResponse(pdf,content_type="application/pdf")
+
+def mensajeinfopro(request):
+	empresa = Empresa.objects.last()
+	producto = Producto.objects.get(id=request.POST.get("productoid"))
+	send_mail(
+			'Informacion sobre producto '+ producto.nombre +' ' + empresa.nombre ,
+			'La persona '+ request.POST.get("nombre") + ' ' + request.POST.get("apellido") + ' con el correo '+request.POST.get("email") + " desea saber informacion sobre el producto:\n" + producto.nombre,
+			request.POST.get("email"),
+			[empresa.correo],
+			fail_silently=False,
+		)
+	send_mail(
+			'Informacion sobre producto '+ producto.nombre +' ' + empresa.nombre ,
+			'Tu solicitud de informacion sobre el producto ' + producto.nombre + ' ha sido resibida un asesor se pondrá en contacto contigo',
+			empresa.correo,
+			[request.POST.get("email")],
+			fail_silently=False,
+		)
+	Mensaje.objects.create(nombre = request.POST.get("nombre"),
+		asunto = "Información sobre el producto "+producto.nombre,
+		email = request.POST.get("email"),
+		telefono= request.POST.get("telefono"),
+		mensaje = "El usuario " + request.POST.get("nombre") + " " + request.POST.get("apellido") + " desea saber información sobre el producto: \n" + producto.nombre,
+		estado ="Sin leer")
+	sweetify.success(request, 'El mensaje ha sido enviado nuestro equipo se pondrá en contacto con usted', persistent=':(')
+	return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))

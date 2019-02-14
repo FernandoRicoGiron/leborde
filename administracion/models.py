@@ -87,6 +87,7 @@ class Mensaje(models.Model):
 	asunto = models.CharField(max_length=100)
 	email = models.EmailField()
 	mensaje = models.TextField()
+	telefono = models.CharField(max_length=50, blank=True, null=True)
 	estado = models.CharField(choices=ESTADO_MENSAJE, max_length=50)
 	
 	def __str__(self):

@@ -19,7 +19,7 @@ import json
 # Mostrar Productos
 @csrf_exempt
 def showproductos(request):
-	productos = Producto.objects.all()
+	productos = Producto.objects.all().order_by("id")
 	imagenes = {}
 	categorias = {}
 	for producto in productos:
@@ -45,6 +45,7 @@ def showmodificarproductos(request):
 	data = [{"tipo":"char","valor":producto.nombre,"label":"Nombre:", "name":"nombre"},
 			{"tipo":"text","valor":producto.descripcion,"label":"Descripción:", "name":"descripcion"},
 			{"tipo":"bolean","valor":producto.popular,"label":"¿Es un producto popular?", "name":"popular"},
+			{"tipo":"bolean","valor":producto.en_tienda,"label":"¿Este producto estara visible en la tienda?", "name":"en_tienda"},
 			{"tipo":"money","valor":producto.precio.amount,"label":"Precio al publico:", "name":"precio"},
 			{"tipo":"money","valor":producto.precio_oferta.amount,"label":"Precio sin oferta:", "name":"precio_oferta"},
 			{"tipo":"select","valor":producto.categoria.nombre, "sel":producto.categoria.id, "label":"Categoria:", "opciones":serializers.serialize('json', Categoria.objects.all()), "name":"categoria"},
@@ -62,6 +63,7 @@ def showagregarproductos(request):
 	data = [{"tipo":"char","valor":"","label":"Nombre:", "name":"nombre"},
 			{"tipo":"text","valor":"","label":"Descripción:", "name":"descripcion"},
 			{"tipo":"bolean","valor":"","label":"¿Es un producto popular?", "name":"popular"},
+			{"tipo":"bolean","valor":"","label":"¿Este producto estara visible en la tienda?", "name":"en_tienda"},
 			{"tipo":"money","valor":"","label":"Precio al publico:", "name":"precio"},
 			{"tipo":"money","valor":"","label":"Precio sin oferta:", "name":"precio_oferta"},
 			# {"tipo":"int","valor":"","label":"Inventario:", "name":"inventario"},
@@ -82,6 +84,10 @@ def agregarproducto(request):
 			popular=True
 		else:
 			popular=False
+		if request.POST.get("en_tienda"):
+			en_tienda=True
+		else:
+			en_tienda=False
 		sumainventario = 0
 		for x in request.POST.getlist("tallas"):
 			
@@ -93,6 +99,7 @@ def agregarproducto(request):
 			precio=request.POST.get("precio"),
 			precio_oferta=request.POST.get("precio_oferta"),
 			popular=popular,
+			en_tienda=en_tienda,
 			inventario=sumainventario,
 			categoria=categoria)
 		producto.tallas.add(*tallas)
@@ -122,6 +129,10 @@ def modificarproducto(request):
 			popular=True
 		else:
 			popular=False
+		if request.POST.get("en_tienda"):
+			en_tienda=True
+		else:
+			en_tienda=False
 		categoria = Categoria.objects.get(id=request.POST.get("categoria"))
 		sumainventario = 0
 		for x in request.POST.getlist("tallas"):
@@ -133,6 +144,7 @@ def modificarproducto(request):
 		producto.precio=request.POST.get("precio")
 		producto.precio_oferta=request.POST.get("precio_oferta")
 		producto.popular=popular
+		producto.en_tienda=en_tienda
 		producto.inventario=sumainventario
 		producto.categoria=categoria
 		producto.tallas.add(*tallas)

@@ -58,8 +58,8 @@ td{
 								<tr class="table_row {{item.product.id}}{{item.talla|replace}}">
 									<td class="column-1">{{pedido.id}}</td>
 									<td class="column-2">{{pedido.fecha|date:"d-m-y h:m"}} </td>
-									<td class="column-3">{% if pedido.estado_pedido == "1" %}Pago Pendiente{% elif pedido.estado_pedido == "2" %}Pagado{% elif pedido.estado_pedido == "3" %}En camino{% elif pedido.estado_pedido == "4" %}Entregado{%endif%}</td>
-									<td class="column-4">{{pedido.total}}</td>
+									<td class="column-3">{%if pedido.comprobante %}En revisión{% elif pedido.estado_pedido == "1" %}Pago Pendiente{% elif pedido.estado_pedido == "2" %}Pagado{% elif pedido.estado_pedido == "3" %}En camino{% elif pedido.estado_pedido == "4" %}Entregado{%endif%}</td>
+									<td class="column-4">$ {{pedido.total.amount}}</td>
 									{% if pedido.estado_pedido == "1" %}
 									<form action="/subircomprobante/{{pedido.id}}/" method="POST" class="bg0 p-t-75 p-b-85" enctype="multipart/form-data">
 									{% csrf_token %}

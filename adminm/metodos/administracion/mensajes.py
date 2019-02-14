@@ -31,6 +31,7 @@ def showmodificarmensajes(request):
 	data = [{"tipo":"char","valor":mensaje.nombre,"label":"Nombre:", "name":"nombre"},
 			{"tipo":"char","valor":mensaje.asunto, "label":"Asusnto:", "name":"asunto"},
 			{"tipo":"char","valor":mensaje.email,"label":"Correo Electrónico:", "name":"email"},
+			{"tipo":"char","valor":mensaje.telefono,"label":"Telefono:", "name":"telefono"},
 			{"tipo":"text","valor":mensaje.mensaje,"label":"Mensaje:", "name":"mensajeusu"},
 			{"tipo":"text2","valor":"","label":"Contestar:", "name":"mensaje"},
 			]
@@ -40,13 +41,13 @@ def showmodificarmensajes(request):
 
 @csrf_exempt
 def contestarmensaje(request):
-	print(request.POST)
+	empresa = Empresa.objects.last()
 	mensaje = Mensaje.objects.get(id = request.POST.get("idmensaje"))
 	if request.POST.get("mensaje") != "":
 		send_mail(
 			'Contestacion a ' + mensaje.asunto,
 			request.POST.get("mensaje"),
-			'unipymes.tec@gmail.com',
+			empresa.correo,
 			[mensaje.email],
 			fail_silently=False,
 		)

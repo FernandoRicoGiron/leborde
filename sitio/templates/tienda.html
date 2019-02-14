@@ -1,13 +1,21 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-	
+	{% if coleccion %}
+	<!-- Title page -->
+	<section class="bg-img1 txt-center p-lr-15 p-tb-92" style="background-image: url({{coleccion.imagen_representativa.url}});">
+		<h2 class="ltext-105 cl0 txt-center">
+			{{coleccion.nombre}}
+		</h2>
+	</section>	
+	{% else %}
 	<!-- Title page -->
 	<section class="bg-img1 txt-center p-lr-15 p-tb-92" style="background-image: url({{seccion.imagen}});">
 		<h2 class="ltext-105 cl0 txt-center">
 			{{seccion.titulo}}
 		</h2>
 	</section>	
+	{% endif %}
 	
 	<!-- Product -->
 	<div class="bg0 m-t-23 p-b-140">

@@ -107,8 +107,13 @@
 										<h4 class="mtext-105 cl2 js-name-detail p-b-14">
 											Agotado
 										</h4>
+										<!--
 										<a href="#" data-toggle="modal" data-target="#pedido" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">
 											solicitar sobre pedido
+										</a>
+										-->
+										<a href="#" data-toggle="modal" data-target="#pedido" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">
+											solicitar información
 										</a>
 										{% else %}
 										<a href="javascript:agregarCarrito()" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">
@@ -178,8 +183,56 @@
 		</div>
 	</section>
 
-
 	<div class="modal fade bd-example-modal-lg" id="pedido" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		  <div class="modal-dialog modal-lg" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h4 class="modal-title" id="exampleModalLabel">Deja tus datos para que nuestro equipo se ponga en contacto contigo</h4>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body">
+		        <form id="formpedidoinfo" action="/informacionproducto/" method="POST">
+		        	{% csrf_token %}
+		        	<div class="row">
+		        		<input type="hidden" name="productoid" id="productoid" value="{{producto.id}}">
+			          <div class="form-group col-sm-6">
+			            <label for="recipient-name" class="col-form-label">Nombre:</label>
+			            <input id="nombre" name="nombre" required="" type="text" class="form-control" id="">
+			          </div>
+			          <div class="form-group col-sm-6">
+			            <label for="recipient-name" class="col-form-label">Apellido:</label>
+			            <input id="apellido" name="apellido" required="" type="text" class="form-control" id="">
+			          </div>
+			          <div class="form-group col-sm-6">
+			            <label for="recipient-name" class="col-form-label">Email:</label>
+			            <input id="email" name="email" required="" type="text" class="form-control" id="recipient-name">
+			          </div>
+			          <div class="form-group col-sm-6">
+			            <label for="recipient-name" class="col-form-label">Numero de telefono:</label>
+			            <input id="telefono" name="telefono" required="" type="text" class="form-control" id="recipient-name">
+			          </div>
+
+			          {% if empresa.telefono %}
+			          <div class="form-group col-sm-12">
+			          	O puedes comunicarte con nosotros en el WhatsApp de contacto: {{empresa.telefono}} para ser atendido por nuestro equipo y  realizar una confección especial (sin cargo extra)
+			          </div>
+			          {% endif %}
+		          </div>
+		        </form>
+		      </div>
+		      <div class="modal-footer">
+		      	
+		        <button type="button" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" data-dismiss="modal">Cerrar</button>
+		        <button type="button" id="submitform" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">Enviar</button>
+		      </div>
+		    </div>
+		</div>
+	</div>
+
+
+<!--	<div class="modal fade bd-example-modal-lg" id="pedido" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		  <div class="modal-dialog modal-lg" role="document">
 		    <div class="modal-content">
 		      <div class="modal-header">
@@ -268,7 +321,7 @@
 		      </div>
 		    </div>
 		  </div>
-		</div>
+		</div>-->
 	{% endblock %}
 
 	{% block js %}
@@ -317,30 +370,47 @@
 	</script>
 
 	<script type="text/javascript">
+	// $("#submitform").on('click', function(event) {
+	// 	var nombre = $("#nombre").val();
+	// 	var email = $("#email").val();
+	// 	var telefono = $("#telefono").val();
+	// 	var codigo = $("#codigo_postal").val();
+	// 	var direccion = $("#direccion").val();
+	// 	var exterior = $("#exterior").val();
+	// 	var pais = $("#pais").val();
+	// 	var estado = $("#estado").val();
+	// 	var colonia = $("#colonia").val();
+	// 	var tipoenvio = $("#tipoenvio").val();
+	// 	if (tipoenvio == 2) {
+	// 		if (nombre!="" & email!="" & telefono!="" & codigo!="" & direccion!="" & exterior!="" & pais!="" & estado!="" & colonia!="Seleccione una opción") {
+	// 			$("#formpedido").submit();
+	// 		}
+	// 		else{
+	// 			swal("Ingrese los datos de envio por favor");
+	// 		}
+	// 	}
+	// 	else{
+	// 		$("#formpedido").submit();
+	// 	}
+		
+	// });
+
 	$("#submitform").on('click', function(event) {
 		var nombre = $("#nombre").val();
+		var apellido = $("#apellido").val();
 		var email = $("#email").val();
 		var telefono = $("#telefono").val();
-		var codigo = $("#codigo_postal").val();
-		var direccion = $("#direccion").val();
-		var exterior = $("#exterior").val();
-		var pais = $("#pais").val();
-		var estado = $("#estado").val();
-		var colonia = $("#colonia").val();
-		var tipoenvio = $("#tipoenvio").val();
-		if (tipoenvio == 2) {
-			if (nombre!="" & email!="" & telefono!="" & codigo!="" & direccion!="" & exterior!="" & pais!="" & estado!="" & colonia!="Seleccione una opción") {
-				$("#formpedido").submit();
-			}
-			else{
-				swal("Ingrese los datos de envio por favor");
-			}
+		var codigo = $("#productoid").val();
+		if (nombre!="" & email!="" & telefono!="" & apellido!="") {
+			$("#formpedidoinfo").submit();
 		}
 		else{
-			$("#formpedido").submit();
+			swal("Ingrese los datos de envio por favor");
 		}
 		
+		
 	});
+
 	$(".talla").on('change', function(event) {
 		cantidad = $("#prodcant").val()
 		talla = $(".talla").val()
@@ -353,7 +423,8 @@
 			data: {talla: talla, producto:producto},
 			success:function(json) {
 				if (json == 0) {
-					data = '<h4 class="mtext-105 cl2 js-name-detail p-b-14">Agotado</h4><a href="#" data-toggle="modal" data-target="#pedido" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">solicitar sobre pedido</a>'
+					// data = '<h4 class="mtext-105 cl2 js-name-detail p-b-14">Agotado</h4><a href="#" data-toggle="modal" data-target="#pedido" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">solicitar sobre pedido</a>'
+					data = '<h4 class="mtext-105 cl2 js-name-detail p-b-14">Agotado</h4><a href="#" data-toggle="modal" data-target="#pedido" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">solicitar información</a>'
 				}
 				else{
 					data = '<a href="javascript:agregarCarrito()" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">Agregar al carrito</a>'
