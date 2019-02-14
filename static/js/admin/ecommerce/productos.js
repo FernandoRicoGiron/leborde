@@ -73,7 +73,7 @@ $("#TablaProductos").on('click', 'button.modificarProducto', function(event) {
                 success: function(json) { // on success..
                 	// console.log(json)
                 	seccionInputs("modificarCampos",json)
-                	$("#formmodificar").append('<input type="hidden" name="idproducto" value="'+id+'"/>')
+                	$("#modificarCampos").append('<input type="hidden" name="idproducto" value="'+id+'"/>')
                 	
                     
                 }
@@ -85,7 +85,7 @@ $("#TablaProductos").on('click', 'button.modificarProducto', function(event) {
 // Funcion Modificar
 $("#botonModificar").on('click', function() {
 	/* Act on the event */
-	if ($("#formmodificar").attr('action') == "modificardato/" | $("#formmodificar").attr('action') == "modificarpregunta/") {
+	if ($("#formmodificar").attr('action') == "modificardato/" | $("#formmodificar").attr('action') == "modificarpregunta/" | $("#formmodificar").attr('action') == "modificarquienessomos/") {
 		for ( instance in CKEDITOR.instances )
     		CKEDITOR.instances[instance].updateElement();
 	}
@@ -166,7 +166,7 @@ $("#agregarProducto").on('click', function(event) {
 // Funcion agregar Productos
 $("#botonAgregar").on('click', function() {
 	/* Act on the event */
-	if ($("#formagregar").attr('action') == "agregardato/" | $("#formagregar").attr('action') == "agregarpregunta/") {
+	if ($("#formagregar").attr('action') == "agregardato/" | $("#formagregar").attr('action') == "agregarpregunta/" | $("#formagregar").attr('action') == "agregarquienessomos/") {
 		for ( instance in CKEDITOR.instances )
     		CKEDITOR.instances[instance].updateElement();
 	}
@@ -257,6 +257,9 @@ function irAtras(argument) {
 	}	
 	else if($("#formagregar").attr('action') == "agregarpregunta/" | $("#formmodificar").attr('action') == "modificarpregunta/"){
 		$("#mostrarPreguntas").click();
+	}	
+	else if($("#formagregar").attr('action') == "agregarquienessomos/" | $("#formmodificar").attr('action') == "modificarquienessomos/"){
+		$("#mostrarSEQS").click();
 	}			
 	$("#botonModificar").html("Modificar")
 	$(".botonCancelar").show();

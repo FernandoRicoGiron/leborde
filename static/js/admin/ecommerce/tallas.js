@@ -54,7 +54,7 @@ $("#TablaTallas").on('click', 'button.modificarTalla', function(event) {
                 success: function(json) { // on success..
                 	// console.log(json)
                 	seccionInputs("modificarCampos",json)
-                	$("#formmodificar").append('<input type="hidden" name="idtalla" value="'+id+'"/>')
+                	$("#modificarCampos").append('<input type="hidden" name="idtalla" value="'+id+'"/>')
                 	
                     
                 }

@@ -4,7 +4,7 @@
 $("#mostrarSEQS").on("click", function () {
 	$(".botonCancelar").show();
 	$(".seccion").hide("fast");
-	$("#secc").html("QuienesSomos").attr('href', '#');
+	$("#secc").html("Quiénes Somos").attr('href', '#');
 	var table = $('#TablaQuienesSomos').DataTable();
         	table.clear();
         	$.ajax({ // create an AJAX call...
@@ -17,10 +17,8 @@ $("#mostrarSEQS").on("click", function () {
  					$.each( quienessomos, function( key, value ) {
  						datos = value.fields;
  						// $.each( datos.imagenes, function( key, value ) {console.log(value)})
-					table.row.add( ['<center><image class="center-items mdl-grid" style="width:80px;" src="/media/'+datos.imagen+'"></center>',
-						value.pk,
-						datos.texto,
-						datos.url,
+					table.row.add( [value.pk,
+						datos.titulo,
 	                    '<button style="padding:10px;" type="button" rel="tooltip" class="modificarQuienesSomos btn btn-success" data-original-title="" title="">'+
 	                      '<i class="material-icons">edit</i>'+
 	                    '</button>'+
@@ -43,7 +41,7 @@ $("#mostrarSEQS").on("click", function () {
 // Modificar
 
 $("#TablaQuienesSomos").on('click', 'button.modificarQuienesSomos', function(event) {
-	$("#secc").html("Regresar a QuienesSomos").attr('href', 'javascript:irAtras()');
+	$("#secc").html("Regresar a Quiénes Somos").attr('href', 'javascript:irAtras()');
 	$(".seccion").hide("fast");
 	id = $(this).parent().parent().attr("id");
 	$("#modificarCampos").html("");
@@ -56,7 +54,7 @@ $("#TablaQuienesSomos").on('click', 'button.modificarQuienesSomos', function(eve
                 success: function(json) { // on success..
                 	// console.log(json)
                 	seccionInputs("modificarCampos",json)
-                	$("#formmodificar").append('<input type="hidden" name="idquienessomos" value="'+id+'"/>')
+                	$("#modificarCampos").append('<input type="hidden" name="idquienessomos" value="'+id+'"/>')
                 	
                     
                 }

@@ -28,6 +28,7 @@
 								</tr>
 								{% for item in cart %}
 								<tr class="table_row {{item.product.id}}{{item.talla|replace}}">
+									<input type="hidden" value="{{item.talla}}" name="">
 									<td class="column-1">
 										<div class="how-itemcart1 header-cart-item-img" id="{{item.product.id}}{{item.talla|replace}}">
 											<img src="{{ item.product.imagenes.first.imagen.url }}" alt="IMG">
@@ -35,9 +36,10 @@
 										<input class="tallacart" type="hidden" name="" value="{{ item.talla }}">
 									</td>
 									<td class="column-2">{{ item.product.nombre }}</td>
-									<td class="column-3">$ {{ item.product.precio }}</td>
+									<td class="column-3">$ {{ item.product.precio.amount }}</td>
 									<td class="column-4">
-										{{ item.quantity }}
+										<input style="text-align: right;" type="number" class="cantidadproducto" value="{{ item.quantity }}">
+										
 									</td>
 									<td class="column-5">{{item.talla}}</td>
 									<td class="column-6">$ {{item.total_price}}</td>
@@ -64,7 +66,7 @@
 							</div>
 
 							<div class="size-209">
-								<span class="mtext-110 cl2">
+								<span id="subto" class="mtext-110 cl2">
 									$ {{cart.summary}} MXN
 								</span>
 							</div>
@@ -77,8 +79,8 @@
 							</div>
 
 							<div class="size-209">
-								<span class="mtext-110 cl2">
-									$ {{envio.costo}}
+								<span id="costodeenvio" class="mtext-110 cl2">
+									$ {{envio.costo.amount}}
 								</span>
 							</div>
 						</div>
@@ -341,7 +343,7 @@ $("#tipoenvio").on('change', function(event) {
 	}
 });
 
-$("#codigo_postal").keyup(function(event) {
+$("#codigo_postal").on("input",function(event) {
 	codigo = $(this).val();
 	$.ajax({
 		             url : 'https://api-codigos-postales.herokuapp.com/v2/codigo_postal/'+codigo, // the endpoint,commonly same url
@@ -351,6 +353,12 @@ $("#codigo_postal").keyup(function(event) {
 		     	console.log(json)
 		     	$("#ciudad").val(json.municipio);
 		     	$("#estado").val(json.estado);
+		     	if (json.municipio == "Tuxtla Gutiérrez") {
+		     		$("#costodeenvio").html("$ 0.00")
+		     	}
+		     	else{
+		     		$("#costodeenvio").html("$ {{envio.costo.amount}}")
+		     	}
 		     	valores = "<option disabled selected value='Seleccione una opción'>Seleccione una opcion</option>"
 		     	$.each(json.colonias, function(index, val) {
 		     		valores += "<option value='"+val+"'>"+val+"</option>";
@@ -358,6 +366,29 @@ $("#codigo_postal").keyup(function(event) {
 		     	$("#colonia").html(valores);
 		     }
 		 });
+});
+
+$(".cantidadproducto").on('change', function(event) {
+	elemento = $(this);
+	cantidad = $(this).val();
+	id = $(this).parent().parent().attr('class').replace("table_row ","");
+	talla = $(this).parent().parent().find('input').eq(0).val()
+	id = id.replace(talla.replace(" ",""),"")
+	if (cantidad != 0) {
+		$.ajax({
+		             url : '/updateCart/', // the endpoint,commonly same url
+		             type : "POST", // http method
+		             data : {producto:id, talla:talla, cantidad}, // data sent with the post request
+		     success : function(json) {
+		     	elemento.parent().parent().find('td').eq(5).html("$ "+json.precio)
+		     	$("#subto").html("$ "+json.suma+" MXN");
+	     		$(".contador").attr("data-notify",json.totalproductos);
+		     }
+		 });
+	}
+	else{
+		elemento.val(1)
+	}
 });
 </script>
 

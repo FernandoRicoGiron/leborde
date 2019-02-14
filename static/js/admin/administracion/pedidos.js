@@ -73,7 +73,7 @@ $("#TablaPedidos").on('click', 'button.modificarPedido', function(event) {
                 success: function(json) { // on success..
                 	// console.log(json)
                 	seccionInputs2("modificarCampos",json)
-                	$("#formmodificar").append('<input type="hidden" name="idpedido" value="'+id+'"/>')
+                	$("#modificarCampos").append('<input type="hidden" name="idpedido" value="'+id+'"/>')
                 	
                     
                 }

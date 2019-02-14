@@ -28,6 +28,7 @@ urlpatterns = [
     path('perfil/', vi.perfil),
     # Ecommerce
     path('agregarCarrito/', vi.add_to_cart),
+    path('updateCart/', vi.update_to_cart),
     path('eliminarCarrito/', vi.remove_from_cart),
     path('pagar/', vi.pago),
     # PAYPAL

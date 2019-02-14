@@ -28,28 +28,28 @@ def showquienessomos(request):
 def showmodificarquienessomos(request):
 	quisomos = QuienesSomos.objects.get(id=request.POST.get("id"))
 	data = [{"tipo":"char","valor":quisomos.titulo,"label":"Titulo:", "name":"titulo"},
-		{"tipo":"ckeditor","valor":quisomos.texto,"label":"Contenido:", "name":"texto"},
+		{"tipo":"ckeditor","valor":quisomos.texto,"label":"Contenido:", "name":"contenido"},
 		]
 	return JsonResponse(data, safe=False)
 
 @csrf_exempt
 def showagregarquienessomos(request):
 	data = [{"tipo":"char","valor":"","label":"Titulo:", "name":"titulo"},
-		{"tipo":"ckeditor","valor":"","label":"Contenido:", "name":"texto"},
+		{"tipo":"ckeditor","valor":"","label":"Contenido:", "name":"contenido"},
 		]
 	return JsonResponse(data, safe=False)
 
 @csrf_exempt
 def agregarquisomos(request):
 	quisomos = QuienesSomos.objects.create(titulo=request.POST.get("titulo"),
-		texto=request.POST.get("texto"),)
+		texto=request.POST.get("contenido"),)
 	return JsonResponse("Correcto", safe=False)
 
 @csrf_exempt
 def modificarquisomos(request):
-	quisomos = QuienesSomos.objects.get(id=request.POST.get("idquisomos"))
+	quisomos = QuienesSomos.objects.get(id=request.POST.get("idquienessomos"))
 	quisomos.titulo = request.POST.get("titulo")
-	quisomos.texto = request.POST.get("texto")
+	quisomos.texto = request.POST.get("contenido")
 	quisomos.save()
 	return JsonResponse("Correcto", safe=False)
 

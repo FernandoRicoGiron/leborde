@@ -256,7 +256,7 @@
 							</a>
 							<span class="header-cart-item-info tallacart">{{ item.talla }}</span>
 							<span class="header-cart-item-info">
-								{{ item.quantity }} x $ {{ item.product.precio }}
+								{{ item.quantity }} x $ {{ item.product.precio.amount }}
 							</span>
 						</div>
 					</li>
@@ -486,7 +486,7 @@
 				{% if request.session.giro|safe != "" %}
 				<div style="color:#FFF" class="col-sm-5 p-b-50">
 					<h4 class="stext-301 cl0 p-b-30">
-						Giro de la empresa
+						{{request.session.titulo}}
 					</h4>
 
 					<p  class="stext-107 cl7 size-201">
@@ -700,6 +700,15 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> Todos
                 var conta = $(".contador").attr("data-notify");
                     conta = parseInt(conta)-json.cantidad;
                     $(".contador").attr("data-notify",conta);
+                    if (conta == 0 & "{{ request.path }}" == "/pagar/") {
+                    	swal("Debe de tener por lo menos un producto en el carrito para poder realizar una compra")
+                    	
+                    	setTimeout(function(){
+						  window.location.replace("/tienda/");
+						}, 3000);
+
+                    }
+                    $("#subto").html("$ "+json.suma+" MXN");
                     }       
                 
              

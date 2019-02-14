@@ -74,7 +74,7 @@ def variables(request):
 	request.session["logo"] = empresa.logo.url
 	request.session["nombreempresa"] = empresa.nombre
 	request.session["giro"] = empresa.giro_de_la_empresa
-	request.session["que_es"] = empresa.que_es
+	request.session["titulo"] = empresa.titulo
 	# redes sociales
 	request.session["facebook"] = empresa.facebook
 	request.session["twiter"] = empresa.twiter
@@ -120,9 +120,11 @@ def nosotros(request):
 	variables(request)
 	empresa = Empresa.objects.last()
 	seccion = Secciones.objects.last()
+	quienessomos = QuienesSomos.objects.all()
 	return render(request, 'nosotros.html', {"cart":cart,
 										"empresa":empresa,
-										"seccion":{"titulo":seccion.tituloqs, "imagen":seccion.imagenqs.url}
+										"seccion":{"titulo":seccion.tituloqs, "imagen":seccion.imagenqs.url},
+										"quienessomos":quienessomos
 										})
 
 def faqs(request):
@@ -441,11 +443,29 @@ def remove_from_cart(request):
 	cart = Cart(request)
 	cantidad = 0
 	talla = request.POST.get("talla")
+	
 	for item in cart:
 		if item.product == producto and item.talla == talla:
 			cantidad = item.quantity
 	cart.remove(producto, talla)
 	data = {"suma":cart.summary(),"id":producto.id, "cantidad":cantidad}
+	return JsonResponse(data, safe=False)
+
+@csrf_exempt
+def update_to_cart(request):
+	id = request.POST.get("producto")
+	producto = Producto.objects.get(id=id)
+	cart = Cart(request)
+	cantidad = 0
+	talla = request.POST.get("talla")
+	
+	for item in cart:
+		if item.product == producto and item.talla == talla:
+			cantidad = item.quantity
+			precio = item.total_price
+
+	cart.update(producto, talla, request.POST.get("cantidad"), producto.precio.amount)
+	data = {"suma":cart.summary(),"id":producto.id, "cantidad":cantidad, "precio":precio, "totalproductos":cart.count()}
 	return JsonResponse(data, safe=False)
 
 # PAYPAL
@@ -640,6 +660,9 @@ def pedido(request):
 	plan = "Total a pagar"
 	precio = total
 	logo = Empresa.objects.last()
+	coenvio = envio.costo.amount
+	if request.POST.get("ciudad") == "Tuxtla Gutiérrez":
+		coenvio = 0.00
 	cart = {"1":{"nombre":producto.nombre,
 				"precio":producto.precio.amount,
 				"cantidad":cantidad,
@@ -647,10 +670,10 @@ def pedido(request):
 				"total":producto.precio * cantidad,
 				"imagen":producto.imagenes.first().imagen.url},
 				"2":{"nombre":"Envio",
-				"precio":envio.costo.amount,
+				"precio":coenvio,
 				"cantidad":1,
 				"talla":"",
-				"total":envio.costo.amount,
+				"total":coenvio,
 				"imagen":""}}
 
 	pdf= render_pdf("pagos.html",{"plan":plan, "precio":precio, "logo":logo.logo.url, "ncuenta":logo.numero_de_cuenta, "cart":cart})
@@ -717,11 +740,14 @@ def pedido2(request):
 				"total":x.total_price,
 				"imagen":x.product.imagenes.first().imagen.url}
 			cont += 1
+		coenvio = envio.costo.amount
+		if request.POST.get("ciudad") == "Tuxtla Gutiérrez":
+			coenvio = 0.00
 		arreglo[cont] = {"nombre":"Envio",
-				"precio":envio.costo.amount,
+				"precio":coenvio,
 				"cantidad":1,
 				"talla":"",
-				"total":envio.costo.amount,
+				"total":coenvio,
 				"imagen":""}
 
 		plan = "Total a pagar"
@@ -769,11 +795,14 @@ def voucher(request, id):
 			"total":x.cantidad*x.producto.precio,
 			"imagen":x.producto.imagenes.first().imagen.url}
 	envio = Envio.objects.last()
+	coenvio = envio.costo.amount
+	if request.POST.get("ciudad") == "Tuxtla Gutiérrez":
+		coenvio = 0.00
 	arreglo["Envio"] = {"nombre":"envio",
-			"precio":envio.costo.amount,
+			"precio":coenvio,
 			"cantidad":1,
 			"talla":"",
-			"total":envio.costo.amount,
+			"total":coenvio,
 			"imagen":""}
 	pdf= render_pdf("pagos.html",{"plan":plan, "precio":precio, "logo":logo.logo.url, "ncuenta":logo.numero_de_cuenta, "cart":arreglo})
 	return HttpResponse(pdf,content_type="application/pdf")

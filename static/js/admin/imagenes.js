@@ -23,21 +23,21 @@ $("#agregarCampos").on("change", "input#files", function() {
             });
 });
 
-$("#agregarCampos").on("change", "input#files2", function() {
-    readURL(this);
+$("#agregarCampos").on("change", "input.files2", function() {
+    readURL(this, $(this).attr('name'));
 });
 
-$("#modificarCampos").on("change", "input#files2", function() {
-    readURL(this);
+$("#modificarCampos").on("change", "input.files2", function() {
+    readURL(this, $(this).attr('name'));
 });
 
-function readURL(input) {
+function readURL(input, name) {
 
   if (input.files && input.files[0]) {
     var reader = new FileReader();
 
     reader.onload = function(e) {
-       document.getElementById("list").innerHTML = ['<div class="col-md-12" style=""><img style="max-width:100%;" class="thumb" src="', e.target.result,'"/></div>'].join('');
+       document.getElementById("list"+name).innerHTML = ['<div class="col-md-12" style=""><img style="max-width:100%;" class="thumb" src="', e.target.result,'"/></div>'].join('');
       
     }
 
