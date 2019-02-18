@@ -486,6 +486,7 @@ def errorpagadopaypal(request):
 	return redirect("/")
 
 def pagarpaypal(request):
+	empresa = Empresa.objects.last()
 	envio = Envio.objects.last()
 	datos = Cliente.objects.get(usuario=request.user)
 	cart = Cart(request)
@@ -522,8 +523,8 @@ def pagarpaypal(request):
 		"telefono":request.POST.get("telefono"),
 		"nombre":request.POST.get("nombrerev")}
 		paypal_dict = {
-			"business": "riicoo28@gmail.com",
-			"receiver_email":"riicoo28@gmail.com",
+			"business": empresa.correopaypal,
+			"receiver_email":empresa.correopaypal,
 			"payer_email":request.POST.get("email"),
 			"address_override":1,
 			"country":"MX",
@@ -566,8 +567,8 @@ def pagarpaypal(request):
 		"telefono":datos.telefono,
 		"nombre":request.user.first_name+" "+request.user.last_name}
 		paypal_dict = {
-			"business": "riicoo28@gmail.com",
-			"receiver_email":"riicoo28@gmail.com",
+			"business": empresa.correopaypal,
+			"receiver_email":empresa.correopaypal,
 			"payer_email":request.user.email,
 			"address_override":1,
 			"country":"MX",
@@ -795,7 +796,7 @@ def subircomprobante(request, id):
 			[pedido.email],
 			fail_silently=False,
 		)
-		sweetify.success(request, 'Gracias por su compra, si todo está correcto su pedido llegará de 3 a 5 días hábiles, si tiene alguna duda o consulta puede realizarla al whatsapp de servicio '+empresa.telefono+' o envia un correo a: '+empresa.correo+', será un placer atenderle', persistent=':(')
+		sweetify.success(request, 'Gracias por su compra, si todo está correcto su pedido llegará de 3 a 5 días hábiles, si tiene alguna duda o consulta puede realizarla al whatsapp de servicio '+empresa.telefono+' ó envia un correo a: '+empresa.correo+', será un placer atenderle', persistent=':(')
 		return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
 	else:
 		sweetify.error(request, 'Seleccione una imagen por favor', persistent=':(')
@@ -819,7 +820,7 @@ def voucher(request, id):
 			"imagen":x.producto.imagenes.first().imagen.url}
 	envio = Envio.objects.last()
 	coenvio = envio.costo.amount
-	if request.POST.get("ciudad") == "Tuxtla Gutiérrez":
+	if pedido.ciudad == "Tuxtla Gutiérrez":
 		coenvio = 0.00
 	arreglo["Envio"] = {"nombre":"envio",
 			"precio":coenvio,

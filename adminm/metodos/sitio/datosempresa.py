@@ -27,6 +27,7 @@ def showmodificardatos(request):
 		{"tipo":"char","valor":dato.direccion,"label":"Dirección:", "name":"direccion"},
 		{"tipo":"char","valor":dato.telefono,"label":"Telefono:", "name":"telefono"},
 		{"tipo":"char","valor":dato.correo,"label":"Correo electronico:", "name":"correo"},
+		{"tipo":"char","valor":dato.correopaypal,"label":"Correo electronico de la cuenta paypal:", "name":"correopaypal"},
 
 		{"tipo":"char","valor":dato.facebook,"label":"Link de Facebook:", "name":"facebook"},
 		{"tipo":"char","valor":dato.twiter,"label":"Link de Twitter:", "name":"twiter"},
@@ -50,6 +51,7 @@ def modificardato(request):
 				direccion=request.POST.get("direccion"),
 				telefono=request.POST.get("telefono"),
 				correo=request.POST.get("correo"),
+				correopaypal=request.POST.get("correopaypal"),
 				logo=request.FILES["logo"],
 				titulo=request.POST.get("titulo"),
 				giro_de_la_empresa=request.POST.get("giro"),
@@ -64,6 +66,7 @@ def modificardato(request):
 				direccion=request.POST.get("direccion"),
 				telefono=request.POST.get("telefono"),
 				correo=request.POST.get("correo"),
+				correopaypal=request.POST.get("correopaypal"),
 				logo=imagen,
 				titulo=request.POST.get("titulo"),
 				giro_de_la_empresa=request.POST.get("giro"),

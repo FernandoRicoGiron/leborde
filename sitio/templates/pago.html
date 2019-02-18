@@ -227,7 +227,7 @@
 							
 
 							<div class="size-208 p-t-1">
-								<span class="mtext-110 cl2 header-cart-total">
+								<span id="grantotal" class="mtext-110 cl2 header-cart-total">
 									Total: $ {{total}} MXN
 								</span>
 							</div>
@@ -355,9 +355,14 @@ $("#codigo_postal").on("input",function(event) {
 		     	$("#estado").val(json.estado);
 		     	if (json.municipio == "Tuxtla Gutiérrez") {
 		     		$("#costodeenvio").html("$ 0.00")
+		     		$("#grantotal").html("Total: $ {{cart.summary}} MXN")
 		     	}
 		     	else{
+		     		envio = parseFloat("{{envio.costo.amount}}")
+		     		subtotal = parseFloat("{{cart.summary}}")
+		     		total = parseFloat(envio + subtotal).toFixed(2)
 		     		$("#costodeenvio").html("$ {{envio.costo.amount}}")
+		     		$("#grantotal").html("Total: $ "+total+ " MXN")
 		     	}
 		     	valores = "<option disabled selected value='Seleccione una opción'>Seleccione una opcion</option>"
 		     	$.each(json.colonias, function(index, val) {

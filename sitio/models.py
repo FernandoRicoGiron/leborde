@@ -69,6 +69,7 @@ class Empresa(models.Model):
 	direccion = models.CharField(max_length=100)
 	telefono = models.CharField(max_length=100)
 	correo = models.CharField(max_length=100)
+	correopaypal = models.CharField(max_length=100)
 	titulo = models.CharField(blank=True, null=True, max_length=50)
 	giro_de_la_empresa = models.TextField(blank=True, null=True)
 	numero_de_cuenta = models.CharField(max_length=50)

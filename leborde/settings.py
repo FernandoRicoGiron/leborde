@@ -91,7 +91,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'tuxmapa_istmena',
         'USER': 'tuxmapa',
-        'PASSWORD': 'i0cj6y339JMxHb2Z',
+        'PASSWORD': 'rockmax28',
         'HOST': 'localhost',
         'PORT': '',
     }
