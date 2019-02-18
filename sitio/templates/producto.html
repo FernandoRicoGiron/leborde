@@ -338,29 +338,41 @@
 		             	talla:talla
 		             }, // data sent with the post request
 		     success : function(json) {
-		     	
-		     	if ($(".carrito").find("div#"+json.id+json.talla.replace(" ","")).length > 0 ){
-		     	var producto = "<input type='hidden' value='"+json.talla+"' class='tallacart' name=''>"+
-		     		"<div class='header-cart-item-img' id='{{producto.id}}"+json.talla.replace(" ","")+"'><img src='{{ producto.imagenes.first.imagen.url }}' alt='IMG'></div><div class='header-cart-item-txt p-t-8'><a href='#' class='header-cart-item-name m-b-18 hov-cl1 trans-04'>{{ producto.nombre }}</a><span class='header-cart-item-info tallacart'>" +json.talla+ "</span><span class='header-cart-item-info'>"+json.cantidad+" x $ {{ producto.precio.amount }}</span></div>";
-		     	$(".carrito").find("div#"+json.id+json.talla.replace(" ","")).parent().html(producto);
-		     }
-		     else{
-		     	var producto = "<li class='header-cart-item flex-w flex-t m-b-12 {{producto.id}}"+json.talla.replace(" ","")+"'><input type='hidden' value='"+json.talla+"' class='tallacart' name=''><div class='header-cart-item-img' id='{{producto.id}}"+json.talla.replace(" ","")+"'><img src='{{ producto.imagenes.first.imagen.url }}' alt='IMG'></div><div class='header-cart-item-txt p-t-8'><a href='#' class='header-cart-item-name m-b-18 hov-cl1 trans-04'>{{ producto.nombre }}</a><span class='header-cart-item-info tallacart'>" +json.talla+ "</span><span class='header-cart-item-info'>"+json.cantidad+" x $ {{ producto.precio.amount }}</span></div></li>";
-		     	$(".carrito").append(producto);
-		     }
+		     	console.log(json)
+		     	if(json.error != "No hay suficientes productos en el inventario"){
+ 			     	if ($(".carrito").find("div#"+json.id+json.talla.replace(" ","")).length > 0 ){
+ 			     	var producto = "<input type='hidden' value='"+json.talla+"' class='tallacart' name=''>"+
+ 			     		"<div class='header-cart-item-img' id='{{producto.id}}"+json.talla.replace(" ","")+"'><img src='{{ producto.imagenes.first.imagen.url }}' alt='IMG'></div><div class='header-cart-item-txt p-t-8'><a href='#' class='header-cart-item-name m-b-18 hov-cl1 trans-04'>{{ producto.nombre }}</a><span class='header-cart-item-info tallacart'>" +json.talla+ "</span><span class='header-cart-item-info'>"+json.cantidad+" x $ {{ producto.precio.amount }}</span></div>";
+ 			     	$(".carrito").find("div#"+json.id+json.talla.replace(" ","")).parent().html(producto);
+ 			     }
+ 			     else{
+ 			     	var producto = "<li class='header-cart-item flex-w flex-t m-b-12 {{producto.id}}"+json.talla.replace(" ","")+"'><input type='hidden' value='"+json.talla+"' class='tallacart' name=''><div class='header-cart-item-img' id='{{producto.id}}"+json.talla.replace(" ","")+"'><img src='{{ producto.imagenes.first.imagen.url }}' alt='IMG'></div><div class='header-cart-item-txt p-t-8'><a href='#' class='header-cart-item-name m-b-18 hov-cl1 trans-04'>{{ producto.nombre }}</a><span class='header-cart-item-info tallacart'>" +json.talla+ "</span><span class='header-cart-item-info'>"+json.cantidad+" x $ {{ producto.precio.amount }}</span></div></li>";
+ 			     	$(".carrito").append(producto);
+ 			     }
+ 	
+ 			     	totalpro = "Total: $"+json.suma;
+ 	            	$(".header-cart-total").html(totalpro);
+ 	                var conta = parseInt($(".contador").attr("data-notify"));
+ 		     		$(".contador").attr("data-notify",conta+parseInt(cantidad));
+ 	
+ 			     	
+ 			     		swal({
+ 		                  type: 'success',
+ 		                  icon: 'success',
+ 		                  title: '¡Genial!',
+ 		                  text: 'Agregado al carrito',
+ 		                })
+		     		}
+		     		else{
+		     			swal({
+ 		                  type: 'warning',
+ 		                  icon: 'warning',
+ 		                  title: 'Oops!',
+ 		                  text: json.error,
+ 		                })
 
-		     	totalpro = "Total: $"+json.suma;
-            	$(".header-cart-total").html(totalpro);
-                var conta = parseInt($(".contador").attr("data-notify"));
-	     		$(".contador").attr("data-notify",conta+parseInt(cantidad));
-
-		     	
-		     		swal({
-	                  type: 'success',
-	                  icon: 'success',
-	                  title: '¡Genial!',
-	                  text: 'Agregado al carrito',
-	                })
+ 		                $("#pedido").modal("show")
+		     		}
 	                
 		  		}		
 		  	    

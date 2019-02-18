@@ -36,6 +36,7 @@ $("#mostrarProductos").on("click", function () {
 						value.pk,
 						datos.nombre,
 						"$ "+datos.precio,
+						datos.inventario,
 						popular,
 						categorias[datos.categoria],
 	                    '<button style="padding:10px;" type="button" rel="tooltip" class="modificarProducto btn btn-success" data-original-title="" title="">'+

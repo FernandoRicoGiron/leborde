@@ -47,6 +47,9 @@ def ipn(sender, *args, **kwargs):
 			talla = Inventario_Talla.objects.get(producto=producto.producto, talla=talla)
 			talla.cantidad -= producto.cantidad
 			talla.save()
+			pro = producto
+			pro.inventario -= x.quantity
+			pro.save()
 		
 		Venta.objects.create(usuario=pedido.usuario,
 			fecha=datetime.datetime.now(),
@@ -435,11 +438,23 @@ def add_to_cart(request):
 	producto = Producto.objects.get(id=id)
 	cart = Cart(request)
 	talla = Talla.objects.get(id=request.POST.get("talla"))
-	cart.add(producto, producto.precio.amount, talla.nombre, cantidad)
+	cantidadincart = 0
 	for item in cart:
-		if item.product == producto:
-			cantidad = item.quantity
-	data = {"id":producto.id, "cantidad":cantidad, "suma":cart.summary(), "talla":talla.nombre}
+		if item.product == producto and item.talla == talla.nombre:
+			cantidadincart = item.quantity
+
+	sumacants = int(cantidad) + int(cantidadincart)
+
+	if sumacants <= int(producto.inventario):
+		# print(producto.inventario)
+		# print((int(cantidad) + int(cantidadincart)))
+		cart.add(producto, producto.precio.amount, talla.nombre, cantidad)
+		for item in cart:
+			if item.product == producto and item.talla == talla.nombre:
+				cantidad = item.quantity
+		data = {"id":producto.id, "cantidad":cantidad, "suma":cart.summary(), "talla":talla.nombre}
+	else:
+		data = {"error":"No hay suficientes productos en el inventario"}
 	return JsonResponse(data, safe=False)
 
 @csrf_exempt
@@ -608,9 +623,11 @@ def pagarpaypal(request):
 	dic = paypal_dict.update(productos)
 	# Create the instance.
 	form = PayPalPaymentsForm(initial=paypal_dict)
-	context = {"form": form, "cart":cart, "denvio":envio, "envio":Envio.objects.last(), "suma":("%.2f" % suma), "total":Envio.objects.last().costo.amount+cart.summary(),}
+	seccion = Secciones.objects.last()
+	context = {"form": form, "cart":cart, "denvio":envio, "envio":Envio.objects.last(), "suma":("%.2f" % suma), "total":Envio.objects.last().costo.amount+cart.summary(),"seccion":{"titulo":seccion.tituloppaypal, "imagen":seccion.imagenppaypal.url}}
 	
 	if datoscomplete:
+
 		return render(request, "pagopaypal.html", context)
 	else:
 		sweetify.success(request, 'Verifica que tus datos esten correctos', persistent=':(')
@@ -740,6 +757,12 @@ def pedido2(request):
 					cantidad=x.quantity,
 					pedido=pedido,
 					talla=x.talla,)
+			invtalla = Inventario_Talla.objects.get(producto=x.product, talla=x.talla)
+			pro = x.product
+			pro.inventario -= x.quantity
+			invtalla.cantidad -= x.quantity
+			pro.save()
+			invtalla.save()
 			arreglo[cont] = {"nombre":x.product.nombre,
 				"precio":x.product.precio.amount,
 				"cantidad":x.quantity,
@@ -791,12 +814,12 @@ def subircomprobante(request, id):
 		)
 		send_mail(
 			'Comprobante de pago '+empresa.nombre,
-			'Su comprobante ha sido enviado correctamente si todo está correcto su pedido llegará de 3 a 5 días hábiles, si tiene alguna duda o consulta puede realizarla al whatsapp de servicio '+empresa.telefono+' o envia un correo a: '+empresa.correo+', será un placer atenderle',
+			'Su comprobante ha sido enviado correctamente si todo está correcto su pedido llegará de 3 a 5 días hábiles, si tiene alguna duda o consulta puede realizarla al whatsapp de servicio '+empresa.telefono+' ó enviar un correo a: '+empresa.correo+', será un placer atenderle',
 			empresa.correo,
 			[pedido.email],
 			fail_silently=False,
 		)
-		sweetify.success(request, 'Gracias por su compra, si todo está correcto su pedido llegará de 3 a 5 días hábiles, si tiene alguna duda o consulta puede realizarla al whatsapp de servicio '+empresa.telefono+' ó envia un correo a: '+empresa.correo+', será un placer atenderle', persistent=':(')
+		sweetify.success(request, 'Gracias por su compra, si todo está correcto su pedido llegará de 3 a 5 días hábiles, si tiene alguna duda o consulta puede realizarla al whatsapp de servicio '+empresa.telefono+' ó enviar un correo a: '+empresa.correo+', será un placer atenderle', persistent=':(')
 		return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
 	else:
 		sweetify.error(request, 'Seleccione una imagen por favor', persistent=':(')

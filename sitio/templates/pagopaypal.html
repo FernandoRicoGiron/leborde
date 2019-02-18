@@ -3,10 +3,12 @@
 {% block content %}
 {% load tags %}
 		
-<section class="bg-img1 txt-center p-lr-15 p-tb-92" style="background-image: url({% static 'sitio/images/Sitio/coleccion3.jpg' %});">
-	<h2 class="ltext-105 cl0 txt-center">
-		Proceder al pago
-	</h2>
+<!-- Title page -->
+	<section class="bg-img1 txt-center p-lr-15 p-tb-92" style="background-image: url({{seccion.imagen}});">
+		<h2 class="ltext-105 cl0 txt-center">
+			{{seccion.titulo}}
+		</h2>
+	</section>
 </section>	<br>
 	<!-- Shoping Cart -->
 	
@@ -41,7 +43,11 @@
 
 							<div class="size-209">
 								<span class="mtext-110 cl2">
-									$ {{envio.costo}}
+									{% if denvio.ciudad != "Tuxtla Gutiérrez"%}
+									$ {{envio.costo.amount}} MXN
+									{% else %}
+									$ 0.00 MXN
+									{% endif %}
 								</span>
 							</div>
 						</div>
@@ -54,7 +60,11 @@
 
 							<div class="size-209">
 								<span class="mtext-110 cl2">
+									{% if denvio.ciudad != "Tuxtla Gutiérrez"%}
 									$ {{total}} MXN
+									{% else %}
+									$ {{cart.summary}} MXN
+									{% endif %}
 								</span>
 							</div>
 						</div>

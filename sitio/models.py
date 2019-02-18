@@ -53,6 +53,8 @@ class Secciones(models.Model):
 	imagenc = models.ImageField(upload_to="Secciones", blank=True, null=True, default="coleccion3.jpg")
 	titulodp = models.CharField(max_length=200, default="Datos para el pago")
 	imagendp = models.ImageField(upload_to="Secciones", blank=True, null=True, default="coleccion3.jpg")
+	tituloppaypal = models.CharField(max_length=200, default="Proceder al pago con paypal")
+	imagenppaypal = models.ImageField(upload_to="Secciones", blank=True, null=True, default="coleccion3.jpg")
 	titulop = models.CharField(max_length=200, default="Datos de perfil")
 	imagenp = models.ImageField(upload_to="Secciones", blank=True, null=True, default="coleccion3.jpg")
 	titulopedidos = models.CharField(max_length=200, default="Mis Pedidos")

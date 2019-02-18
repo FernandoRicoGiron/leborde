@@ -29,6 +29,10 @@ def showmodificarsecciones(request):
 		{"tipo":"imagen2","valor":seccion.imagenc.url,"label":"Imagen principal en 'Contáctanos':", "name":"imagenc"},
 		{"tipo":"char","valor":seccion.titulodp,"label":"Titulo en 'Datos para pago':", "name":"titulodp"},
 		{"tipo":"imagen2","valor":seccion.imagendp.url,"label":"Imagen principal en 'Datos para pago':", "name":"imagendp"},
+
+		{"tipo":"char","valor":seccion.tituloppaypal,"label":"Titulo en 'Proceder al pago con paypal':", "name":"tituloppaypal"},
+		{"tipo":"imagen2","valor":seccion.imagenppaypal.url,"label":"Imagen principal en 'Proceder al pago con paypal':", "name":"imagenppaypal"},
+
 		{"tipo":"char","valor":seccion.titulop,"label":"Titulo en 'Datos de Perfil':", "name":"titulop"},
 		{"tipo":"imagen2","valor":seccion.imagenp.url,"label":"Imagen principal en 'Datos de Perfil':", "name":"imagenp"},
 		{"tipo":"char","valor":seccion.titulopedidos,"label":"Titulo en 'Pedidos':", "name":"titulopedidos"},
@@ -46,6 +50,7 @@ def modificarseccion(request):
 	imagenqs = seccion.imagenqs
 	imagenc = seccion.imagenc
 	imagendp = seccion.imagendp
+	imagenppaypal = seccion.imagenppaypal
 	imagenp = seccion.imagenp
 	imagenpedidos = seccion.imagenpedidos
 	imagenpreguntas = seccion.imagenpreguntas
@@ -58,6 +63,10 @@ def modificarseccion(request):
 		imagenc = request.FILES["imagenc"]
 	if "imagendp" in request.FILES:
 		imagendp = request.FILES["imagendp"]
+
+	if "imagenppaypal" in request.FILES:
+		imagenppaypal = request.FILES["imagenppaypal"]
+
 	if "imagenp" in request.FILES:
 		imagenp = request.FILES["imagenp"]
 	if "imagenpedidos" in request.FILES:
@@ -75,6 +84,10 @@ def modificarseccion(request):
 			imagenc=imagenc,
 			titulodp=request.POST.get("titulodp"),
 			imagendp=imagendp,
+
+			tituloppaypal=request.POST.get("tituloppaypal"),
+			imagenppaypal=imagenppaypal,
+
 			titulop=request.POST.get("titulop"),
 			imagenp=imagenp,
 			titulopedidos=request.POST.get("titulopedidos"),
