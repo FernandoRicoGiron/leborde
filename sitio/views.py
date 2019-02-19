@@ -757,7 +757,8 @@ def pedido2(request):
 					cantidad=x.quantity,
 					pedido=pedido,
 					talla=x.talla,)
-			invtalla = Inventario_Talla.objects.get(producto=x.product, talla=x.talla)
+			talla = Talla.objects.get(nombre = x.talla)
+			invtalla = Inventario_Talla.objects.get(producto=x.product, talla=talla)
 			pro = x.product
 			pro.inventario -= x.quantity
 			invtalla.cantidad -= x.quantity
