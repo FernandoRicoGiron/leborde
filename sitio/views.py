@@ -501,6 +501,7 @@ def errorpagadopaypal(request):
 	return redirect("/")
 
 def pagarpaypal(request):
+	print(request.POST.get("telefono"))
 	empresa = Empresa.objects.last()
 	envio = Envio.objects.last()
 	datos = Cliente.objects.get(usuario=request.user)
