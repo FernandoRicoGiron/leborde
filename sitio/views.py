@@ -832,7 +832,7 @@ def voucher(request, id):
 	total = 0
 	pedido = Pedido.objects.get(id=id)
 	plan = "Total a pagar"
-	precio = pedido.total
+	precio = pedido.total.amount
 	logo = Empresa.objects.last()
 	productos = Producto_Pedido.objects.filter(pedido=pedido)
 	arreglo = {}
@@ -841,7 +841,7 @@ def voucher(request, id):
 			"precio":x.producto.precio.amount,
 			"cantidad":x.cantidad,
 			"talla":x.talla,
-			"total":x.cantidad*x.producto.precio,
+			"total":x.cantidad*x.producto.precio.amount,
 			"imagen":x.producto.imagenes.first().imagen.url}
 	envio = Envio.objects.last()
 	coenvio = envio.costo.amount

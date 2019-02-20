@@ -169,9 +169,16 @@
 							Help & FAQs
 						</a>-->
 
+						<a href="/faqs/" class="flex-c-m trans-04 p-lr-25">
+							Ayuda & FAQs
+						</a>
+
 						{% if user.is_authenticated %}
-						<a href="#" data-toggle="modal" data-target="#iniciosesion" class="flex-c-m trans-04 p-lr-25">
+						<a href="#" class="flex-c-m trans-04 p-lr-25">
 							Hola {{user}}
+						</a>
+						<a href="/pedidos/"  class="flex-c-m trans-04 p-lr-25">
+							Mis Pedidos
 						</a>
 						<a href="/perfil/"  class="flex-c-m trans-04 p-lr-25">
 							Modificar Perfil
@@ -181,7 +188,7 @@
 						</a>
 						{% else %}
 						<a href="#" data-toggle="modal" data-target="#iniciosesion" class="flex-c-m trans-04 p-lr-25">
-							Iniciar Sesion / Registrarse
+							Iniciar Sesión / Registrarse
 						</a>
 						{% endif %}
 

@@ -18,7 +18,8 @@ $("#mostrarPedidos").on("click", function () {
  					$.each( pedidos, function( key, value ) {
  						
  						datos = value.fields;
- 						if (datos.comprobante) {
+ 						// alert(datos.comprobante)
+ 						if (datos.comprobante != "" & datos.estado_pedido != 2 & datos.estado_pedido != 3 & datos.estado_pedido != 4) {
  							estadopedido = '<i class="material-icons text-warning">report</i> <a style="position:absolute" href="#">Con comprobante</a>'
  						}
  						else if (datos.estado_pedido == 1) {
