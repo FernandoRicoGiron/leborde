@@ -81,7 +81,7 @@ def index(request):
 		for venta in ventas:
 			sumaventas += venta.monto.amount
 
-		ultimospedidos = Pedido.objects.all()[:5]
+		ultimospedidos = Pedido.objects.all().order_by("-id")[:5]
 		return render(request, "admin.html", {"ventas":sumaventas, "sumapedidos":len(sumapedidos), "maspedidos":maspedidos, "ultimospedidos":ultimospedidos})
 	else:
 		logout(request)
