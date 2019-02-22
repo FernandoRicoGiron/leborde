@@ -375,11 +375,11 @@ def perfil(request):
 	colonias = {}
 	if datos.codigopostal:
 		colonias = requests.get('https://api-codigos-postales.herokuapp.com/v2/codigo_postal/'+datos.codigopostal)
-		print(colonias.text)
+		colonias = colonias.json(),
 	return render(request, 'datos.html', {"cart":cart,
 		"datos":datos,
 		"seccion":{"titulo":seccion.titulop, "imagen":seccion.imagenp.url},
-		"colonias":colonias.json(),
+		"colonias": colonias
 		})
 
 @login_required(login_url='/')	
