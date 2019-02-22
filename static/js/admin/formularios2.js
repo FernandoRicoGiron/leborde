@@ -153,7 +153,7 @@ function seccionInputs2(campos, json) {
 		    $("#"+campos).append(file)
 		    // document.getElementById('files').addEventListener('change', archivo, false);
 		    if (valor != "") {
-                document.getElementById("list").innerHTML = ['<div class="col-md-12" style=""><img style="max-width:100%" class="thumb" src="', valor,'"/></div>'].join('');
+                document.getElementById("list").innerHTML = ['<div class="col-md-12" style=""><a href="'+valor+'"><img style="max-width:100%" class="thumb" src="', valor,'"/></a></div>'].join('');
                 	
 		    }
 		    
