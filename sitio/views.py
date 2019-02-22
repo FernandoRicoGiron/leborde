@@ -22,6 +22,7 @@ import goslate
 import smtplib
 import sweetify
 import datetime
+import requests
 # from __future__ import unicode_literal
 
 # @csrf_exempt
@@ -197,7 +198,7 @@ def producto(request, id):
 	estadodatos = False
 	if request.user.is_authenticated:
 		cliente = Cliente.objects.get(usuario=request.user)
-		if cliente.telefono != "null" and cliente.direccion != "null" and cliente.ciudad != "null" and cliente.estado != "null" and cliente.pais != "null" and cliente.codigopostal != "null":
+		if cliente.telefono != "null" and cliente.calle != "null" and cliente.colonia != "null" and cliente.no_exterior != "null" and cliente.ciudad != "null" and cliente.estado != "null" and cliente.pais != "null" and cliente.codigopostal != "null":
 			estadodatos = True
 		else:
 			estadodatos = "No cuenta con datos de envio"
@@ -371,9 +372,15 @@ def perfil(request):
 	user = request.user
 	datos = Cliente.objects.get(usuario=user)
 	seccion = Secciones.objects.last()
+	colonias = {}
+	if datos.codigopostal:
+		colonias = requests.get('https://api-codigos-postales.herokuapp.com/v2/codigo_postal/'+datos.codigopostal)
+		print(colonias.text)
 	return render(request, 'datos.html', {"cart":cart,
 		"datos":datos,
-		"seccion":{"titulo":seccion.titulop, "imagen":seccion.imagenp.url}})
+		"seccion":{"titulo":seccion.titulop, "imagen":seccion.imagenp.url},
+		"colonias":colonias.json(),
+		})
 
 @login_required(login_url='/')	
 def modificardatos(request):
@@ -383,7 +390,10 @@ def modificardatos(request):
 	cliente.usuario.last_name=request.POST.get("apellido")
 	cliente.usuario.email=request.POST.get("email")
 	cliente.telefono = request.POST.get("telefono")
-	cliente.direccion=request.POST.get("direccion")
+	cliente.colonia=request.POST.get("colonia")
+	cliente.calle=request.POST.get("calle")
+	cliente.no_exterior=request.POST.get("exterior")
+	cliente.no_interior=request.POST.get("interior")
 	cliente.ciudad=request.POST.get("ciudad")
 	cliente.estado=request.POST.get("estado")
 	cliente.pais=request.POST.get("pais")
@@ -420,13 +430,13 @@ def pago(request):
 	variables(request)
 	cliente = Cliente.objects.get(usuario=request.user)
 	print(cliente.telefono)
-	if cliente.telefono != None and cliente.direccion != None and cliente.ciudad != None and cliente.estado != None and cliente.pais != None and cliente.codigopostal != None:
+	if cliente.telefono != None and cliente.colonia != None and cliente.calle != None and cliente.no_exterior != None and cliente.ciudad != None and cliente.estado != None and cliente.pais != None and cliente.codigopostal != None:
 		estadodatos = True
 	else:
 		estadodatos = "No cuenta con datos de envio"
 	if cart.count() > 0:
 		seccion = Secciones.objects.last()
-		return render(request, 'pago.html', {"cart":cart, "seccion":{"titulo":seccion.titulodp, "imagen":seccion.imagendp.url}, "envio":envio, "total":envio.costo.amount+cart.summary(), "estadodatos":estadodatos})
+		return render(request, 'pago.html', {"cart":cart, "seccion":{"titulo":seccion.titulodp, "imagen":seccion.imagendp.url}, "envio":envio, "total":envio.costo.amount+cart.summary(), "estadodatos":estadodatos, "cliente":cliente})
 	else:
 		sweetify.error(request, 'Agregue por lo menos un producto al carrito de compras', persistent=':(')
 		return redirect("/tienda/")
@@ -445,7 +455,9 @@ def add_to_cart(request):
 
 	sumacants = int(cantidad) + int(cantidadincart)
 
-	if sumacants <= int(producto.inventario):
+	inventario = Inventario_Talla.objects.get(producto=producto, talla=talla)
+
+	if sumacants <= int(inventario.cantidad):
 		# print(producto.inventario)
 		# print((int(cantidad) + int(cantidadincart)))
 		cart.add(producto, producto.precio.amount, talla.nombre, cantidad)
@@ -474,19 +486,31 @@ def remove_from_cart(request):
 
 @csrf_exempt
 def update_to_cart(request):
+	cantidad = request.POST.get("cantidad")
 	id = request.POST.get("producto")
 	producto = Producto.objects.get(id=id)
 	cart = Cart(request)
-	cantidad = 0
-	talla = request.POST.get("talla")
-	
-	for item in cart:
-		if item.product == producto and item.talla == talla:
-			cantidad = item.quantity
-			precio = item.total_price
+	talla = Talla.objects.get(nombre=request.POST.get("talla"))
 
-	cart.update(producto, talla, request.POST.get("cantidad"), producto.precio.amount)
-	data = {"suma":cart.summary(),"id":producto.id, "cantidad":cantidad, "precio":precio, "totalproductos":cart.count()}
+	cantidadincart = 0
+	for item in cart:
+		if item.product == producto and item.talla == talla.nombre:
+			cantidadincart = item.quantity
+
+	sumacants = int(cantidad) + int(cantidadincart)
+
+	inventario = Inventario_Talla.objects.get(producto=producto, talla=talla)
+	
+	if sumacants <= int(inventario.cantidad):
+		for item in cart:
+			if item.product == producto and item.talla == talla.nombre:
+				cantidad = item.quantity
+				precio = item.total_price
+
+		cart.update(producto, talla, request.POST.get("cantidad"), producto.precio.amount)
+		data = {"suma":cart.summary(),"id":producto.id, "cantidad":cantidad, "precio":precio, "totalproductos":cart.count()}
+	else:
+		data = {"error":"No hay suficientes productos en el inventario", "cantidad":int(cantidadincart)}
 	return JsonResponse(data, safe=False)
 
 # PAYPAL
@@ -578,7 +602,7 @@ def pagarpaypal(request):
 		"pais":datos.pais,
 		"ciudad":datos.ciudad,
 		"estado":datos.estado,
-		"direccion":datos.direccion,
+		"direccion":datos.colonia + " " + datos.calle + " " +datos.no_exterior + " " + datos.no_interior,
 		"codigo":datos.codigopostal,
 		"telefono":datos.telefono,
 		"nombre":request.user.first_name+" "+request.user.last_name}
@@ -590,7 +614,7 @@ def pagarpaypal(request):
 			"country":"MX",
 			"city":datos.ciudad,
 			"state":datos.estado,
-			"address1":datos.direccion,
+			"address1":datos.colonia + " " + datos.calle + " " +datos.no_exterior + " " + datos.no_interior,
 			"zip":datos.codigopostal,
 			"contact_phone":datos.telefono,
 			"first_name":request.user.first_name+" "+request.user.last_name,
@@ -612,7 +636,7 @@ def pagarpaypal(request):
 					pais = datos.pais,
 					estado = datos.estado,
 					ciudad = datos.ciudad,
-					direccion = datos.direccion,
+					direccion = datos.colonia + " " + datos.calle + " " +datos.no_exterior + " " + datos.no_interior,
 					codigopostal = datos.codigopostal,
 					email = request.user.email,)
 			datoscomplete = True
@@ -658,7 +682,7 @@ def pedido(request):
 				pais = request.POST.get("pais"),
 				estado = request.POST.get("estado"),
 				ciudad = request.POST.get("ciudad"),
-				direccion = request.POST.get("colonia") + " " +request.POST.get("calle") + " " + request.POST.get("exterior") + " " + request.POST.get("interior"),
+				direccion = request.POST.get("colonia") + " " +request.POST.get("direccion") + " " + request.POST.get("exterior") + " " + request.POST.get("interior"),
 				codigopostal = request.POST.get("codigo"),
 				email = request.POST.get("email"),)
 	else:
@@ -674,7 +698,7 @@ def pedido(request):
 				pais = cliente.pais,
 				estado = cliente.estado,
 				ciudad = cliente.ciudad,
-				direccion = cliente.direccion,
+				direccion = cliente.colonia + " " + cliente.calle + " " +cliente.no_exterior + " " + cliente.no_interior,
 				codigopostal = cliente.codigopostal,
 				email = request.user.email,)
 
@@ -722,6 +746,7 @@ def pedido2(request):
 			
 
 		if request.POST.get("enviomod") == "2":
+			ciudad = request.POST.get("ciudad")
 			if request.POST.get("ciudad") != "Tuxtla Gutiérrez":
 				total = total + envio.costo.amount
 			pedido = Pedido.objects.create(usuario = request.user,
@@ -737,8 +762,10 @@ def pedido2(request):
 					codigopostal = request.POST.get("codigo"),
 					email = request.POST.get("email"),)
 		else:
+			
 			cliente = Cliente.objects.get(usuario = request.user)
-			if cliente.ciudad != "Tuxtla Gutiérrez":
+			ciudad = cliente.ciudad
+			if ciudad != "Tuxtla Gutiérrez":
 				total = total + envio.costo.amount
 			pedido = Pedido.objects.create(usuario = request.user,
 					total = total,
@@ -749,7 +776,7 @@ def pedido2(request):
 					pais = cliente.pais,
 					estado = cliente.estado,
 					ciudad = cliente.ciudad,
-					direccion = cliente.direccion,
+					direccion = cliente.colonia + " " + cliente.calle + " " +cliente.no_exterior + " " + cliente.no_interior,
 					codigopostal = cliente.codigopostal,
 					email = request.user.email,)
 
@@ -773,7 +800,7 @@ def pedido2(request):
 				"imagen":x.product.imagenes.first().imagen.url}
 			cont += 1
 		coenvio = envio.costo.amount
-		if request.POST.get("ciudad") == "Tuxtla Gutiérrez":
+		if ciudad == "Tuxtla Gutiérrez":
 			coenvio = 0.00
 		arreglo[cont] = {"nombre":"Envio",
 				"precio":coenvio,

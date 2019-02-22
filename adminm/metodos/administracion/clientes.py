@@ -39,7 +39,10 @@ def showmodificarclientes(request):
 			{"tipo":"char","valor":cliente.usuario.last_name,"label":"Apellido:", "name":"apellido"},
 			{"tipo":"char","valor":cliente.usuario.email,"label":"Correo Electrónico:", "name":"email"},
 			{"tipo":"char","valor":cliente.telefono,"label":"Telefono:", "name":"telefono"},
-			{"tipo":"char","valor":cliente.direccion,"label":"Dirección:", "name":"direccion"},
+			{"tipo":"char","valor":cliente.colonia,"label":"Colonia:", "name":"colonia"},
+			{"tipo":"char","valor":cliente.calle,"label":"Calle:", "name":"calle"},
+			{"tipo":"char","valor":cliente.no_exterior,"label":"No. Exterior:", "name":"no_exterior"},
+			{"tipo":"char","valor":cliente.no_interior,"label":"No. Interior:", "name":"no_interior"},
 			{"tipo":"char","valor":cliente.ciudad,"label":"Ciudad:", "name":"ciudad"},
 			{"tipo":"char","valor":cliente.estado,"label":"Estado:", "name":"estado"},
 			{"tipo":"char","valor":cliente.pais,"label":"País:", "name":"pais"},
@@ -58,7 +61,10 @@ def showagregarclientes(request):
 			{"tipo":"char","valor":"","label":"Apellido:", "name":"apellido"},
 			{"tipo":"char","valor":"","label":"Correo Electrónico:", "name":"email"},
 			{"tipo":"char","valor":"","label":"Telefono:", "name":"telefono"},
-			{"tipo":"char","valor":"","label":"Dirección:", "name":"direccion"},
+			{"tipo":"char","valor":"","label":"Colonia:", "name":"colonia"},
+			{"tipo":"char","valor":"","label":"Calle:", "name":"calle"},
+			{"tipo":"char","valor":"","label":"No. Exterior:", "name":"no_exterior"},
+			{"tipo":"char","valor":"","label":"No. Interior:", "name":"no_interior"},
 			{"tipo":"char","valor":"","label":"Ciudad:", "name":"ciudad"},
 			{"tipo":"char","valor":"","label":"Estado:", "name":"estado"},
 			{"tipo":"char","valor":"","label":"País:", "name":"pais"},
@@ -85,7 +91,10 @@ def agregarcliente(request):
 			last_name=apellido)
 		cliente = Cliente.objects.create(usuario=user,
 			telefono=request.POST.get("telefono"),
-			direccion=request.POST.get("direccion"),
+			colonia=request.POST.get("colonia"),
+			calle=request.POST.get("calle"),
+			no_exterior=request.POST.get("no_exterior"),
+			no_interior=request.POST.get("no_interior"),
 			ciudad=request.POST.get("ciudad"),
 			estado=request.POST.get("estado"),
 			pais=request.POST.get("pais"),
@@ -109,7 +118,10 @@ def modificarcliente(request):
 		cliente.usuario.last_name=request.POST.get("apellido")
 		cliente.usuario.email=request.POST.get("email")
 		cliente.telefono = request.POST.get("telefono")
-		cliente.direccion=request.POST.get("direccion")
+		cliente.colonia=request.POST.get("colonia")
+		cliente.calle=request.POST.get("calle")
+		cliente.no_exterior=request.POST.get("no_exterior")
+		cliente.no_interior=request.POST.get("no_interior")
 		cliente.ciudad=request.POST.get("ciudad")
 		cliente.estado=request.POST.get("estado")
 		cliente.pais=request.POST.get("pais")
@@ -124,7 +136,10 @@ def modificarcliente(request):
 			cliente.usuario.last_name=request.POST.get("apellido")
 			cliente.usuario.email=request.POST.get("email")
 			cliente.telefono = request.POST.get("telefono")
-			cliente.direccion=request.POST.get("direccion")
+			cliente.colonia=request.POST.get("colonia")
+			cliente.calle=request.POST.get("calle")
+			cliente.no_exterior=request.POST.get("no_exterior")
+			cliente.no_interior=request.POST.get("no_interior")
 			cliente.ciudad=request.POST.get("ciudad")
 			cliente.estado=request.POST.get("estado")
 			cliente.pais=request.POST.get("pais")

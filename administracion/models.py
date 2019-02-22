@@ -63,7 +63,10 @@ class Producto_Pedido(models.Model):
 class Cliente(models.Model):
 	usuario = models.OneToOneField(User, on_delete=models.CASCADE)
 	telefono = models.CharField(max_length=100, blank=True, null=True)
-	direccion = models.CharField(max_length=100, blank=True, null=True)
+	colonia = models.CharField(max_length=100, blank=True, null=True)
+	calle = models.CharField(max_length=100, blank=True, null=True)
+	no_exterior = models.CharField(max_length=100, blank=True, null=True)
+	no_interior = models.CharField(max_length=100, blank=True, null=True)
 	ciudad = models.CharField(max_length=100, blank=True, null=True)
 	estado = models.CharField(max_length=100, blank=True, null=True)
 	pais = models.CharField(max_length=100, blank=True, null=True)

@@ -80,7 +80,11 @@
 
 							<div class="size-209">
 								<span id="costodeenvio" class="mtext-110 cl2">
+									{% if cliente.ciudad == "Tuxtla Gutiérrez" %}
+									$ 0.00
+									{% else %}
 									$ {{envio.costo.amount}}
+									{%endif%}
 								</span>
 							</div>
 						</div>
@@ -318,6 +322,7 @@ $("#formpago").on('submit', function(event) {
 
 $("#tipoenvio").on('change', function(event) {
 	if ($(this).val() == 2) {
+		$("#costodeenvio").html("$ {{envio.costo.amount}}")
 		$("#ingdatosenvio").show();
 		$("#nombre").prop('required',true);
 		$("#email").prop('required',true);
@@ -331,6 +336,12 @@ $("#tipoenvio").on('change', function(event) {
 	}
 	else{
 		$("#ingdatosenvio").hide();
+		if ("{{cliente.ciudad}}" == "Tuxtla Gutiérrez") {
+			$("#costodeenvio").html("$ 0.00")
+		}
+		else{
+			$("#costodeenvio").html("$ {{envio.costo.amount}}")
+		}
 		$("#nombre").removeAttr('required');
 		$("#email").removeAttr('required');
 		$("#telefono").removeAttr('required');
@@ -383,11 +394,22 @@ $(".cantidadproducto").on('change', function(event) {
 		$.ajax({
 		             url : '/updateCart/', // the endpoint,commonly same url
 		             type : "POST", // http method
-		             data : {producto:id, talla:talla, cantidad}, // data sent with the post request
+		             data : {producto:id, talla:talla, cantidad:cantidad}, // data sent with the post request
 		     success : function(json) {
-		     	elemento.parent().parent().find('td').eq(5).html("$ "+json.precio)
-		     	$("#subto").html("$ "+json.suma+" MXN");
-	     		$(".contador").attr("data-notify",json.totalproductos);
+		     	if (json.error != "No hay suficientes productos en el inventario") {
+			     	elemento.parent().parent().find('td').eq(5).html("$ "+json.precio)
+			     	$("#subto").html("$ "+json.suma+" MXN");
+		     		$(".contador").attr("data-notify",json.totalproductos);
+	     		}
+	     		else{
+	     			swal({
+ 		                  type: 'warning',
+ 		                  icon: 'warning',
+ 		                  title: 'Oops!',
+ 		                  text: json.error,
+ 		                })
+	     			elemento.val(json.cantidad);
+	     		}
 		     }
 		 });
 	}

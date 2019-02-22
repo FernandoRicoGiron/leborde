@@ -71,43 +71,7 @@
 														Teléfono:
 													</span>
 												</div>
-												<input required value="{%if datos.telefono%}{{datos.telefono}}{%endif%}" class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="telefono" placeholder="Numero de teléfono">
-											</div>
-											
-											<div class="bor8 bg0 m-b-12 col-md-4">
-												<div class="w-full-ssm">
-													<span class="stext-110 cl2">
-														Dirección:
-													</span>
-												</div>
-												<input required value="{%if datos.direccion%}{{datos.direccion}}{%endif%}" class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="direccion" placeholder="Dirección">
-											</div>
-											
-											<div class="bor8 bg0 m-b-12 col-md-4">
-												<div class="w-full-ssm">
-													<span class="stext-110 cl2">
-														Ciudad:
-													</span>
-												</div>
-												<input required value="{%if datos.ciudad%}{{datos.ciudad}}{%endif%}" class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="ciudad" placeholder="Ciudad">
-											</div>
-											
-											<div class="bor8 bg0 m-b-12 col-md-4">
-												<div class="w-full-ssm">
-													<span class="stext-110 cl2">
-														Estado:
-													</span>
-												</div>
-												<input required value="{%if datos.estado%}{{datos.estado}}{%endif%}" class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="estado" placeholder="Estado">
-											</div>
-											
-											<div class="bor8 bg0 m-b-12 col-md-4">
-												<div class="w-full-ssm">
-													<span class="stext-110 cl2">
-														País:
-													</span>
-												</div>
-												<input required value="{%if datos.pais%}{{datos.pais}}{%endif%}" class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="pais" placeholder="País">
+												<input required value="{%if datos.telefono != 'null'%}{{datos.telefono}}{%endif%}" class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="telefono" placeholder="Numero de teléfono">
 											</div>
 
 											<div class="bor8 bg0 m-b-12 col-md-4">
@@ -116,8 +80,76 @@
 														Código Postal:
 													</span>
 												</div>
-												<input required value="{%if datos.codigopostal%}{{datos.codigopostal}}{%endif%}" class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="codigo" placeholder="Código Postal">
+												<input required value="{%if datos.codigopostal != 'null'%}{{datos.codigopostal}}{%endif%}" class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="codigo" placeholder="Código Postal" id="codigo_postal">
 											</div>
+											
+											<div class="bor8 bg0 m-b-12 col-md-4">
+												<div class="w-full-ssm">
+													<span class="stext-110 cl2">
+														Colonia:
+													</span>
+												</div>
+												<select value=""  id="colonia" class="stext-111 cl8 plh3 size-111 p-lr-15" name="colonia">
+													<option disabled value='Seleccione una opción'>Seleccione una opcion</option>
+													{% for colonia in colonias.colonias %}
+													<option {%if datos.colonia == colonia %}selected{%endif%} value='{{colonia}}'>{{colonia}}</option>
+													{% endfor %}
+												</select>
+											</div>
+
+											<div class="bor8 bg0 m-b-12 col-md-4">
+												<div class="w-full-ssm">
+													<span class="stext-110 cl2">
+														Calle:
+													</span>
+												</div>
+												<input id="direccion"  class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="calle" placeholder="Calle" value="{%if datos.calle != 'null'%}{{datos.calle}}{%endif%}">
+											</div>
+
+											<div class="bor8 bg0 m-b-12 col-md-4">
+												<div class="w-full-ssm">
+													<span class="stext-110 cl2">
+														No. Exterior:
+													</span>
+												</div>
+												<input id="exterior"  class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="exterior" placeholder="No. Exterior" value="{%if datos.no_exterior != 'null'%}{{datos.no_exterior}}{%endif%}">
+											</div>
+											<div class="bor8 bg0 m-b-12 col-md-4">
+												<div class="w-full-ssm">
+													<span class="stext-110 cl2">
+														No. Interior (Opcional):
+													</span>
+												</div>
+												<input id="interior"  class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="interior" placeholder="No. Interior" value="{%if datos.no_interior != 'null'%}{{datos.no_interior}}{%endif%}">
+											</div>
+											
+											<div class="bor8 bg0 m-b-12 col-md-4">
+												<div class="w-full-ssm">
+													<span class="stext-110 cl2">
+														País:
+													</span>
+												</div>
+												<input  readonly="" id="pais" class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="pais" placeholder="País" value="México">
+											</div>
+
+											<div class="bor8 bg0 m-b-12 col-md-4">
+												<div class="w-full-ssm">
+													<span class="stext-110 cl2">
+														Estado:
+													</span>
+												</div>
+												<input readonly="" id="estado" class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="estado" placeholder="Estado" value="{%if datos.estado != 'null'%}{{datos.estado}}{%endif%}">
+											</div>
+
+											<div class="bor8 bg0 m-b-12 col-md-4">
+												<div class="w-full-ssm">
+													<span class="stext-110 cl2">
+														Ciudad:
+													</span>
+												</div>
+												<input readonly="" id="ciudad" class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="ciudad" placeholder="Ciudad" value="{%if datos.ciudad != 'null'%}{{datos.ciudad}}{%endif%}">
+											</div>
+											
 										</div>
 										
 									</div>
@@ -200,4 +232,29 @@
 	
 		
 
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+	
+	$("#codigo_postal").on("input",function(event) {
+	codigo = $(this).val();
+	$.ajax({
+		             url : 'https://api-codigos-postales.herokuapp.com/v2/codigo_postal/'+codigo, // the endpoint,commonly same url
+		             type : "GET", // http method
+		             data : {}, // data sent with the post request
+		     success : function(json) {
+		     	console.log(json)
+		     	$("#ciudad").val(json.municipio);
+		     	$("#estado").val(json.estado);
+		     	valores = "<option disabled selected value='Seleccione una opción'>Seleccione una opcion</option>"
+		     	$.each(json.colonias, function(index, val) {
+		     		valores += "<option value='"+val+"'>"+val+"</option>";
+		     	});
+		     	$("#colonia").html(valores);
+		     }
+		 });
+});
+
+</script>
 {% endblock %}
