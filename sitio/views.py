@@ -58,13 +58,22 @@ def ipn(sender, *args, **kwargs):
 			pedido=pedido)
 
 		empresa = Empresa.objects.last()
-		send_mail(
-			'Encuesta de servicio '+empresa.nombre,
-			'Gracias por comprar en '+empresa.nombre+" su pago se ha completado correctamente, le agradeceriamos que se tome un momento de su tiempo para llenar la siguiente encuesta\n\n"+empresa.link_encuesta,
-			empresa.correo,
-			[pedido.email],
-			fail_silently=False,
-		)
+		if empresa.link_encuesta:
+			send_mail(
+				'Encuesta de servicio '+empresa.nombre,
+				'Gracias por comprar en '+empresa.nombre+" su pago se ha completado correctamente, le agradeceriamos que se tome un momento de su tiempo para llenar la siguiente encuesta\n\n"+empresa.link_encuesta,
+				empresa.correo,
+				[pedido.email],
+				fail_silently=False,
+			)
+		else:
+			send_mail(
+					'Graias de parte de '+empresa.nombre,
+					'Gracias por comprar en '+empresa.nombre+" su pago se ha completado correctamente, ",
+					empresa.correo,
+					[pedido.email],
+					fail_silently=False,
+				)
 
 		# print(json.loads("{"+sender.query.replace("&",",")+"}"))
 		# for x in datos:
@@ -822,7 +831,7 @@ def pedido2(request):
 def listapedidos(request):
 	cart = Cart(request)
 	variables(request)
-	pedidos = Pedido.objects.filter(usuario=request.user)
+	pedidos = Pedido.objects.filter(usuario=request.user).order_by("-id")
 	seccion = Secciones.objects.last()
 	return render(request, 'pedidos.html', {"cart":cart,
 		"pedidos":pedidos,

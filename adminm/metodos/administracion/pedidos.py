@@ -48,7 +48,7 @@ def showmodificarpedidos(request):
 	data = [{"tipo":"label","label":"Pedido"},
 			{"tipo":"pedido", "label":"Pedido", "valor":listaproductos},
 			{"tipo":"select3","valor":"estadopedido", "sel":pedido.estado_pedido, "label":"Estado del pedido:", "opciones":{'1':'Pago Pendiente','2':'Pagado',"3":'En Camino',"4":'Entregado'}, "name":"estadopedido"},
-			{"tipo":"imagen2","valor":comprobante,"label":"Comprobante:", "name":"comprobante"},
+			{"tipo":"modalimagen","valor":comprobante,"label":"Comprobante:", "name":"comprobante"},
 			{"tipo":"label","label":" Datos del cliente"},
 			{"tipo":"char","valor":pedido.usuario.first_name + " " + pedido.usuario.last_name,"label":"Usuario:", "name":"usuario"},
 			{"tipo":"char","valor":pedido.email,"label":"Correo Electrónico:", "name":"email"},

@@ -159,6 +159,24 @@ function seccionInputs2(campos, json) {
 		    
 
 		}
+		else if (tipo == "modalimagen"){
+			input = '<div class="col-md-12">'+
+						'<div class="form-group">'+
+						  '<label class="bmd-label-floating">'+label+'</label>'+
+			            '</div>'+
+			            '<div class="form-group" style="max-width:400px;">'+
+			            	'<a href="javascript:;"  data-fancybox="image" data-src="'+valor+'" data-caption="'+label+'"><img src="'+valor+'"></a>'+
+			            '</div>'
+		            '</div>';  
+		    $('[data-fancybox="image"]').fancybox({
+		        buttons : [
+		          'download',
+		          'thumbs',
+		          'close'
+		        ]
+		      });
+
+		}
 		else if(tipo == "multiselect"){
 			opciones = JSON.parse(value.opciones);
 			opt = "";
