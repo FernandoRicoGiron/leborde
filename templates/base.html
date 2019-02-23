@@ -686,8 +686,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> Todos
         var id = $(this).attr("id");
         var talla = $(this).parent().find('input.tallacart').val();
         var elem = $("."+id);
-        id = id.replace(talla.replace(" ",""),"");
-        
+        id = id.replace(talla.replace(/\//g,"").replace(/\s+/g,""),"");
         $.ajax({
                      url : '/eliminarCarrito/', // the endpoint,commonly same url
                      type : "POST", // http method

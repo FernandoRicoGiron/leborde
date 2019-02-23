@@ -464,7 +464,7 @@ def add_to_cart(request):
 		for item in cart:
 			if item.product == producto and item.talla == talla.nombre:
 				cantidad = item.quantity
-		data = {"id":producto.id, "cantidad":cantidad, "suma":cart.summary(), "talla":talla.nombre}
+		data = {"id":producto.id, "cantidad":cantidad, "suma":cart.summary(), "talla":talla.nombre, "tallareplace":talla.nombre.replace(" ","").replace("/","")}
 	else:
 		data = {"error":"No hay suficientes productos en el inventario"}
 	return JsonResponse(data, safe=False)
@@ -481,7 +481,7 @@ def remove_from_cart(request):
 		if item.product == producto and item.talla == talla:
 			cantidad = item.quantity
 	cart.remove(producto, talla)
-	data = {"suma":cart.summary(),"id":producto.id, "cantidad":cantidad}
+	data = {"suma":cart.summary(),"id":producto.id, "cantidad":cantidad, "tallareplace":talla.replace(" ","").replace("/","")}
 	return JsonResponse(data, safe=False)
 
 @csrf_exempt
@@ -508,7 +508,7 @@ def update_to_cart(request):
 				precio = item.total_price
 
 		cart.update(producto, talla, request.POST.get("cantidad"), producto.precio.amount)
-		data = {"suma":cart.summary(),"id":producto.id, "cantidad":cantidad, "precio":precio, "totalproductos":cart.count()}
+		data = {"suma":cart.summary(),"id":producto.id, "cantidad":cantidad, "precio":precio, "totalproductos":cart.count(), "tallareplace":talla.nombre.replace(" ","").replace("/","")}
 	else:
 		data = {"error":"No hay suficientes productos en el inventario", "cantidad":int(cantidadincart)}
 	return JsonResponse(data, safe=False)

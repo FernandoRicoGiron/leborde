@@ -389,7 +389,7 @@ $(".cantidadproducto").on('change', function(event) {
 	cantidad = $(this).val();
 	id = $(this).parent().parent().attr('class').replace("table_row ","");
 	talla = $(this).parent().parent().find('input').eq(0).val()
-	id = id.replace(talla.replace(" ",""),"")
+	id = id.replace(talla.replace(/\//g,"").replace(/\s+/g,""),"");
 	if (cantidad != 0) {
 		$.ajax({
 		             url : '/updateCart/', // the endpoint,commonly same url

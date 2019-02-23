@@ -4,4 +4,4 @@ register = template.Library()
 
 @register.filter
 def replace(value):
-    return value.replace(" ","")
+    return value.replace(" ","").replace("/","")
