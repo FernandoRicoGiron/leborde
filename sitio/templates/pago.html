@@ -232,7 +232,11 @@
 
 							<div class="size-208 p-t-1">
 								<span id="grantotal" class="mtext-110 cl2 header-cart-total">
+									{% if cliente.ciudad == "Tuxtla Gutiérrez" %}
+									Total: $ {{cart.summary}} MXN
+									{% else %}
 									Total: $ {{total}} MXN
+									{% endif %}
 								</span>
 							</div>
 						</div>
