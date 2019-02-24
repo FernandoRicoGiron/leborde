@@ -323,7 +323,7 @@ def recuperarcontraseña(request):
 	cart = Cart(request)
 	email = request.POST.get("email")
 	username = request.POST.get("username")
-	if email or username:
+	if email != "" or username != "":
 		if User.objects.filter(email=email).exists():
 			user = User.objects.get(email=email)
 			datos = Cliente.objects.get(usuario=user)
