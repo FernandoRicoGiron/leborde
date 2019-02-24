@@ -562,6 +562,7 @@ def pagarpaypal(request):
 	pedido.save()
 	# What you want the button to do.
 	datoscomplete = False
+	print(request.POST)
 	if request.POST.get("enviomod") == "2":
 		envio = {"email":request.POST.get("email"),
 		"pais":request.POST.get("pais"),
@@ -738,6 +739,9 @@ def pedido(request):
 	return HttpResponse(pdf,content_type="application/pdf")
 
 def pedido2(request):
+	if not request.POST.get("colonia") and request.POST.get("enviomod") == "2":
+		sweetify.success(request, 'Verifica que tus datos esten correctos', persistent=':(')
+		return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
 	cart = Cart(request)
 	if cart.count() > 0:
 		cantidad = request.POST.get("cantidad")
