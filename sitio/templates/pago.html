@@ -327,6 +327,7 @@ $("#formpago").on('submit', function(event) {
 $("#tipoenvio").on('change', function(event) {
 	if ($(this).val() == 2) {
 		$("#costodeenvio").html("$ {{envio.costo.amount}}")
+		$("#grantotal").html("Total: $ {{total}} MXN")
 		$("#ingdatosenvio").show();
 		$("#nombre").prop('required',true);
 		$("#email").prop('required',true);
@@ -342,9 +343,11 @@ $("#tipoenvio").on('change', function(event) {
 		$("#ingdatosenvio").hide();
 		if ("{{cliente.ciudad}}" == "Tuxtla Gutiérrez") {
 			$("#costodeenvio").html("$ 0.00")
+			$("#grantotal").html("Total: $ {{cart.summary}} MXN")
 		}
 		else{
 			$("#costodeenvio").html("$ {{envio.costo.amount}}")
+			$("#grantotal").html("Total: $ {{total}} MXN")
 		}
 		$("#nombre").removeAttr('required');
 		$("#email").removeAttr('required');

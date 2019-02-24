@@ -263,27 +263,31 @@ def registrar(request):
 	password = request.POST.get("password")
 	nombre = request.POST.get("nombre")
 	apellido = request.POST.get("apellido")
-	try:
-		user = User.objects.create_user(username=usuario,
-		email=email,
-		password=password,
-		first_name=nombre,
-		last_name=apellido)
-		user = authenticate(request, username=usuario, password=password)
-
-		if request.method == 'GET':
-			return redirect("/")
-		else:
-			# sale = Sale()
-			# sale.charge(request, user)
-			if user is not None:
-				login(request, user)
-				return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
-			else:
-				return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
-	except Exception as e:
-		sweetify.error(request, 'El nombre de usuario ya esta en uso', persistent=':(')
+	if User.objects.filter(email=email).exists():
+		sweetify.error(request, 'Ya existe un usuario on este correo', persistent=':(')
 		return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
+	else:
+		try:
+			user = User.objects.create_user(username=usuario,
+			email=email,
+			password=password,
+			first_name=nombre,
+			last_name=apellido)
+			user = authenticate(request, username=usuario, password=password)
+
+			if request.method == 'GET':
+				return redirect("/")
+			else:
+				# sale = Sale()
+				# sale.charge(request, user)
+				if user is not None:
+					login(request, user)
+					return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
+				else:
+					return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
+		except Exception as e:
+			sweetify.error(request, 'El nombre de usuario ya esta en uso', persistent=':(')
+			return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
 	
 	
 
@@ -315,39 +319,43 @@ def req_sesion(request):
 
 @csrf_exempt
 def recuperarcontraseña(request):
+	empresa = Empresa.objects.last()
 	cart = Cart(request)
 	email = request.POST.get("email")
 	username = request.POST.get("username")
-	if User.objects.filter(email=email).exists():
-		user = User.objects.get(email=email)
-		datos = Cliente.objects.get(usuario=user)
-		datos.token_req = request.POST.get("token")
-		datos.save()
-		cart = Cart(request)
-		send_mail(
-			'Recuperar contraseña Leborde',
-			'Ingresa al siguiente url para modificar tu contraseña \n http://istmeña.com/modificarcontra/' + request.POST.get("token"),
-			user.email,
-			[user.email],
-			fail_silently=False,
-		)
-		sweetify.success(request, 'Se ha enviado un enlace a su correo', persistent=':(')
-	elif User.objects.filter(username=username).exists():
-		user = User.objects.get(username=username)
-		datos = Cliente.objects.get(usuario=user)
-		datos.token_req = request.POST.get("token")
-		datos.save()
-		cart = Cart(request)
-		send_mail(
-			'Recuperar contraseña Leborde',
-			'Ingresa al siguiente url para modificar tu contraseña \n http://istmeña.com/modificarcontra/' + request.POST.get("token"),
-			user.email,
-			[user.email],
-			fail_silently=False,
-		)
-		sweetify.success(request, 'Se ha enviado un enlace a su correo', persistent=':(')
+	if email or username:
+		if User.objects.filter(email=email).exists():
+			user = User.objects.get(email=email)
+			datos = Cliente.objects.get(usuario=user)
+			datos.token_req = request.POST.get("token")
+			datos.save()
+			cart = Cart(request)
+			send_mail(
+				'Recuperar contraseña Leborde',
+				'Ingresa al siguiente url para modificar tu contraseña \n http://istmeña.com/modificarcontra/' + request.POST.get("token"),
+				empresa.correo,
+				[user.email],
+				fail_silently=False,
+			)
+			sweetify.success(request, 'Se ha enviado un enlace a su correo', persistent=':(')
+		elif User.objects.filter(username=username).exists():
+			user = User.objects.get(username=username)
+			datos = Cliente.objects.get(usuario=user)
+			datos.token_req = request.POST.get("token")
+			datos.save()
+			cart = Cart(request)
+			send_mail(
+				'Recuperar contraseña Leborde',
+				'Ingresa al siguiente url para modificar tu contraseña \n http://istmeña.com/modificarcontra/' + request.POST.get("token"),
+				empresa.correo,
+				[user.email],
+				fail_silently=False,
+			)
+			sweetify.success(request, 'Se ha enviado un enlace a su correo', persistent=':(')
+		else:
+			sweetify.error(request, 'El usuario o el correo no existe', persistent=':(')
 	else:
-		sweetify.error(request, 'El usuario o el correo no existe', persistent=':(')
+		sweetify.error(request, 'Ingrese un usuario o un email por favor', persistent=':(')
 	return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
 
 @csrf_exempt
