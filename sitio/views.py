@@ -539,7 +539,9 @@ def pagarpaypal(request):
 	envio = Envio.objects.last()
 	datos = Cliente.objects.get(usuario=request.user)
 	cart = Cart(request)
-	
+	if not request.POST.get("colonia") and request.POST.get("enviomod") == "2":
+		sweetify.success(request, 'Verifica que tus datos esten correctos', persistent=':(')
+		return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
 	productos = {}
 	cont = 1
 	for item in cart:
