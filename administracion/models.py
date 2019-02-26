@@ -44,6 +44,8 @@ class Pedido(models.Model):
 	direccion = models.CharField(max_length=200, blank=True, null=True)
 	codigopostal = models.CharField(max_length=100, blank=True, null=True)
 	email = models.CharField(max_length=100, blank=True, null=True)
+	servicio_mensajeria = models.CharField(max_length=100, blank=True, null=True)
+	numero_guia = models.CharField(max_length=100, blank=True, null=True)
 	comprobante = models.ImageField(upload_to="Comprobantes", blank=True, null=True)
 
 	def __str__(self):

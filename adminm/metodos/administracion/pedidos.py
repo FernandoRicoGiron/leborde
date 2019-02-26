@@ -48,6 +48,8 @@ def showmodificarpedidos(request):
 	data = [{"tipo":"label","label":"Pedido"},
 			{"tipo":"pedido", "label":"Pedido", "valor":listaproductos},
 			{"tipo":"select3","valor":"estadopedido", "sel":pedido.estado_pedido, "label":"Estado del pedido:", "opciones":{'1':'Pago Pendiente','2':'Pagado',"3":'En Camino',"4":'Entregado'}, "name":"estadopedido"},
+			{"tipo":"char2","valor":pedido.servicio_mensajeria,"label":"Serivicio de Mensajería:", "name":"servicio_mensajeria"},
+			{"tipo":"char2","valor":pedido.numero_guia,"label":"Numero de Guia:", "name":"numero_guia"},
 			{"tipo":"modalimagen","valor":comprobante,"label":"Comprobante:", "name":"comprobante"},
 			{"tipo":"label","label":" Datos del cliente"},
 			{"tipo":"char","valor":pedido.usuario.first_name + " " + pedido.usuario.last_name,"label":"Usuario:", "name":"usuario"},
@@ -74,10 +76,13 @@ def agregarpedido(request):
 
 @csrf_exempt
 def modificarpedido(request):
+	empresa = Empresa.objects.last()
 	pedido = Pedido.objects.get(id=request.POST.get("idpedido"))
 	pedido.estado_pedido = request.POST.get("estadopedido")
 	if "comprobante" in request.FILES:
 		pedido.comprobante = request.FILES["comprobante"]
+	pedido.numero_guia = request.POST.get("numero_guia")
+	pedido.servicio_mensajeria = request.POST.get("servicio_mensajeria")
 	pedido.save()
 	if request.POST.get("estadopedido") == "2" or request.POST.get("estadopedido") == "3" or request.POST.get("estadopedido") == "4":
 		if not Venta.objects.filter(usuario=pedido.usuario, monto=pedido.total, pedido=pedido).exists():
@@ -86,6 +91,49 @@ def modificarpedido(request):
 			send_mail(
 				'Encuesta de servicio '+empresa.nombre,
 				'Gracias por comprar en '+empresa.nombre+" su pago se ha completado correctamente, le agradeceriamos que se tome un momento de su tiempo para llenar la siguiente encuesta\n\n"+empresa.link_encuesta,
+				empresa.correo,
+				[pedido.email],
+				fail_silently=False,
+			)
+		if request.POST.get("estadopedido") == "2":
+			send_mail(
+				'Tu pago ha sido realizado correctamente '+empresa.nombre+'.',
+				'Muchas gracias por comprar en '+
+				empresa.nombre+
+				" Se le avisara cuando su pedido este en camino\n"+
+				"Si tienes alguna duda, puedes contactarnos al WhatsApp de servicio "+
+				empresa.telefono+
+				" y alguien de nuestro equipo te apoyará con todo gusto.\n\nHa sido un placer atenderte.\n\nEquipo "+
+				empresa.nombre,
+				empresa.correo,
+				[pedido.email],
+				fail_silently=False,
+			)
+		if request.POST.get("estadopedido") == "3":
+			send_mail(
+				'Tu pedido en '+empresa.nombre+' va en camino.',
+				'Muchas gracias por comprar en '+
+				empresa.nombre+
+				" A continuación se despliega la información sobre el envío de tu pedido.\n\n\nServicio de Mensajería: "+
+				pedido.servicio_mensajeria+"\n\nNumero de guia: "+
+				pedido.numero_guia+
+				"\n\nPuedes rastrearlo directamente en la página web de la mensajería.\n\nSi tienes alguna duda, puedes contactarnos al WhatsApp de servicio "+
+				empresa.telefono+
+				" y alguien de nuestro equipo te apoyará con todo gusto.\n\nHa sido un placer atenderte.\n\nTe esperamos pronto de regreso.\n\nEquipo "+
+				empresa.nombre,
+				empresa.correo,
+				[pedido.email],
+				fail_silently=False,
+			)
+		if request.POST.get("estadopedido") == "4":
+			send_mail(
+				'Graias por comprar en '+empresa.nombre,
+				'Muchas gracias por comprar en '+
+				empresa.nombre+
+				"Si tienes alguna duda, puedes contactarnos al WhatsApp de servicio "+
+				empresa.telefono+
+				" y alguien de nuestro equipo te apoyará con todo gusto.\n\nHa sido un placer atenderte.\n\nTe esperamos pronto de regreso.\n\nEquipo "+
+				empresa.nombre,
 				empresa.correo,
 				[pedido.email],
 				fail_silently=False,

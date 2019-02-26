@@ -838,6 +838,16 @@ def pedido2(request):
 		cart.clear()
 		empresa = Empresa.objects.last()
 		pdf= render_pdf("pagos.html",{"empresa":empresa,"plan":plan, "precio":precio, "logo":logo.logo.url, "ncuenta":logo.numero_de_cuenta, "cart":arreglo})
+		email = EmailMessage('Tu pedido en '+empresa.nombre, 'Completa tu pago.', empresa.correo, [request.user.email]) 
+		email.attach('pedido'+empresa.nombre+'.pdf', pdf.getvalue() , 'application/pdf') 
+		email.send()
+		send_mail(
+			'Nuevo pedido '+ producto.nombre +' ' + empresa.nombre ,
+			'El usuario '+request.user.username+' ha realizado un nuevo pedido ',
+			empresa.correo,
+			[empresa.correo],
+			fail_silently=False,
+		)
 		return HttpResponse(pdf,content_type="application/pdf")
 	else:
 		return redirect("/pagar/")
@@ -865,8 +875,8 @@ def subircomprobante(request, id):
 			fail_silently=False,
 		)
 		send_mail(
-			'Comprobante de pago '+empresa.nombre,
-			'Su comprobante ha sido enviado correctamente si todo está correcto su pedido llegará de 3 a 5 días hábiles, si tiene alguna duda o consulta puede realizarla al whatsapp de servicio '+empresa.telefono+' ó enviar un correo a: '+empresa.correo+', será un placer atenderle',
+			'Tu comprobante fue recibido con éxito.',
+			'Gracias por tu compra, si todo está correcto tu pedido llegará de 3 a 5 días hábiles, si tienes alguna duda o consulta puedes realizarla al WhatsApp de servicio '+empresa.telefono+' ó enviar un correo a: '+empresa.correo+', será un placer atenderle\n\nAtte.\n\nEquipo '+empresa.nombre,
 			empresa.correo,
 			[pedido.email],
 			fail_silently=False,

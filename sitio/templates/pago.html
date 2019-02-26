@@ -2,7 +2,14 @@
 {% load static %}
 {% block content %}
 {% load tags %}
-		
+<style type="text/css">
+	input[type=number]::-webkit-inner-spin-button, 
+	input[type=number]::-webkit-outer-spin-button {  
+
+	   opacity: 1;
+
+	}
+</style>
 <!-- Title page -->
 	<section class="bg-img1 txt-center p-lr-15 p-tb-92" style="background-image: url({{seccion.imagen}});">
 		<h2 class="ltext-105 cl0 txt-center">
@@ -38,7 +45,7 @@
 									<td class="column-2">{{ item.product.nombre }}</td>
 									<td class="column-3">$ {{ item.product.precio.amount }}</td>
 									<td class="column-4">
-										<input style="text-align: right;" type="number" class="cantidadproducto" value="{{ item.quantity }}">
+										<input style="text-align: right;" type="number" class="cantidadproducto stext-111 cl8 plh3 size-111 p-lr-15" value="{{ item.quantity }}">
 										
 									</td>
 									<td class="column-5">{{item.talla}}</td>
@@ -222,6 +229,119 @@
 										</div>
 										
 									</div>
+
+
+									<!--Mis datos-->
+									{% if not estadodatos == True %}
+									<div id="noingdatosenvio" class="col-sm-12" style="display:none">
+									{% else %}
+									<div id="noingdatosenvio" class="col-sm-12" >
+									{% endif %}
+										<div class="row">
+											
+											<div class="bor8 bg0 m-b-12 col-md-4">
+												<div class="w-full-ssm">
+													<span class="stext-110 cl2">
+														Nombre de quien recibirá el pedido:
+													</span>
+												</div>
+												<input disabled class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" placeholder="Nombre del que recibira el producto" value="{{ request.user.first_name }} {{ request.user.last_name }}">
+											</div>
+
+											<div class="bor8 bg0 m-b-12 col-md-4">
+												<div class="w-full-ssm">
+													<span class="stext-110 cl2">
+														Email:
+													</span>
+												</div>
+												<input disabled class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" placeholder="Nombre del que recibira el producto" value="{{ request.user.email }}">
+											</div>
+											
+											<div class="bor8 bg0 m-b-12 col-md-4">
+												<div class="w-full-ssm">
+													<span class="stext-110 cl2">
+														Teléfono:
+													</span>
+												</div>
+												<input disabled class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" placeholder="Nombre del que recibira el producto" value="{{ cliente.telefono }}">
+											</div>
+
+											<div class="bor8 bg0 m-b-12 col-md-4">
+												<div class="w-full-ssm">
+													<span class="stext-110 cl2">
+														Código Postal:
+													</span>
+												</div>
+												<input disabled class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" placeholder="Nombre del que recibira el producto" value="{{ cliente.codigopostal }}">
+											</div>
+
+											<div class="bor8 bg0 m-b-12 col-md-4">
+												<div class="w-full-ssm">
+													<span class="stext-110 cl2">
+														Colonia:
+													</span>
+												</div>
+												<input disabled class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" placeholder="Nombre del que recibira el producto" value="{{ cliente.colonia }}">
+											</div>
+
+											<div class="bor8 bg0 m-b-12 col-md-4">
+												<div class="w-full-ssm">
+													<span class="stext-110 cl2">
+														Calle:
+													</span>
+												</div>
+												<input disabled class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" placeholder="Nombre del que recibira el producto" value="{{ cliente.calle }}">
+											</div>
+											<div class="bor8 bg0 m-b-12 col-md-4">
+												<div class="w-full-ssm">
+													<span class="stext-110 cl2">
+														No. Exterior:
+													</span>
+												</div>
+												<input disabled class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" placeholder="Nombre del que recibira el producto" value="{{ cliente.no_exterior }}">
+											</div>
+											<div class="bor8 bg0 m-b-12 col-md-4">
+												<div class="w-full-ssm">
+													<span class="stext-110 cl2">
+														No. Interior (Opcional):
+													</span>
+												</div>
+												<input disabled class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" placeholder="Nombre del que recibira el producto" value="{{ cliente.no_interior }}">
+											</div>
+											<div class="bor8 bg0 m-b-12 col-md-4">
+												<div class="w-full-ssm">
+													<span class="stext-110 cl2">
+														País:
+													</span>
+												</div>
+												<input disabled class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" placeholder="Nombre del que recibira el producto" value="{{ cliente.pais }}">
+											</div>
+
+											<div class="bor8 bg0 m-b-12 col-md-4">
+												<div class="w-full-ssm">
+													<span class="stext-110 cl2">
+														Estado:
+													</span>
+												</div>
+												<input disabled class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" placeholder="Nombre del que recibira el producto" value="{{ cliente.estado }}">
+											</div>
+
+											<div class="bor8 bg0 m-b-12 col-md-4">
+												<div class="w-full-ssm">
+													<span class="stext-110 cl2">
+														Ciudad:
+													</span>
+												</div>
+												<input disabled class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" placeholder="Nombre del que recibira el producto" value="{{ cliente.ciudad }}">
+											</div>
+											
+											
+											
+
+											
+										</div>
+										
+									</div>
 										
 								
 							</div>
@@ -251,6 +371,15 @@
 								</span>
 							</div>
 							<a href="#" id="pagoxxo"><img width="200" src="{% static 'sitio/images/Sitio/oxxo.png' %}"></a>
+							<p>(24 horas para realizar el pago)</p>
+							<p><b>Instruciones</b></p>
+							<ul>
+								<li>1. Da click en "Pagar en Oxxo".</li>
+								<li>2. Imprime o guarda la información desplegada.</li>
+								<li>3. Ve a la tienda Oxxo de tu selección.</li>
+								<li>4. Haz tu depósito en efectivo a la cuenta de la confirmación.</li>
+								<li>5. Regresa a la página de la tienda y sube tu recibo en “Mis pedidos” para proceder con el envío de tu pedido.</li>
+							</ul>
 						</div>
 						<div class="bor8 bg0 m-b-12 col-md-6">
 							<div class="w-full-ssm">
@@ -326,6 +455,8 @@ $("#formpago").on('submit', function(event) {
 
 $("#tipoenvio").on('change', function(event) {
 	if ($(this).val() == 2) {
+		$("#ingdatosenvio").show();
+		$("#noingdatosenvio").hide();
 		$("#costodeenvio").html("$ {{envio.costo.amount}}")
 		$("#grantotal").html("Total: $ {{total}} MXN")
 		$("#ingdatosenvio").show();
@@ -341,6 +472,7 @@ $("#tipoenvio").on('change', function(event) {
 	}
 	else{
 		$("#ingdatosenvio").hide();
+		$("#noingdatosenvio").show();
 		if ("{{cliente.ciudad}}" == "Tuxtla Gutiérrez") {
 			$("#costodeenvio").html("$ 0.00")
 			$("#grantotal").html("Total: $ {{cart.summary}} MXN")

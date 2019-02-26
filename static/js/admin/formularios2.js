@@ -13,6 +13,14 @@ function seccionInputs2(campos, json) {
 	                    '</div>'+
 	                  '</div>';
 		}
+		if (tipo == "char2") {
+			input = '<div class="col-md-6">'+
+	                    '<div class="form-group">'+
+	                      '<label class="bmd-label-floating">'+label+'</label>'+
+	                      '<input name="'+name+'" type="text" class="form-control" value="'+valor+'">'+
+	                    '</div>'+
+	                  '</div>';
+		}
 		else if (tipo == "label") {
 			input = '<div class="col-md-12">'+
 	                    '<div class="form-group">'+

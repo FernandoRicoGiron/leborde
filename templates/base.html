@@ -493,12 +493,8 @@
 				{% if request.session.giro|safe != "" %}
 				<div style="color:#FFF" class="col-sm-5 p-b-50">
 					<h4 class="stext-301 cl0 p-b-30">
-						{{request.session.titulo}}
+						Redes Sociales
 					</h4>
-
-					<p  class="stext-107 cl7 size-201">
-						{{request.session.giro|safe}}
-					</p>
 
 					<div class="p-t-27">
 						{% if request.session.facebook %}
@@ -523,12 +519,8 @@
 				{% else %}
 				<div style="color:#FFF" class="col-sm-5 p-b-50">
 					<h4 class="stext-301 cl0 p-b-30">
-						¿Que es {{request.session.nombreempresa}}?
+						Redes Sociales
 					</h4>
-
-					<p  class="stext-107 cl7 size-201">
-						{{request.session.que_es|safe}}
-					</p>
 
 					<div class="p-t-27">
 						{% if request.session.facebook %}
