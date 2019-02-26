@@ -28,27 +28,6 @@ def iniciardashboard(request):
 	user = authenticate(request, username=usuario, password=password)
 	if user is not None and user.is_staff:
 		login(request, user)
-		# Eliminacion de pedidos obsoletos
-		hoy = datetime.now()
-		pedidos = Pedido.objects.filter(estado_pedido=1)
-		for pedido in pedidos:
-			if not pedido.comprobante:
-				d1 = date(hoy.year,hoy.month,hoy.day)
-				d2 = date(pedido.fecha.year,pedido.fecha.month,pedido.fecha.day)
-				diferencia = abs(d1 - d2).days
-				if diferencia > 3:
-					pedidoprod = Producto_Pedido.objects.filter(pedido=pedido)
-					for producto in pedidoprod:
-						if Talla.objects.filter(nombre=producto.talla).exists():
-							talla = Talla.objects.get(nombre=producto.talla)
-							if Inventario_Talla.objects.filter(producto=producto.producto, talla=talla).exists():
-								inventariotalla = Inventario_Talla.objects.get(producto=producto.producto, talla=talla)
-								inventariotalla.cantidad += producto.cantidad
-								producto.producto.inventario += producto.cantidad
-								inventariotalla.save()
-								producto.producto.save()
-					pedido.delete()
-
 		return redirect("/dashboard/")
 	else:
 		sweetify.error(request, 'Usuario o contraseña incorrecto o puede que este usuario no tenga los permisos necesarios para acceder al dashboard', persistent=':(')
@@ -103,6 +82,26 @@ def index(request):
 			sumaventas += venta.monto.amount
 
 		ultimospedidos = Pedido.objects.all().order_by("-id")[:5]
+		# Eliminacion de pedidos obsoletos
+		hoy = datetime.now()
+		pedidos = Pedido.objects.filter(estado_pedido=1)
+		for pedido in pedidos:
+			if not pedido.comprobante:
+				d1 = date(hoy.year,hoy.month,hoy.day)
+				d2 = date(pedido.fecha.year,pedido.fecha.month,pedido.fecha.day)
+				diferencia = abs(d1 - d2).days
+				if diferencia > 3:
+					pedidoprod = Producto_Pedido.objects.filter(pedido=pedido)
+					for producto in pedidoprod:
+						if Talla.objects.filter(nombre=producto.talla).exists():
+							talla = Talla.objects.get(nombre=producto.talla)
+							if Inventario_Talla.objects.filter(producto=producto.producto, talla=talla).exists():
+								inventariotalla = Inventario_Talla.objects.get(producto=producto.producto, talla=talla)
+								inventariotalla.cantidad += producto.cantidad
+								producto.producto.inventario += producto.cantidad
+								inventariotalla.save()
+								producto.producto.save()
+					pedido.delete()
 		return render(request, "admin.html", {"ventas":sumaventas, "sumapedidos":len(sumapedidos), "maspedidos":maspedidos, "ultimospedidos":ultimospedidos})
 	else:
 		logout(request)
