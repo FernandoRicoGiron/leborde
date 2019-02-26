@@ -90,7 +90,7 @@ def index(request):
 				d1 = date(hoy.year,hoy.month,hoy.day)
 				d2 = date(pedido.fecha.year,pedido.fecha.month,pedido.fecha.day)
 				diferencia = abs(d1 - d2).days
-				if diferencia > 3:
+				if diferencia > 2:
 					pedidoprod = Producto_Pedido.objects.filter(pedido=pedido)
 					for producto in pedidoprod:
 						if Talla.objects.filter(nombre=producto.talla).exists():
