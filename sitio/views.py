@@ -842,7 +842,7 @@ def pedido2(request):
 		email.attach('pedido'+empresa.nombre+'.pdf', pdf.getvalue() , 'application/pdf') 
 		email.send()
 		send_mail(
-			'Nuevo pedido '+ producto.nombre +' ' + empresa.nombre ,
+			'Nuevo pedido '+ empresa.nombre ,
 			'El usuario '+request.user.username+' ha realizado un nuevo pedido ',
 			empresa.correo,
 			[empresa.correo],
