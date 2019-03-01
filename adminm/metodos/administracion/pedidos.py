@@ -90,20 +90,24 @@ def modificarpedido(request):
 			empresa = Empresa.objects.last()
 			send_mail(
 				'Encuesta de servicio '+empresa.nombre,
-				'Gracias por comprar en '+empresa.nombre+" su pago se ha completado correctamente, le agradeceriamos que se tome un momento de su tiempo para llenar la siguiente encuesta\n\n"+empresa.link_encuesta,
+				'Gracias por comprar en '+
+				empresa.nombre+
+				"\n\nHemos preparado una encuesta para evaluar la experiencia que has tenido al comprar con nosotros, nos gustaría conocer tu opinión al respecto y así mejorar nuestros productos y servicios.\n\n"+
+				empresa.link_encuesta+
+				"\n\nAgradecemos de antemano tu colaboración y la posibilidad de mejorar\n\nHa sido un placer atenderte\n\nTe esperamos pronto\n\nAtentamente\n\nEquipo "+
+				empresa.nombre,
 				empresa.correo,
 				[pedido.email],
 				fail_silently=False,
 			)
 		if request.POST.get("estadopedido") == "2":
 			send_mail(
-				'Tu pago ha sido realizado correctamente '+empresa.nombre+'.',
+				'Muchas gracias por comprar en '+empresa.nombre+'.',
 				'Muchas gracias por comprar en '+
 				empresa.nombre+
-				" Se le avisara cuando su pedido este en camino\n"+
-				"Si tienes alguna duda, puedes contactarnos al WhatsApp de servicio "+
-				empresa.telefono+
-				" y alguien de nuestro equipo te apoyará con todo gusto.\n\nHa sido un placer atenderte.\n\nEquipo "+
+				"\n\nTu pago fue aprobado y estaremos procesando tu pedido de forma inmediata.\n\n"+
+				"Pronto estarás recibiendo un correo con la información de tu envío. "+
+				"\n\nHa sido un placer atenderte.\n\nTe esperamos pronto\n\nAtentamente\n\nEquipo "+
 				empresa.nombre,
 				empresa.correo,
 				[pedido.email],
@@ -114,7 +118,7 @@ def modificarpedido(request):
 				'Tu pedido en '+empresa.nombre+' va en camino.',
 				'Muchas gracias por comprar en '+
 				empresa.nombre+
-				" A continuación se despliega la información sobre el envío de tu pedido.\n\n\nServicio de Mensajería: "+
+				"\n\nA continuación se despliega la información sobre el envío de tu pedido.\n\n\nServicio de Mensajería: "+
 				pedido.servicio_mensajeria+"\n\nNumero de guia: "+
 				pedido.numero_guia+
 				"\n\nPuedes rastrearlo directamente en la página web de la mensajería.\n\nSi tienes alguna duda, puedes contactarnos al WhatsApp de servicio "+
@@ -127,7 +131,7 @@ def modificarpedido(request):
 			)
 		if request.POST.get("estadopedido") == "4":
 			send_mail(
-				'Graias por comprar en '+empresa.nombre,
+				'Muchas gracias por comprar en '+empresa.nombre,
 				'Muchas gracias por comprar en '+
 				empresa.nombre+
 				"Si tienes alguna duda, puedes contactarnos al WhatsApp de servicio "+
