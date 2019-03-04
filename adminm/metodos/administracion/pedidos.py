@@ -152,5 +152,19 @@ def modificarpedido(request):
 def eliminarpedido(request):
 	pedido = Pedido.objects.get(id=request.POST.get("id"))
 	id = pedido.id
+	# Eliminacion de pedidos obsoletos
+	if pedido.estado_pedido == "1":
+		if not pedido.comprobante:
+			pedidoprod = Producto_Pedido.objects.filter(pedido=pedido)
+			for producto in pedidoprod:
+				if Talla.objects.filter(nombre=producto.talla).exists():
+					print("hola")
+					talla = Talla.objects.get(nombre=producto.talla)
+					if Inventario_Talla.objects.filter(producto=producto.producto, talla=talla).exists():
+						inventariotalla = Inventario_Talla.objects.get(producto=producto.producto, talla=talla)
+						inventariotalla.cantidad += producto.cantidad
+						producto.producto.inventario += producto.cantidad
+						inventariotalla.save()
+						producto.producto.save()
 	pedido.delete()
 	return JsonResponse(id, safe=False)
