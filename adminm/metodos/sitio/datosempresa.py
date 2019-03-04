@@ -45,9 +45,9 @@ def showmodificardatos(request):
 
 @csrf_exempt
 def modificardato(request):
-	dato = Empresa.objects.last()
-	imagen = dato.logo
-	dato.delete()
+	empresa = Empresa.objects.last()
+	imagen = empresa.logo
+	
 	if "logo" in request.FILES:
 		dato = Empresa.objects.create(nombre=request.POST.get("nombre"),
 				direccion=request.POST.get("direccion"),
@@ -82,4 +82,5 @@ def modificardato(request):
 				twiter=request.POST.get("twiter"),
 				instagram=request.POST.get("instagram"),
 				youtube=request.POST.get("youtube"),)
+	empresa.delete()
 	return JsonResponse("Correcto", safe=False)
