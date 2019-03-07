@@ -2,7 +2,11 @@
 {% load static %}
 {% block content %}
 {% load tags %}
-		
+<style type="text/css">
+	input[type="image"]{
+		display: none;
+	}
+</style>
 <!-- Title page -->
 	<section class="bg-img1 txt-center p-lr-15 p-tb-92" style="background-image: url({{seccion.imagen}});">
 		<h2 class="ltext-105 cl0 txt-center">
@@ -167,7 +171,11 @@
 														Pagar con PayPal:
 													</span>
 												</div>
-												{{ form.render }}
+												<div id="button-paypal">
+													{{ form.render }}
+													<button id="botonsubmit" style="width:300px; height:200px; background-image:url({% static 'sitio/images/boton-paypal.png' %}); background-repeat: no-repeat; background-size: 300px;"></button>
+												</div>
+												
 											</div>
 											
 										</div>
@@ -187,8 +195,15 @@
 			</div>
 		</div>
 	
-		
-	
+
 		
 
 {% endblock %}
+		
+{% block js %}
+<script type="text/javascript">
+	$("#botonsubmit").on('click',function() {
+		$("#button-paypal").find('form').submit();
+	});
+</script>
+{% endblock %}	

@@ -559,7 +559,10 @@ def pagarpaypal(request):
 		cont += 1
 
 	productos["item_name_"+str(cont)] = "Envio"
-	if request.POST.get("ciudad") != "Tuxtla Gutiérrez":
+	if request.POST.get("ciudad") != "Tuxtla Gutiérrez" and request.POST.get("enviomod") == "2":
+		productos["amount_"+str(cont)] = ("%.2f" % envio.costo)
+		suma = cart.summary()+envio.costo.amount
+	elif datos.ciudad != "Tuxtla Gutiérrez" and request.POST.get("enviomod") == "1":
 		productos["amount_"+str(cont)] = ("%.2f" % envio.costo)
 		suma = cart.summary()+envio.costo.amount
 	else:
@@ -880,7 +883,7 @@ def subircomprobante(request, id):
 			empresa.telefono+
 			' ó enviar un correo a: '+
 			empresa.correo+
-			', será un placer atenderle\n\nHa sido un placer atenderte\n\nTe esperamos pronto\n\nAtentamente\n\nEquipo '+
+			', para coordinar a entrega\n\nHa sido un placer atenderte\n\nTe esperamos pronto\n\nAtentamente\n\nEquipo '+
 			empresa.nombre,
 			empresa.correo,
 			[pedido.email],
@@ -888,7 +891,7 @@ def subircomprobante(request, id):
 		)
 		sweetify.success(request, 'Gracias por tu compra, si todo está correcto con el pago, tu pedido llegará en un lapso de 3 a 5 días hábiles. Si te encuentras en Tuxtla Gutiérrez, puedes comunicarte con nosotros al whatsapp de servicio '+
 			empresa.telefono+
-			' ó enviar un correo a: '+empresa.correo+'para coordinar la entrega, será un placer atenderte', persistent=':(')
+			' ó enviar un correo a: '+empresa.correo+' para coordinar la entrega, será un placer atenderte', persistent=':(')
 		return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
 	else:
 		sweetify.error(request, 'Seleccione una imagen por favor', persistent=':(')
