@@ -161,7 +161,7 @@ def nosotros(request):
 def faqs(request):
 	cart = Cart(request)
 	variables(request)
-	faqs = FAQ.objects.all()
+	faqs = FAQ.objects.all().order_by("id")
 	seccion = Secciones.objects.last()
 	return render(request, 'faqs.html', {"cart":cart,
 										"faqs":faqs,
