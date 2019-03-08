@@ -61,19 +61,36 @@ def ipn(sender, *args, **kwargs):
 		if empresa.link_encuesta:
 			send_mail(
 				'Encuesta de servicio '+empresa.nombre,
-				'Gracias por comprar en '+empresa.nombre+" su pago se ha completado correctamente, le agradeceriamos que se tome un momento de su tiempo para llenar la siguiente encuesta\n\n"+empresa.link_encuesta,
+				'Gracias por comprar en '+
+				empresa.nombre+
+				"\n\nHemos preparado una encuesta para evaluar la experiencia que has tenido al comprar con nosotros, nos gustaría conocer tu opinión al respecto y así mejorar nuestros productos y servicios.\n\n"+
+				empresa.link_encuesta+
+				"\n\nAgradecemos de antemano tu colaboración y la posibilidad de mejorar\n\nHa sido un placer atenderte\n\nTe esperamos pronto\n\nAtentamente\n\nEquipo "+
+				empresa.nombre,
 				empresa.correo,
 				[pedido.email],
 				fail_silently=False,
 			)
 		else:
 			send_mail(
-					'Graias de parte de '+empresa.nombre,
-					'Gracias por comprar en '+empresa.nombre+" su pago se ha completado correctamente, ",
-					empresa.correo,
-					[pedido.email],
-					fail_silently=False,
-				)
+				'Muchas gracias por comprar en '+empresa.nombre+'.',
+				'Muchas gracias por comprar en '+
+				empresa.nombre+
+				"\n\nTu pago fue aprobado y estaremos procesando tu pedido de forma inmediata.\n\n"+
+				"Pronto estarás recibiendo un correo con la información de tu envío. "+
+				"\n\nHa sido un placer atenderte.\n\nTe esperamos pronto\n\nAtentamente\n\nEquipo "+
+				empresa.nombre,
+				empresa.correo,
+				[pedido.email],
+				fail_silently=False,
+			)
+		send_mail(
+			'Pago por Paypal '+empresa.nombre,
+			'El usuario '+pedido.usuario.username+' ha realizado un compra el numero de pedido es '+str(pedido.id),
+			empresa.correo,
+			[empresa.correo],
+			fail_silently=False,
+		)
 
 		# print(json.loads("{"+sender.query.replace("&",",")+"}"))
 		# for x in datos:
@@ -532,9 +549,12 @@ def update_to_cart(request):
 
 # PAYPAL
 def pagadopaypal(request):
+	empresa = Empresa.objects.last()
 	cart = Cart(request)
 	cart.clear()
-	sweetify.success(request, 'El pago se ha completado correctamente, espere su pedido de 3 a 5 dias habiles', persistent=':(')
+	sweetify.success(request, 'Gracias por tu compra, si todo está correcto con el pago, tu pedido llegará en un lapso de 3 a 5 días hábiles.\n\nSi te encuentras en Tuxtla Gutiérrez, puedes comunicarte con nosotros al whatsapp de servicio '+
+			empresa.telefono+
+			' ó enviar un correo a: '+empresa.correo+' para coordinar la entrega, será un placer atenderte', persistent=':(')
 	return redirect("/")
 
 def errorpagadopaypal(request):
