@@ -48,8 +48,8 @@ def ipn(sender, *args, **kwargs):
 			talla = Inventario_Talla.objects.get(producto=producto.producto, talla=talla)
 			talla.cantidad -= producto.cantidad
 			talla.save()
-			pro = producto
-			pro.inventario -= x.quantity
+			pro = producto.producto
+			pro.inventario -= producto.cantidad
 			pro.save()
 		
 		Venta.objects.create(usuario=pedido.usuario,
