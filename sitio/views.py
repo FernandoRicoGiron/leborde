@@ -71,6 +71,18 @@ def ipn(sender, *args, **kwargs):
 				[pedido.email],
 				fail_silently=False,
 			)
+			send_mail(
+				'Muchas gracias por comprar en '+empresa.nombre+'.',
+				'Muchas gracias por comprar en '+
+				empresa.nombre+
+				"\n\nTu pago fue aprobado y estaremos procesando tu pedido de forma inmediata.\n\n"+
+				"Pronto estarás recibiendo un correo con la información de tu envío. "+
+				"\n\nHa sido un placer atenderte.\n\nTe esperamos pronto\n\nAtentamente\n\nEquipo "+
+				empresa.nombre,
+				empresa.correo,
+				[pedido.email],
+				fail_silently=False,
+			)
 		else:
 			send_mail(
 				'Muchas gracias por comprar en '+empresa.nombre+'.',
@@ -281,7 +293,7 @@ def registrar(request):
 	nombre = request.POST.get("nombre")
 	apellido = request.POST.get("apellido")
 	if User.objects.filter(email=email).exists():
-		sweetify.error(request, 'Ya existe un usuario on este correo', persistent=':(')
+		sweetify.error(request, 'Ya existe un usuario con este correo', persistent=':(')
 		return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
 	else:
 		try:
