@@ -23,7 +23,8 @@ def showproductos(request):
 	imagenes = {}
 	categorias = {}
 	for producto in productos:
-		imagenes[producto.imagenes.first().id] = producto.imagenes.first().imagen.url
+		if producto.imagenes:
+			imagenes[producto.imagenes.first().id] = producto.imagenes.first().imagen.url
 		categorias[producto.categoria.id] = producto.categoria.nombre
 	productos = serializers.serialize('json', productos)
 	data = {"productos":productos, "imagenes":imagenes, "categorias":categorias}
