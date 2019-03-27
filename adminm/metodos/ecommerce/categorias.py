@@ -52,5 +52,6 @@ def modificarcategoria(request):
 @csrf_exempt
 def eliminarcategoria(request):
 	categoria = Categoria.objects.get(id=request.POST.get("id"))
+	id = categoria.id
 	categoria.delete()
 	return JsonResponse(id, safe=False)

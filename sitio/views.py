@@ -184,7 +184,7 @@ def tienda(request):
 	cart = Cart(request)
 	variables(request)
 	categorias = Categoria.objects.all()
-	productos = Producto.objects.filter(en_tienda=True)
+	productos = Producto.objects.filter(en_tienda=True).order_by("id")
 	colecciones = Coleccion.objects.all()
 	seccion = Secciones.objects.last()
 	return render(request, 'tienda.html', {"cart":cart,
@@ -199,7 +199,7 @@ def categoria(request, id):
 	variables(request)
 	categorias = Categoria.objects.all()
 	categoria = Categoria.objects.get(id=id)
-	productos = Producto.objects.filter(categoria=categoria, en_tienda=True)
+	productos = Producto.objects.filter(categoria=categoria, en_tienda=True).order_by("id")
 	colecciones = Coleccion.objects.all()
 	seccion = Secciones.objects.last()
 	return render(request, 'tienda.html', {"cart":cart,
@@ -214,7 +214,7 @@ def coleccion(request, id):
 	variables(request)
 	categorias = Categoria.objects.all()
 	coleccion = Coleccion.objects.get(id=id)
-	productos = coleccion.productos.filter(en_tienda=True)
+	productos = coleccion.productos.filter(en_tienda=True).order_by("id")
 	colecciones = Coleccion.objects.all()
 	seccion = Secciones.objects.last()
 	return render(request, 'tienda.html', {"cart":cart,
