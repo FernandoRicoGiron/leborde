@@ -142,7 +142,7 @@ def index(request):
 	variables(request)
 	marcas = Marca.objects.all()
 	tipos = Categoria.objects.all()
-	populares = Producto.objects.filter(popular=True)
+	populares = Producto.objects.filter(popular=True).order_by("id")
 	nuevos = Producto.objects.all().order_by("-id")[:10]
 	colecciones = Coleccion.objects.all()
 	categorias = Categoria.objects.all()
