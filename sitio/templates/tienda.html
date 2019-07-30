@@ -108,20 +108,20 @@
 					</span>
 
 					{% if productos.has_previous %}
-						<a style="padding-left: 15px; padding-right: 15px;" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" href="?page=1">&laquo; Primera</a>
-						<a style="padding-left: 15px; padding-right: 15px;" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" href="?page={{ productos.previous_page_number }}">Anterior</a>
+						<a style="padding-left: 15px; padding-right: 15px; min-width:50px" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" href="?page=1">&laquo; Primera</a>
+						<a style="padding-left: 15px; padding-right: 15px; min-width:50px" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" href="?page={{ productos.previous_page_number }}">Anterior</a>
 					{% endif %}
 
 					
 					
 					{% for pagina in productos.paginator.page_range  %}
-						<a style="padding-left: 15px; padding-right: 15px;" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" href="?page={{ pagina }}">{{pagina}}</a>
+						<a style="padding-left: 15px; padding-right: 15px; min-width:50px" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" href="?page={{ pagina }}">{{pagina}}</a>
 					{% endfor %}
 						
 
 					{% if productos.has_next %}
-						<a style="padding-left: 15px; padding-right: 15px;" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" href="?page={{ productos.next_page_number }}">Siguiente</a>
-						<a style="padding-left: 15px; padding-right: 15px;" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" href="?page={{ productos.paginator.num_pages }}">Ultima &raquo;</a>
+						<a style="padding-left: 15px; padding-right: 15px; min-width:50px" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" href="?page={{ productos.next_page_number }}">Siguiente</a>
+						<a style="padding-left: 15px; padding-right: 15px; min-width:50px" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" href="?page={{ productos.paginator.num_pages }}">Ultima &raquo;</a>
 					{% endif %}
 				
 			</div>
