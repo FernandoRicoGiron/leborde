@@ -48,13 +48,14 @@
 
 			<div class="flex-w flex-sb-m p-b-52">
 				<div class="flex-w flex-l-m filter-tope-group m-tb-10">
-					<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1" data-filter="*">
+					<a class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 " href="/">
 						TODAS LAS CATEGORIAS
-					</button>
+					</a>
 					{% for categoria in categorias %}
-					<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".{{categoria.id}}">
-						{{categoria.nombre|upper}}
-					</button>
+						<a href="/categoria/{{categoria.id}}/" class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5">
+							{{categoria.nombre|upper}}
+						</a>
+
 					{% endfor %}
 				</div>
 

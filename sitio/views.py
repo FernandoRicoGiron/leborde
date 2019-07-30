@@ -165,6 +165,34 @@ def index(request):
 										"colecciones":colecciones,
 										"categorias":categorias})
 
+def indexcategoria(request, id):
+	cart = Cart(request)
+	variables(request)
+	marcas = Marca.objects.all()
+	tipos = Categoria.objects.all()
+	categoria = Categoria.objects.get(id=id)
+	populares = Producto.objects.filter(popular=True, categoria=categoria, en_tienda=True).order_by("id")
+	nuevos = Producto.objects.all().order_by("-id")[:10]
+	colecciones = Coleccion.objects.all()
+	categorias = Categoria.objects.all()
+	# ofertas = Producto.objects.filter(Oferta = True)
+	carruseles = Carrusel.objects.all()
+
+	paginator = Paginator(populares, 12) # Show 25 contacts per page
+
+	pagina = request.GET.get('page')
+	populares = paginator.get_page(pagina)
+	
+	return render(request, 'index.html', {"cart":cart,
+										"categorias":categorias,
+										"carruseles":carruseles,
+										"marcas":marcas,
+										"tipos":tipos,
+										"populares":populares,
+										"nuevos":nuevos,
+										"colecciones":colecciones,
+										"categorias":categorias})
+
 def nosotros(request):
 	cart = Cart(request)
 	variables(request)

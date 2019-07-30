@@ -4,7 +4,10 @@ from . import views as vi
 
 urlpatterns = [
     # path('prueba/', vi.prueba),
+    re_path('categoria/(?P<id>\d+)/', vi.indexcategoria),
     path('', vi.index),
+    # re_path('coleccion/(?P<id>\d+)/', vi.coleccion),
+    re_path('(?P<id>\d+)/', vi.producto),
     path('nosotros/', vi.nosotros),
     re_path('tienda/categoria/(?P<id>\d+)/', vi.categoria),
     re_path('tienda/coleccion/(?P<id>\d+)/', vi.coleccion),

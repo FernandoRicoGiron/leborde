@@ -293,8 +293,8 @@
 	{% endblock %}
 
 	{% include "modallogin.html" %}
-	<!-- Marcas -->
-{% if request.path != "/" %}
+	<!-- Marcas -->{{request.path}}
+{% if request.path != "/" and "/categoria/" not in request.path %}
 <style type="text/css">
 
 	.slick-slide {
