@@ -101,7 +101,30 @@
 
 				
 			</div>
+			<div class="pagination row">
+				
+					<span style="width:100%" class="current">
+						<h4>Pagina {{ productos.number }} de {{ productos.paginator.num_pages }}.</h4>
+					</span>
 
+					{% if productos.has_previous %}
+						<a style="padding-left: 15px; padding-right: 15px;" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" href="?page=1">&laquo; Primera</a>
+						<a style="padding-left: 15px; padding-right: 15px;" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" href="?page={{ productos.previous_page_number }}">Anterior</a>
+					{% endif %}
+
+					
+					
+					{% for pagina in productos.paginator.page_range  %}
+						<a style="padding-left: 15px; padding-right: 15px;" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" href="?page={{ pagina }}">{{pagina}}</a>
+					{% endfor %}
+						
+
+					{% if productos.has_next %}
+						<a style="padding-left: 15px; padding-right: 15px;" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" href="?page={{ productos.next_page_number }}">Siguiente</a>
+						<a style="padding-left: 15px; padding-right: 15px;" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" href="?page={{ productos.paginator.num_pages }}">Ultima &raquo;</a>
+					{% endif %}
+				
+			</div>
 			<!-- Load more
 			<div class="flex-c-m flex-w w-full p-t-45">
 				<a href="#" class="flex-c-m stext-101 cl5 size-103 bg2 bor1 hov-btn1 p-lr-15 trans-04">
