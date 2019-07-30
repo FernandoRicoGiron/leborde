@@ -343,7 +343,7 @@ def iniciarsesion(request):
 
 def req_sesion(request):
 	cart = Cart(request)
-	sweetify.error(request, 'Nesecitas iniciar sesion para acceder a esta seccion', persistent=':(')
+	sweetify.error(request, 'Necesitas iniciar sesión para acceder a esta sección', persistent=':(')
 	return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
 
 @csrf_exempt
