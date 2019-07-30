@@ -214,6 +214,11 @@ def categoria(request, id):
 	productos = Producto.objects.filter(categoria=categoria, en_tienda=True).order_by("id")
 	colecciones = Coleccion.objects.all()
 	seccion = Secciones.objects.last()
+
+	paginator = Paginator(productos, 12) # Show 25 contacts per page
+
+	pagina = request.GET.get('page')
+	productos = paginator.get_page(pagina)
 	return render(request, 'tienda.html', {"cart":cart,
 										"categorias":categorias,
 										"productos":productos,
@@ -229,6 +234,11 @@ def coleccion(request, id):
 	productos = coleccion.productos.filter(en_tienda=True).order_by("id")
 	colecciones = Coleccion.objects.all()
 	seccion = Secciones.objects.last()
+
+	paginator = Paginator(productos, 12) # Show 25 contacts per page
+
+	pagina = request.GET.get('page')
+	productos = paginator.get_page(pagina)
 	return render(request, 'tienda.html', {"cart":cart,
 										"categorias":categorias,
 										"productos":productos,
@@ -246,6 +256,12 @@ def producto(request, id):
 	pro_re = Producto.objects.filter(categoria=producto.categoria)
 	envio = Envio.objects.last()
 	estadodatos = False
+
+	paginator = Paginator(pro_re, 8) # Show 25 contacts per page
+
+	pagina = request.GET.get('page')
+	pro_re = paginator.get_page(pagina)
+
 	if request.user.is_authenticated:
 		cliente = Cliente.objects.get(usuario=request.user)
 		if cliente.telefono != "null" and cliente.calle != "null" and cliente.colonia != "null" and cliente.no_exterior != "null" and cliente.ciudad != "null" and cliente.estado != "null" and cliente.pais != "null" and cliente.codigopostal != "null":
