@@ -86,7 +86,7 @@ $("#TablaProductos").on('click', 'button.modificarProducto', function(event) {
 // Funcion Modificar
 $("#botonModificar").on('click', function() {
 	/* Act on the event */
-	if ($("#formmodificar").attr('action') == "modificardato/" | $("#formmodificar").attr('action') == "modificarpregunta/" | $("#formmodificar").attr('action') == "modificarquienessomos/") {
+	if ($("#formmodificar").attr('action') == "modificardato/" | $("#formmodificar").attr('action') == "modificarpregunta/" | $("#formmodificar").attr('action') == "modificarquienessomos/"| $("#formmodificar").attr('action') == "modificardato/") {
 		for ( instance in CKEDITOR.instances )
     		CKEDITOR.instances[instance].updateElement();
 	}
@@ -167,7 +167,7 @@ $("#agregarProducto").on('click', function(event) {
 // Funcion agregar Productos
 $("#botonAgregar").on('click', function() {
 	/* Act on the event */
-	if ($("#formagregar").attr('action') == "agregardato/" | $("#formagregar").attr('action') == "agregarpregunta/" | $("#formagregar").attr('action') == "agregarquienessomos/") {
+	if ($("#formagregar").attr('action') == "agregardato/" | $("#formagregar").attr('action') == "agregarpregunta/" | $("#formagregar").attr('action') == "agregarquienessomos/" | $("#formagregar").attr('action') == "modificardato/") {
 		for ( instance in CKEDITOR.instances )
     		CKEDITOR.instances[instance].updateElement();
 	}

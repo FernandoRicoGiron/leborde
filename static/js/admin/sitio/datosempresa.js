@@ -6,7 +6,7 @@ $("#mostrarDE").on("click", function () {
 	$(".seccion").hide("fast");
 	$("#modificarCampos").html("");
 	$("#formmodificar").attr('action', 'modificardato/');
-
+	
 	$.ajax({ // create an AJAX call...
                 data: {}, // get the form data
                 type: 'POST', // GET or POST

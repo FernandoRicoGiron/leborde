@@ -124,6 +124,7 @@ def variables(request):
 	request.session["twiter"] = empresa.twiter
 	request.session["instagram"] = empresa.instagram
 	request.session["youtube"] = empresa.youtube
+	request.session["correo"] = empresa.correo
 	# Categorias
 	categorias = Categoria.objects.all()
 	marcas = Marca.objects.all()
@@ -164,6 +165,22 @@ def index(request):
 										"nuevos":nuevos,
 										"colecciones":colecciones,
 										"categorias":categorias})
+
+def politicas(request):
+	empresa = Empresa.objects.last()
+	seccion = Secciones.objects.last()
+	return render(request, "politicas.html", {"politicas":empresa.politicas,
+		"titulo":seccion.titulopoliticas,
+		"imagen":seccion.imagenpoliticas.url,
+		})
+
+def terminos(request):
+	empresa = Empresa.objects.last()
+	seccion = Secciones.objects.last()
+	return render(request, "terminos.html", {"terminos":empresa.terminos_condiciones,
+		"titulo":seccion.tituloterminos,
+		"imagen":seccion.imagenterminos.url,
+		})
 
 def indexcategoria(request, id):
 	cart = Cart(request)

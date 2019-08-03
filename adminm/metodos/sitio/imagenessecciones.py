@@ -39,6 +39,12 @@ def showmodificarsecciones(request):
 		{"tipo":"imagen2","valor":seccion.imagenpedidos.url,"label":"Imagen principal en 'Pedidos':", "name":"imagenpedidos"},
 		{"tipo":"char","valor":seccion.titulopreguntas,"label":"Titulo en 'Preguntas Frecuentes':", "name":"titulopreguntas"},
 		{"tipo":"imagen2","valor":seccion.imagenpreguntas.url,"label":"Imagen principal en 'Preguntas Frecuentes':", "name":"imagenpreguntas"},
+
+		{"tipo":"char","valor":seccion.tituloterminos,"label":"Titulo en 'Terminos y condiciones':", "name":"tituloterminos"},
+		{"tipo":"imagen2","valor":seccion.imagenterminos.url,"label":"Imagen principal en 'Terminos y condiciones':", "name":"imagenterminos"},
+
+		{"tipo":"char","valor":seccion.titulopoliticas,"label":"Titulo en 'Aviso de privacidad':", "name":"titulopoliticas"},
+		{"tipo":"imagen2","valor":seccion.imagenpoliticas.url,"label":"Imagen principal en 'Aviso de privacidad':", "name":"imagepoliticass"},
 		
 		]
 	return JsonResponse(data, safe=False)
@@ -54,6 +60,8 @@ def modificarseccion(request):
 	imagenp = seccion.imagenp
 	imagenpedidos = seccion.imagenpedidos
 	imagenpreguntas = seccion.imagenpreguntas
+	imagenpoliticas = seccion.imagenpoliticas
+	imagenterminos = seccion.imagenterminos
 
 	if "imagent" in request.FILES:
 		imagent = request.FILES["imagent"]
@@ -74,6 +82,11 @@ def modificarseccion(request):
 	if "imagenpreguntas" in request.FILES:
 		imagenpreguntas = request.FILES["imagenpreguntas"]
 
+	if "imagenterminos" in request.FILES:
+		imagenterminos = request.FILES["imagenterminos"]
+	if "imagenpoliticas" in request.FILES:
+		imagenpoliticas = request.FILES["imagenpoliticas"]
+
 	seccion.delete()
 
 	seccion = Secciones.objects.create(titulot=request.POST.get("titulot"),
@@ -93,6 +106,11 @@ def modificarseccion(request):
 			titulopedidos=request.POST.get("titulopedidos"),
 			imagenpedidos=imagenpedidos,
 			titulopreguntas=request.POST.get("titulopreguntas"),
-			imagenpreguntas=imagenpreguntas,)
+			imagenpreguntas=imagenpreguntas,
+			tituloterminos=request.POST.get("tituloterminos"),
+			imagenterminos=imagenterminos,
+			titulopoliticas=request.POST.get("titulopoliticas"),
+			imagenpoliticas=imagenpoliticas,
+			)
 
 	return JsonResponse("Correcto", safe=False)

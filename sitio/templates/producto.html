@@ -162,11 +162,11 @@
 
 									<div class="block2-txt flex-w flex-t p-t-14">
 										<div class="block2-txt-child1 flex-col-l ">
-											<a href="/tienda/{{ producto.id }}/" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+											<a style="font-size:16px; color:rgb(64,64,64)" href="/tienda/{{ producto.id }}/" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
 												{{producto.nombre}}
 											</a>
 
-											<span class="stext-105 cl3">
+											<span style="font-size:16px; color:rgb(136,136,136)" class="stext-105 cl3">
 												${{producto.precio.amount}} <strike>${{producto.precio_oferta.amount}}</strike>
 											</span>
 										</div>
@@ -349,7 +349,7 @@
  			     	$(".carrito").append(producto);
  			     }
  	
- 			     	totalpro = "Total: $"+json.suma;
+ 			     	totalpro = "<strong style='color: rgb(255,19,89)'>Total:</strong> $"+json.suma;
  	            	$(".header-cart-total").html(totalpro);
  	                var conta = parseInt($(".contador").attr("data-notify"));
  		     		$(".contador").attr("data-notify",conta+parseInt(cantidad));

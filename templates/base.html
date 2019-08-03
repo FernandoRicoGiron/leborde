@@ -45,7 +45,7 @@
 		<!-- Header desktop -->
 		<div class="container-menu-desktop">
 			<!-- Topbar -->
-			<div class="top-bar">
+			<div style="height:30px;" class="top-bar">
 				<div class="content-topbar flex-sb-m h-full container">
 					<div class="left-top-bar">
 						<!--Free shipping for standard order over $100-->
@@ -274,7 +274,7 @@
 				
 				<div class="w-full">
 					<div class="header-cart-total w-full p-tb-40">
-						Total: $ {{cart.summary}}
+						<strong style="color: rgb(255,19,89)">Total:</strong> $ {{cart.summary}}
 					</div>
 
 					<div class="header-cart-buttons flex-w w-full">
@@ -298,7 +298,8 @@
 
 	{% include "modallogin.html" %}
 	<!-- Marcas -->
-{% if request.path != "/" and "/categoria/" not in request.path %}
+	
+{% if request.path != "/" and "/categoria/" not in request.path  %}
 <style type="text/css">
 
 	.slick-slide {
@@ -417,141 +418,101 @@
 	}
 </style>
 
-	
-	<section class="bg0 p-t-23 p-b-140">
-		<div class="container">
-			<section class="customer-logos slider">
-			{% for x, marca in request.session.marcas.items %}
-	     		<div class="slide">
-	     			<img src="{{marca.imagen}}">
-	     		</div>
-	      	{% endfor %}
-		   </section>
-			
-		</div>
-	</section>
+	{% if request.session.marcas.items|length > 0 %}
+		<section class="bg0 p-t-23 p-b-140">
+			<div class="container">
+				<section class="customer-logos slider">
+				{% for x, marca in request.session.marcas.items %}
+					<div class="slide">
+						<img src="{{marca.imagen}}">
+					</div>
+				{% endfor %}
+			</section>
+				
+			</div>
+		</section>
+	{% endif %}
 	
 	<!-- EndMarcas -->	
 {% endif %}	
 	<!-- Footer -->
-	<footer class="bg3 p-t-75 p-b-32">
+	<footer style="padding-top:0px;" class="p-t-75 p-b-32">
 		<div class="container">
 			<div class="row">
 				<div class="col-sm-4 p-b-50">
-					<h4 class="stext-301 cl0 p-b-30">
-						Categorias
+					<h4 style="color:rgb(64,64,64)" class="stext-301 cl0 p-b-30">
+						<a style="color: rgb(64,64,64)" href="/">Inicio</a>
 					</h4>
 
 					<ul>
-						{% for x, categoria in request.session.categorias.items %}
 						<li class="p-b-10">
-							<a style="color:#FFF" href="/tienda/categoria/{{x}}/" class="stext-107 cl7 hov-cl1 trans-04">
-								{{categoria}}
+							<a style="color:rgb(136,136,136)" href="/politicas/" class="stext-107 cl7 hov-cl1 trans-04">
+								* Aviso de Privacidad
 							</a>
 						</li>
-						{% endfor %}
+						<li class="p-b-10">
+							<a style="color:rgb(136,136,136)" href="/terminos/" class="stext-107 cl7 hov-cl1 trans-04">
+								* Terminos y Condiciones
+							</a>
+						</li>
+						
 
 						
 					</ul>
 				</div>
 
-				<div  class="col-sm-3 p-b-50">
-					<h4 class="stext-301 cl0 p-b-30">
-						Secciones
+				
+
+				
+				<div style="color:#FFF" class="col-sm-5 p-b-50">
+					<h4 style="color:rgb(64,64,64)" class="stext-301 cl0 p-b-30">
+						<a style="color: rgb(64,64,64)" href="/">Redes Sociales</a>
 					</h4>
 
+					<div class="p-t-27">
 					<ul>
+						{% if request.session.facebook and request.session.facebook != "null" %}
 						<li class="p-b-10">
-							<a style="color:#FFF" href="/" class="stext-107 cl7 hov-cl1 trans-04">
-								Inicio
-							</a>
+						<a style="color: rgb(64,64,64)" href="{{request.session.facebook}}" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
+							<i class="fa fa-facebook"></i> {{request.session.facebook|replace2:"https://www.facebook.com/"}}
+						</a>
 						</li>
-
+						{% endif %}
+						{% if request.session.twiter and request.session.twiter != "null" %}
 						<li class="p-b-10">
-							<a style="color:#FFF" href="/tienda/" class="stext-107 cl7 hov-cl1 trans-04">
-								Tienda
-							</a>
+						<a style="color: rgb(64,64,64)" href="{{request.session.twiter}}" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
+							<i class="fa fa-twitter"></i> {{request.session.twiter|replace2:"https://www.twitter.com/"}}
+						</a>
 						</li>
-
+						{% endif %}
+						{% if request.session.instagram and request.session.instagram != "null" %}
 						<li class="p-b-10">
-							<a style="color:#FFF" href="/nosotros/" class="stext-107 cl7 hov-cl1 trans-04">
-								¿Quiénes somos? 
-							</a>
+						<a style="color: rgb(64,64,64)" href="{{request.session.instagram}}" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
+							<i class="fa fa-instagram"></i> {{request.session.instagram|replace2:"https://www.instagram.com/"}}
+						</a>
 						</li>
-
+						{% endif %}
+						{% if request.session.youtube and request.session.youtube != "null" %}
 						<li class="p-b-10">
-							<a style="color:#FFF" href="/contacto/" class="stext-107 cl7 hov-cl1 trans-04">
-								Contáctanos
-							</a>
+						<a style="color: rgb(64,64,64)" href="{{request.session.youtube}}" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
+							<i class="fa fa-youtube"></i> {{request.session.youtube|replace2:"https://www.youtube.com/"}}
+						</a>
 						</li>
+						{% endif %}
+						{% if request.session.correo and request.session.correo != "null" %}
 						<li class="p-b-10">
-							<a style="color:#FFF" href="/faqs/" class="stext-107 cl7 hov-cl1 trans-04">
-								Faqs
-							</a>
+						<a style="color: rgb(64,64,64)" href="javascript:" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
+							<i class="fa fa-at"></i> {{request.session.correo}}
+						</a>
 						</li>
+						{% endif %}
 					</ul>
-				</div>
-
-				{% if request.session.giro|safe != "" %}
-				<div style="color:#FFF" class="col-sm-5 p-b-50">
-					<h4 class="stext-301 cl0 p-b-30">
-						Redes Sociales
-					</h4>
-
-					<div class="p-t-27">
-						{% if request.session.facebook %}
-						<a href="{{request.session.facebook}}" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
-							<i class="fa fa-facebook"></i>
-						</a>
-						{% elif request.session.twiter %}
-						<a href="{{request.session.twiter}}" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
-							<i class="fa fa-twitter"></i>
-						</a>
-						{% elif request.session.instagram %}
-						<a href="{{request.session.instagram}}" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
-							<i class="fa fa-instagram"></i>
-						</a>
-						{% elif request.session.youtube %}
-						<a href="{{request.session.youtube}}" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
-							<i class="fa fa-youtube"></i>
-						</a>
-						{% endif %}
 					</div>
 				</div>
-				{% else %}
-				<div style="color:#FFF" class="col-sm-5 p-b-50">
-					<h4 class="stext-301 cl0 p-b-30">
-						Redes Sociales
-					</h4>
-
-					<div class="p-t-27">
-						{% if request.session.facebook %}
-						<a href="{{request.session.facebook}}" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
-							<i class="fa fa-facebook"></i>
-						</a>
-						{% elif request.session.twiter %}
-						<a href="{{request.session.twiter}}" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
-							<i class="fa fa-twitter"></i>
-						</a>
-						{% elif request.session.instagram %}
-						<a href="{{request.session.instagram}}" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
-							<i class="fa fa-instagram"></i>
-						</a>
-						{% elif request.session.youtube %}
-						<a href="{{request.session.youtube}}" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
-							<i class="fa fa-youtube"></i>
-						</a>
-						{% endif %}
-					</div>
-				</div>
-				{% endif %}
+				
 
 			<div class="p-t-40">
-				<div class="flex-c-m flex-w p-b-18">
-					<a href="#" class="m-all-1">
-						<img src="{% static 'sitio/images/icons/icon-pay-01.png' %}" alt="ICON-PAY">
-					</a>
-				</div>
+				
 
 				<p class="stext-107 cl6 txt-center">
 					<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
@@ -688,7 +649,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> Todos
                      talla:talla,                
                      }, // data sent with the post request
              success : function(json) {
-             	totalpro = "Total: $"+json.suma+".00"
+             	totalpro = "<strong style='color: rgb(255,19,89)'>Total:</strong> $"+json.suma+".00"
                 $(".header-cart-total").html(totalpro);
                 elem.remove()
                 swal({

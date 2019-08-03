@@ -66,6 +66,10 @@ class Secciones(models.Model):
 	imagenpedidos = models.ImageField(upload_to="Secciones", blank=True, null=True, default="coleccion3.jpg")
 	titulopreguntas = models.CharField(max_length=200, default="Preguntas Frecuentes")
 	imagenpreguntas = models.ImageField(upload_to="Secciones", blank=True, null=True, default="coleccion3.jpg")
+	titulopoliticas = models.CharField(max_length=200, default="Aviso de Privacidad")
+	imagenpoliticas = models.ImageField(upload_to="Secciones", blank=True, null=True, default="coleccion3.jpg")
+	tituloterminos = models.CharField(max_length=200, default="Terminos y Condiciones")
+	imagenterminos = models.ImageField(upload_to="Secciones", blank=True, null=True, default="coleccion3.jpg")
 
 	def __str__(self):
 		return "Secciones del sitio"
@@ -87,6 +91,8 @@ class Empresa(models.Model):
 	twiter = models.URLField(blank=True, null=True)
 	instagram = models.URLField(blank=True, null=True)
 	youtube = models.URLField(blank=True, null=True)
+	terminos_condiciones = RichTextField(blank=True, null=True)
+	politicas = RichTextField(blank=True, null=True)
 
 	def __str__(self):
 		return self.nombre

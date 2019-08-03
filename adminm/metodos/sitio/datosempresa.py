@@ -39,6 +39,8 @@ def showmodificardatos(request):
 		{"tipo":"imagen2","valor":dato.logo.url,"label":"Logo:", "name":"logo"},
 		{"tipo":"char", "valor":dato.titulo, "label":"Titulo de texto para mostrar en la parte baja del sitio:", "name":"titulo"},
 		{"tipo":"text", "valor":dato.giro_de_la_empresa,"label":"Texto para mostrar en la parte baja del sitio:", "name":"giro"},
+		{"tipo":"ckeditor", "valor":dato.terminos_condiciones,"label":"Terminos y Condiciones:", "name":"terminos_condiciones"},
+		{"tipo":"ckeditor", "valor":dato.politicas,"label":"Politicas de Privacidad:", "name":"politicas"},
 		
 		]
 	return JsonResponse(data, safe=False)
@@ -64,7 +66,11 @@ def modificardato(request):
 				facebook=request.POST.get("facebook"),
 				twiter=request.POST.get("twiter"),
 				instagram=request.POST.get("instagram"),
-				youtube=request.POST.get("youtube"),)
+				youtube=request.POST.get("youtube"),
+				terminos_condiciones=request.POST.get("terminos_condiciones"),
+				politicas=request.POST.get("politicas"),
+				
+				)
 	else:
 		dato = Empresa.objects.create(nombre=request.POST.get("nombre"),
 				direccion=request.POST.get("direccion"),
@@ -81,6 +87,8 @@ def modificardato(request):
 				facebook=request.POST.get("facebook"),
 				twiter=request.POST.get("twiter"),
 				instagram=request.POST.get("instagram"),
-				youtube=request.POST.get("youtube"),)
+				youtube=request.POST.get("youtube"),
+				terminos_condiciones=request.POST.get("terminos_condiciones"),
+				politicas=request.POST.get("politicas"),)
 	empresa.delete()
 	return JsonResponse("Correcto", safe=False)

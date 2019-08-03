@@ -46,4 +46,7 @@ urlpatterns = [
     path('pedidos/', vi.listapedidos, name="listapedidos"),
     re_path('subircomprobante/(?P<id>\d+)/', vi.subircomprobante),
     re_path('voucher/(?P<id>\d+)/', vi.voucher),
+    
+    path('politicas/', vi.politicas, name="politicas"),
+    path('terminos/', vi.terminos, name="terminos"),
 ]

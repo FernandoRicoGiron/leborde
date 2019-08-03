@@ -20,8 +20,8 @@
 								</h2>
 							</div>
 								
-							<div class="layer-slick1 animated visible-false" data-appear="zoomIn" data-delay="1600">
-								<a href="{%if 'https://' not in carrusel.url%}https://{{carrusel.url}}{%else%}{{carrusel.url}}{%endif%}" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04">
+							<div class="layer-slick1 animated visible-false btncarrusel" data-appear="zoomIn" data-delay="1600">
+								<a href="{%if 'https://' not in carrusel.url%}https://{{carrusel.url}}{%else%}{{carrusel.url}}{%endif%}" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 ">
 									Ver
 								</a>
 							</div>
@@ -38,21 +38,21 @@
 
 
 	<!-- Product -->
-	<section class="bg0 p-t-23 p-b-140">
+	<section style="padding-bottom: 50px;" class="bg0 p-t-23 p-b-140">
 		<div class="container">
 			<div class="p-b-10">
-				<h3 class="ltext-103 cl5">
+				<h3 style="color: rgb(64,64,64);" class="ltext-103 cl5">
 					Productos Populares
 				</h3>
 			</div>
 
 			<div class="flex-w flex-sb-m p-b-52">
 				<div class="flex-w flex-l-m filter-tope-group m-tb-10">
-					<a class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 " href="/">
+					<a style="color: rgb(64,64,64);" class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 " href="/">
 						TODAS LAS CATEGORIAS
 					</a>
 					{% for categoria in categorias %}
-						<a href="/categoria/{{categoria.id}}/" class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5">
+						<a style="color: rgb(64,64,64);" href="/categoria/{{categoria.id}}/" class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5">
 							{{categoria.nombre|upper}}
 						</a>
 
@@ -89,10 +89,10 @@
 				
 			</div>
 
-			<div class="row isotope-grid">
+			<div class="row isotope-grid" style="">
 				{% for popular in populares %}
 				<a href="/tienda/{{popular.id}}/">
-					<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item {{popular.categoria.id}}">
+					<div class="col-sm-6 col-md-4 col-lg-4 p-b-35 isotope-item {{popular.categoria.id}}">
 						<!-- Block2 -->
 						<div class="block2">
 							
@@ -107,11 +107,11 @@
 
 							<div class="block2-txt flex-w flex-t p-t-14">
 								<div class="block2-txt-child1 flex-col-l ">
-									<a href="/tienda/{{popular.id}}/" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+									<a href="/tienda/{{popular.id}}/" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6" style="font-size:16px; color: rgb(64,64,64);">
 										{{popular.nombre}}
 									</a>
 
-									<span class="stext-105 cl3">
+									<span class="stext-105 cl3" style="font-size:16px; color:rgb(136,136,136);">
 										$ {{popular.precio.amount}}  <strike>${{popular.precio_oferta.amount}}</strike>
 									</span>
 								</div>
@@ -129,24 +129,24 @@
 			<div class="pagination row">
 				
 					<span style="width:100%" class="current">
-						<h4>Pagina {{ populares.number }} de {{ populares.paginator.num_pages }}.</h4>
+						<h4>Página {{ populares.number }} de {{ populares.paginator.num_pages }}.</h4>
 					</span>
 
 					{% if populares.has_previous %}
-						<a style="padding-left: 5px; padding-right: 5px; min-width:50px" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" href="?page=1">&laquo; Primera</a>
-						<a style="padding-left: 5px; padding-right: 5px; min-width:50px" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" href="?page={{ productos.previous_page_number }}">Anterior</a>
+						<a style="padding-left: 5px; padding-right: 5px; min-width:50px; background-color:rgb(255,19,89);" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" href="?page=1">&laquo; Primera</a>
+						<a style="padding-left: 5px; padding-right: 5px; min-width:50px; background-color:rgb(255,19,89);" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" href="?page={{ productos.previous_page_number }}">Anterior</a>
 					{% endif %}
 
 					
 					
 					{% for pagina in populares.paginator.page_range  %}
-						<a style="padding-left: 5px; padding-right: 5px; min-width:50px" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" href="?page={{ pagina }}">{{pagina}}</a>
+						<a style="padding-left: 5px; padding-right: 5px; min-width:50px; background-color:rgb(255,19,89);" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" href="?page={{ pagina }}">{{pagina}}</a>
 					{% endfor %}
 						
 
 					{% if populares.has_next %}
-						<a style="padding-left: 5px; padding-right: 5px; min-width:50px" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" href="?page={{ productos.next_page_number }}">Siguiente</a>
-						<a style="padding-left: 5px; padding-right: 5px; min-width:50px" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" href="?page={{ productos.paginator.num_pages }}">Ultima &raquo;</a>
+						<a style="padding-left: 5px; padding-right: 5px; min-width:50px; background-color:rgb(255,19,89);" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" href="?page={{ productos.next_page_number }}">Siguiente</a>
+						<a style="padding-left: 5px; padding-right: 5px; min-width:50px; background-color:rgb(255,19,89);" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" href="?page={{ productos.paginator.num_pages }}">Ultima &raquo;</a>
 					{% endif %}
 				
 			</div>

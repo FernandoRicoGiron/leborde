@@ -23,19 +23,19 @@
 			<div class="row">
 				<div class="col-sm-12">
 					<div class="p-b-10">
-						<h3 class=" cl5">
+						<h3 style="color: rgb(64,64,64);" class=" cl5">
 							Categorias
 						</h3>
 					</div>
 					
 					<div class="flex-w flex-sb-m p-b-52">
 						<div class="flex-w flex-l-m filter-tope-group m-tb-10">
-							<a href="/tienda/" class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1" data-filter="*">
+							<a href="/tienda/" class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1" data-filter="*" style="color: rgb(64,64,64);">
 								TODOS LO PRODUCTOS
 							</a>
 
 							{% for categoria in categorias %}
-							<a href="/tienda/categoria/{{categoria.id}}/" class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5">
+							<a href="/tienda/categoria/{{categoria.id}}/" class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" style="color: rgb(64,64,64);">
 								{{categoria.nombre|upper}}
 							</a>
 
@@ -70,7 +70,7 @@
 			<div class="row isotope-grid">
 				{% for producto in productos %}
 				<a href="/tienda/{{producto.id}}/">
-					<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item {{producto.categoria.id}}">
+					<div class="col-sm-6 col-md-4 col-lg-4 p-b-35 isotope-item {{producto.categoria.id}}">
 						<!-- Block2 -->
 						<div class="block2">
 							<div class="block2-pic hov-img0">
@@ -83,11 +83,11 @@
 
 							<div class="block2-txt flex-w flex-t p-t-14">
 								<div class="block2-txt-child1 flex-col-l ">
-									<a href="/tienda/{{ producto.id }}/" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+									<a href="/tienda/{{ producto.id }}/" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6" style="font-size:16px; color:rgb(64,64,64);">
 										{{producto.nombre}}
 									</a>
 
-									<span class="stext-105 cl3">
+									<span class="stext-105 cl3" style="font-size:16px; color:rgb(136,136,136);">
 										${{producto.precio.amount}} <strike>${{producto.precio_oferta.amount}}</strike>
 									</span>
 								</div>
@@ -104,24 +104,24 @@
 			<div class="pagination row">
 				
 					<span style="width:100%" class="current">
-						<h4>Pagina {{ productos.number }} de {{ productos.paginator.num_pages }}.</h4>
+						<h4 style="font-family: Soberana Sans;">Página {{ productos.number }} de {{ productos.paginator.num_pages }}.</h4>
 					</span>
 
 					{% if productos.has_previous %}
-						<a style="padding-left: 15px; padding-right: 15px; min-width:50px" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" href="?page=1">&laquo; Primera</a>
-						<a style="padding-left: 15px; padding-right: 15px; min-width:50px" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" href="?page={{ productos.previous_page_number }}">Anterior</a>
+						<a style="padding-left: 15px; padding-right: 15px; min-width:50px; background-color:rgb(255,19,89);" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" href="?page=1">&laquo; Primera</a>
+						<a style="padding-left: 15px; padding-right: 15px; min-width:50px; background-color:rgb(255,19,89);" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" href="?page={{ productos.previous_page_number }}">Anterior</a>
 					{% endif %}
 
 					
 					
 					{% for pagina in productos.paginator.page_range  %}
-						<a style="padding-left: 15px; padding-right: 15px; min-width:50px" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" href="?page={{ pagina }}">{{pagina}}</a>
+						<a style="padding-left: 15px; padding-right: 15px; min-width:50px; background-color:rgb(255,19,89);" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" href="?page={{ pagina }}">{{pagina}}</a>
 					{% endfor %}
 						
 
 					{% if productos.has_next %}
-						<a style="padding-left: 15px; padding-right: 15px; min-width:50px" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" href="?page={{ productos.next_page_number }}">Siguiente</a>
-						<a style="padding-left: 15px; padding-right: 15px; min-width:50px" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" href="?page={{ productos.paginator.num_pages }}">Ultima &raquo;</a>
+						<a style="padding-left: 15px; padding-right: 15px; min-width:50px; background-color:rgb(255,19,89);" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" href="?page={{ productos.next_page_number }}">Siguiente</a>
+						<a style="padding-left: 15px; padding-right: 15px; min-width:50px; background-color:rgb(255,19,89);" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" href="?page={{ productos.paginator.num_pages }}">Ultima &raquo;</a>
 					{% endif %}
 				
 			</div>
