@@ -167,19 +167,25 @@ def index(request):
 										"categorias":categorias})
 
 def politicas(request):
+	cart = Cart(request)
+	variables(request)
 	empresa = Empresa.objects.last()
 	seccion = Secciones.objects.last()
 	return render(request, "politicas.html", {"politicas":empresa.politicas,
 		"titulo":seccion.titulopoliticas,
 		"imagen":seccion.imagenpoliticas.url,
+		"cart":cart,
 		})
 
 def terminos(request):
+	cart = Cart(request)
+	variables(request)
 	empresa = Empresa.objects.last()
 	seccion = Secciones.objects.last()
 	return render(request, "terminos.html", {"terminos":empresa.terminos_condiciones,
 		"titulo":seccion.tituloterminos,
 		"imagen":seccion.imagenterminos.url,
+		"cart":cart,
 		})
 
 def indexcategoria(request, id):
