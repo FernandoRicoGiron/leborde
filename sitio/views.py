@@ -151,7 +151,7 @@ def index(request):
 	# ofertas = Producto.objects.filter(Oferta = True)
 	carruseles = Carrusel.objects.all()
 
-	paginator = Paginator(populares, 12) # Show 25 contacts per page
+	paginator = Paginator(populares, 1) # Show 25 contacts per page
 
 	pagina = request.GET.get('page')
 	populares = paginator.get_page(pagina)
@@ -246,7 +246,7 @@ def tienda(request):
 	colecciones = Coleccion.objects.all()
 	seccion = Secciones.objects.last()
 
-	paginator = Paginator(productos, 12) # Show 25 contacts per page
+	paginator = Paginator(productos, 1) # Show 25 contacts per page
 
 	pagina = request.GET.get('page')
 	productos = paginator.get_page(pagina)

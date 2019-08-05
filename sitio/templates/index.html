@@ -134,7 +134,7 @@
 
 					{% if populares.has_previous %}
 						<a style="padding-left: 5px; padding-right: 5px; min-width:50px; background-color:rgb(255,19,89);" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" href="?page=1">&laquo; Primera</a>
-						<a style="padding-left: 5px; padding-right: 5px; min-width:50px; background-color:rgb(255,19,89);" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" href="?page={{ productos.previous_page_number }}">Anterior</a>
+						<a style="padding-left: 5px; padding-right: 5px; min-width:50px; background-color:rgb(255,19,89);" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" href="?page={{ populares.previous_page_number }}">Anterior</a>
 					{% endif %}
 
 					
@@ -145,8 +145,8 @@
 						
 
 					{% if populares.has_next %}
-						<a style="padding-left: 5px; padding-right: 5px; min-width:50px; background-color:rgb(255,19,89);" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" href="?page={{ productos.next_page_number }}">Siguiente</a>
-						<a style="padding-left: 5px; padding-right: 5px; min-width:50px; background-color:rgb(255,19,89);" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" href="?page={{ productos.paginator.num_pages }}">Ultima &raquo;</a>
+						<a style="padding-left: 5px; padding-right: 5px; min-width:50px; background-color:rgb(255,19,89);" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" href="?page={{ populares.next_page_number }}">Siguiente</a>
+						<a style="padding-left: 5px; padding-right: 5px; min-width:50px; background-color:rgb(255,19,89);" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04" href="?page={{ populares.paginator.num_pages }}">Ultima &raquo;</a>
 					{% endif %}
 				
 			</div>
