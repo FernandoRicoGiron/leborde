@@ -51,6 +51,8 @@ def showmodificarsecciones(request):
 
 @csrf_exempt
 def modificarseccion(request):
+	print(request.POST)
+	print(request.FILES)
 	seccion = Secciones.objects.last()
 	imagent = seccion.imagent
 	imagenqs = seccion.imagenqs
@@ -84,8 +86,8 @@ def modificarseccion(request):
 
 	if "imagenterminos" in request.FILES:
 		imagenterminos = request.FILES["imagenterminos"]
-	if "imagenpoliticas" in request.FILES:
-		imagenpoliticas = request.FILES["imagenpoliticas"]
+	if "imagepoliticass" in request.FILES:
+		imagenpoliticas = request.FILES["imagepoliticass"]
 
 	seccion.delete()
 

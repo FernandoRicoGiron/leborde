@@ -261,7 +261,7 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
 .topbar-mobile li {
   padding: 8px 20px;
   border-top: 1px solid rgba(255,255,255,0.05);
-  background-color: #BC0C4C;
+  background-color: #FFF7F7;
 }
 
 
@@ -732,13 +732,13 @@ Input, textarea : 14px/1.6 '', Arial, sans-serif;
 .main-menu-m {
   padding-top: 10px;
   padding-bottom: 10px;
-  background-color: #BC0C4C;
+  background-color: #FFF7F7;
 }
 
 .main-menu-m > li > a {
   font-family: Soberana Sans;
   font-size: 14px;
-  color: white;
+  color: black;
   line-height: 2.8;
   padding: 8px 20px 8px 20px;
 }
