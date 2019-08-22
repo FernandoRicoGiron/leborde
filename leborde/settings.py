@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'uhajcswr-7!mre&h#$t8jpytbu@9g8!1kt)q7el!^0@zu6(4ue'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
 
@@ -83,10 +83,10 @@ WSGI_APPLICATION = 'leborde.wsgi.application'
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    # }
     # 'default': {
     #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
     #     'NAME': 'tuxmapa_istmena',
@@ -95,14 +95,14 @@ DATABASES = {
     #     'HOST': 'localhost',
     #     'PORT': '',
     # }
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    #     'NAME': 'tuxmapa_istmena',
-    #     'USER': 'tuxmapa',
-    #     'PASSWORD': 'i0cj6y339JMxHb2Z',
-    #     'HOST': 'localhost',
-    #     'PORT': '',
-    # }
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'tuxmapa_istmena',
+        'USER': 'tuxmapa',
+        'PASSWORD': 'i0cj6y339JMxHb2Z',
+        'HOST': 'localhost',
+        'PORT': '',
+    }
 }
 
 
