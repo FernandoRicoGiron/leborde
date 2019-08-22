@@ -36,7 +36,8 @@
 	<link rel="stylesheet" type="text/css" href="{% static 'sitio/css/util.css' %}">
 	<link rel="stylesheet" type="text/css" href="{% static 'sitio/css/main.css' %}">
 <!--===============================================================================================-->
-	
+	{% block css %}
+	{% endblock %}
 </head>
 <body class="animsition">
 	
@@ -740,6 +741,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> Todos
 	        }]
 	    });
 	});
+	$('.carousel').carousel()
 	</script>
 	{% load sweetify %}
 	{% sweetify %}

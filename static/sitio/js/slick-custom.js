@@ -54,7 +54,7 @@
                 appendArrows: $(wrapSlick1),
                 prevArrow:'<button class="arrow-slick1 prev-slick1"><i class="zmdi zmdi-caret-left"></i></button>',
                 nextArrow:'<button class="arrow-slick1 next-slick1"><i class="zmdi zmdi-caret-right"></i></button>',
-                dots: showDot,
+                dots: true,
                 appendDots: $(wrapSlick1).find('.wrap-slick1-dots'),
                 dotsClass:'slick1-dots',
                 customPaging: function(slick, index) {
