@@ -77,6 +77,7 @@ class Secciones(models.Model):
 class Empresa(models.Model):
 	nombre = models.CharField(max_length=100)
 	logo = models.ImageField(upload_to="Logo")
+	fav_logo = models.ImageField(upload_to="Logo", blank=True, null=True)
 	direccion = models.CharField(max_length=100)
 	telefono = models.CharField(max_length=100)
 	correo = models.CharField(max_length=100)

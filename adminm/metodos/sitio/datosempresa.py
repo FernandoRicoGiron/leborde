@@ -21,6 +21,12 @@ import json
 @csrf_exempt
 def showmodificardatos(request):
 	dato = Empresa.objects.last()
+	logo = ""
+	fav_logo = ""
+	if dato.logo:
+		logo = dato.logo.url
+	if dato.fav_logo:
+		fav_logo = dato.fav_logo.url
 	data = [{"tipo":"char","valor":dato.nombre,"label":"Nombre:", "name":"nombre"},
 		{"tipo":"char","valor":dato.numero_de_cuenta,"label":"Número de cuenta:", "name":"numero_de_cuenta"},
 		{"tipo":"char","valor":dato.banco,"label":"Banco:", "name":"banco"},
@@ -36,7 +42,8 @@ def showmodificardatos(request):
 		{"tipo":"char","valor":dato.instagram,"label":"Link de Instagram:", "name":"instagram"},
 		{"tipo":"char","valor":dato.youtube,"label":"Link de Youtube:", "name":"youtube"},
 
-		{"tipo":"imagen2","valor":dato.logo.url,"label":"Logo:", "name":"logo"},
+		{"tipo":"imagen2","valor":logo,"label":"Logo:", "name":"logo"},
+		{"tipo":"imagen2","valor":fav_logo,"label":"Logo de pestaña:", "name":"logo2"},
 		{"tipo":"char", "valor":dato.titulo, "label":"Titulo de texto para mostrar en la parte baja del sitio:", "name":"titulo"},
 		{"tipo":"text", "valor":dato.giro_de_la_empresa,"label":"Texto para mostrar en la parte baja del sitio:", "name":"giro"},
 		{"tipo":"ckeditor", "valor":dato.terminos_condiciones,"label":"Terminos y Condiciones:", "name":"terminos_condiciones"},
@@ -50,45 +57,29 @@ def modificardato(request):
 	empresa = Empresa.objects.last()
 	imagen = empresa.logo
 	
+	dato = Empresa.objects.create(nombre=request.POST.get("nombre"),
+			direccion=request.POST.get("direccion"),
+			telefono=request.POST.get("telefono"),
+			correo=request.POST.get("correo"),
+			correopaypal=request.POST.get("correopaypal"),
+			titulo=request.POST.get("titulo"),
+			giro_de_la_empresa=request.POST.get("giro"),
+			numero_de_cuenta=request.POST.get("numero_de_cuenta"),
+			banco=request.POST.get("banco"),
+			tipo_tarjeta=request.POST.get("tipo_tarjeta"),
+			link_encuesta=request.POST.get("link_encuesta"),
+			facebook=request.POST.get("facebook"),
+			twiter=request.POST.get("twiter"),
+			instagram=request.POST.get("instagram"),
+			youtube=request.POST.get("youtube"),
+			terminos_condiciones=request.POST.get("terminos_condiciones"),
+			politicas=request.POST.get("politicas"),
+			
+			)
 	if "logo" in request.FILES:
-		dato = Empresa.objects.create(nombre=request.POST.get("nombre"),
-				direccion=request.POST.get("direccion"),
-				telefono=request.POST.get("telefono"),
-				correo=request.POST.get("correo"),
-				correopaypal=request.POST.get("correopaypal"),
-				logo=request.FILES["logo"],
-				titulo=request.POST.get("titulo"),
-				giro_de_la_empresa=request.POST.get("giro"),
-				numero_de_cuenta=request.POST.get("numero_de_cuenta"),
-				banco=request.POST.get("banco"),
-				tipo_tarjeta=request.POST.get("tipo_tarjeta"),
-				link_encuesta=request.POST.get("link_encuesta"),
-				facebook=request.POST.get("facebook"),
-				twiter=request.POST.get("twiter"),
-				instagram=request.POST.get("instagram"),
-				youtube=request.POST.get("youtube"),
-				terminos_condiciones=request.POST.get("terminos_condiciones"),
-				politicas=request.POST.get("politicas"),
-				
-				)
-	else:
-		dato = Empresa.objects.create(nombre=request.POST.get("nombre"),
-				direccion=request.POST.get("direccion"),
-				telefono=request.POST.get("telefono"),
-				correo=request.POST.get("correo"),
-				correopaypal=request.POST.get("correopaypal"),
-				logo=imagen,
-				titulo=request.POST.get("titulo"),
-				giro_de_la_empresa=request.POST.get("giro"),
-				numero_de_cuenta=request.POST.get("numero_de_cuenta"),
-				banco=request.POST.get("banco"),
-				tipo_tarjeta=request.POST.get("tipo_tarjeta"),
-				link_encuesta=request.POST.get("link_encuesta"),
-				facebook=request.POST.get("facebook"),
-				twiter=request.POST.get("twiter"),
-				instagram=request.POST.get("instagram"),
-				youtube=request.POST.get("youtube"),
-				terminos_condiciones=request.POST.get("terminos_condiciones"),
-				politicas=request.POST.get("politicas"),)
+		dato.logo=request.FILES["logo"]
+	if "logo2" in request.FILES:
+		dato.fav_logo=request.FILES["logo2"]
+	dato.save()
 	empresa.delete()
 	return JsonResponse("Correcto", safe=False)

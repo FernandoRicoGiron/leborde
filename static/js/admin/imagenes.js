@@ -30,6 +30,9 @@ $("#agregarCampos").on("change", "input.files2", function() {
 $("#modificarCampos").on("change", "input.files2", function() {
     readURL(this, $(this).attr('name'));
 });
+// $("#modificarCampos").on("change", "input.files3", function() {
+//     readURL(this, $(this).attr('name'));
+// });
 
 function readURL(input, name) {
 

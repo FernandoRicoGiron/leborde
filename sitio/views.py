@@ -116,6 +116,7 @@ def variables(request):
 	# Empresa
 	empresa = Empresa.objects.last()
 	request.session["logo"] = empresa.logo.url
+	request.session["fav_logo"] = empresa.fav_logo.url
 	request.session["nombreempresa"] = empresa.nombre
 	request.session["giro"] = empresa.giro_de_la_empresa
 	request.session["titulo"] = empresa.titulo
