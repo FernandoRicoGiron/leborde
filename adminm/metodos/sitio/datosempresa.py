@@ -56,11 +56,14 @@ def showmodificardatos(request):
 def modificardato(request):
 	empresa = Empresa.objects.last()
 	imagen = empresa.logo
+	imagen2 = empresa.fav_logo
 	
 	dato = Empresa.objects.create(nombre=request.POST.get("nombre"),
 			direccion=request.POST.get("direccion"),
 			telefono=request.POST.get("telefono"),
 			correo=request.POST.get("correo"),
+			logo=imagen,
+			fav_logo=imagen2,
 			correopaypal=request.POST.get("correopaypal"),
 			titulo=request.POST.get("titulo"),
 			giro_de_la_empresa=request.POST.get("giro"),
