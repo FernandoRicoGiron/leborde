@@ -11,6 +11,8 @@ urlpatterns = [
     re_path('tienda/coleccion/(?P<id>\d+)/', vi.coleccion),
     re_path('tienda/(?P<id>\d+)/', vi.producto),
     re_path('categoria/(?P<id>\d+)/', vi.indexcategoria),
+    re_path('subircomprobante/(?P<id>\d+)/', vi.subircomprobante),
+    re_path('voucher/(?P<id>\d+)/', vi.voucher),
     re_path('/(?P<id>\d+)/', vi.producto),
     path('tienda/', vi.tienda),
     path('checktalla/', vi.checktalla),
@@ -44,8 +46,7 @@ urlpatterns = [
     path('crearpedido/', vi.pedido, name="pedido"),
     path('crearpedido2/', vi.pedido2, name="pedido2"),
     path('pedidos/', vi.listapedidos, name="listapedidos"),
-    re_path('subircomprobante/(?P<id>\d+)/', vi.subircomprobante),
-    re_path('voucher/(?P<id>\d+)/', vi.voucher),
+    
     
     path('politicas/', vi.politicas, name="politicas"),
     path('terminos/', vi.terminos, name="terminos"),
