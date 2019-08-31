@@ -995,7 +995,7 @@ def subircomprobante(request, id):
 			empresa.telefono+
 			' ó enviar un correo a: '+
 			empresa.correo+
-			', para coordinar a entrega\n\nHa sido un placer atenderte\n\nTe esperamos pronto\n\nAtentamente\n\nEquipo '+
+			', para coordinar la entrega\n\nHa sido un placer atenderte\n\nTe esperamos pronto\n\nAtentamente\n\nEquipo '+
 			empresa.nombre,
 			empresa.correo,
 			[pedido.email],
