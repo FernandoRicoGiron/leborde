@@ -134,7 +134,7 @@ def modificarpedido(request):
 				'Muchas gracias por comprar en '+empresa.nombre,
 				'Muchas gracias por comprar en '+
 				empresa.nombre+
-				"Si tienes alguna duda, puedes contactarnos al WhatsApp de servicio "+
+				"\n\nSi tienes alguna duda, puedes contactarnos al WhatsApp de servicio "+
 				empresa.telefono+
 				" y alguien de nuestro equipo te apoyará con todo gusto.\n\nHa sido un placer atenderte.\n\nTe esperamos pronto de regreso.\n\nEquipo "+
 				empresa.nombre,
