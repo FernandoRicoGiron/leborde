@@ -160,10 +160,10 @@ EMAIL_USE_TLS = True
 
 EMAIL_HOST = 'mail.wservices.ch'
 
-EMAIL_HOST_USER = 'contacto@xn--istmea-0wa.com'
+EMAIL_HOST_USER = 'contacto@istmena.com'
 
 #Must generate specific password for your app in [gmail settings][1]
-EMAIL_HOST_PASSWORD = 'Q9eK6srxbL'
+EMAIL_HOST_PASSWORD = 'hPjQctRPh6cW'
 
 EMAIL_PORT = 587
 
