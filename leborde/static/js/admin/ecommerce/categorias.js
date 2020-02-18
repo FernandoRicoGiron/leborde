@@ -54,7 +54,7 @@ $("#TablaCategorias").on('click', 'button.modificarCategoria', function(event) {
                 success: function(json) { // on success..
                 	// console.log(json)
                 	seccionInputs("modificarCampos",json)
-                	$("#formmodificar").append('<input type="hidden" name="idcategoria" value="'+id+'"/>')
+                	$("#modificarCampos").append('<input type="hidden" name="idcategoria" value="'+id+'"/>')
                 	
                     
                 }

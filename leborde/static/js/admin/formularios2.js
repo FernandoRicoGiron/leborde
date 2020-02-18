@@ -13,6 +13,14 @@ function seccionInputs2(campos, json) {
 	                    '</div>'+
 	                  '</div>';
 		}
+		if (tipo == "char2") {
+			input = '<div class="col-md-6">'+
+	                    '<div class="form-group">'+
+	                      '<label class="bmd-label-floating">'+label+'</label>'+
+	                      '<input name="'+name+'" type="text" class="form-control" value="'+valor+'">'+
+	                    '</div>'+
+	                  '</div>';
+		}
 		else if (tipo == "label") {
 			input = '<div class="col-md-12">'+
 	                    '<div class="form-group">'+
@@ -153,10 +161,28 @@ function seccionInputs2(campos, json) {
 		    $("#"+campos).append(file)
 		    // document.getElementById('files').addEventListener('change', archivo, false);
 		    if (valor != "") {
-                document.getElementById("list").innerHTML = ['<div class="col-md-12" style=""><img style="max-width:100%" class="thumb" src="', valor,'"/></div>'].join('');
+                document.getElementById("list").innerHTML = ['<div class="col-md-12" style=""><a href="'+valor+'"><img style="max-width:100%" class="thumb" src="', valor,'"/></a></div>'].join('');
                 	
 		    }
 		    
+
+		}
+		else if (tipo == "modalimagen"){
+			input = '<div class="col-md-12">'+
+						'<div class="form-group">'+
+						  '<label class="bmd-label-floating">'+label+'</label>'+
+			            '</div>'+
+			            '<div class="form-group" style="max-width:400px;">'+
+			            	'<a href="javascript:;"  data-fancybox="image" data-src="'+valor+'" data-caption="'+label+'"><img src="'+valor+'"></a>'+
+			            '</div>'
+		            '</div>';  
+		    $('[data-fancybox="image"]').fancybox({
+		        buttons : [
+		          'download',
+		          'thumbs',
+		          'close'
+		        ]
+		      });
 
 		}
 		else if(tipo == "multiselect"){

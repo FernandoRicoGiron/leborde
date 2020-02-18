@@ -496,14 +496,16 @@ $("#tipoenvio").on('change', function(event) {
 $("#codigo_postal").on("input",function(event) {
 	codigo = $(this).val();
 	$.ajax({
-		             url : 'https://api-codigos-postales.herokuapp.com/v2/codigo_postal/'+codigo, // the endpoint,commonly same url
+		             url : 'https://api-sepomex.hckdrk.mx/query/info_cp/'+codigo, // the endpoint,commonly same url
 		             type : "GET", // http method
-		             data : {}, // data sent with the post request
+		             data : {}, 
 		     success : function(json) {
-		     	console.log(json)
-		     	$("#ciudad").val(json.municipio);
-		     	$("#estado").val(json.estado);
-		     	if (json.municipio == "Tuxtla Gutiérrez") {
+				municipio = json[0].response.municipio
+				estado = json[0].response.estado
+				// alert(municipio)
+		     	$("#ciudad").val(municipio);
+		     	$("#estado").val(estado);
+		     	if (municipio == "Tuxtla Gutiérrez") {
 		     		$("#costodeenvio").html("$ 0.00")
 		     		$("#grantotal").html("Total: $ {{cart.summary}} MXN")
 		     	}
@@ -515,11 +517,15 @@ $("#codigo_postal").on("input",function(event) {
 		     		$("#grantotal").html("Total: $ "+total+ " MXN")
 		     	}
 		     	valores = "<option disabled selected value='Seleccione una opción'>Seleccione una opcion</option>"
-		     	$.each(json.colonias, function(index, val) {
-		     		valores += "<option value='"+val+"'>"+val+"</option>";
+		     	$.each(json, function(index, val) {
+					colonia = val.response.asentamiento
+		     		valores += "<option value='"+colonia+"'>"+colonia+"</option>";
 		     	});
 		     	$("#colonia").html(valores);
-		     }
+		     },
+			 error : function(){
+				 console.log("no se encontro")
+			 }
 		 });
 });
 

@@ -18,7 +18,11 @@ $("#mostrarPedidos").on("click", function () {
  					$.each( pedidos, function( key, value ) {
  						
  						datos = value.fields;
- 						if (datos.estado_pedido == 1) {
+ 						// alert(datos.comprobante)
+ 						if (datos.comprobante != "" & datos.estado_pedido != 2 & datos.estado_pedido != 3 & datos.estado_pedido != 4) {
+ 							estadopedido = '<i class="material-icons text-warning">report</i> <a style="position:absolute" href="#">Con comprobante</a>'
+ 						}
+ 						else if (datos.estado_pedido == 1) {
  							estadopedido = '<i class="material-icons text-danger">report</i> <a style="position:absolute" href="#">Pago Pendiente</a>'
  						}
  						else if (datos.estado_pedido == 2) {
@@ -73,7 +77,7 @@ $("#TablaPedidos").on('click', 'button.modificarPedido', function(event) {
                 success: function(json) { // on success..
                 	// console.log(json)
                 	seccionInputs2("modificarCampos",json)
-                	$("#formmodificar").append('<input type="hidden" name="idpedido" value="'+id+'"/>')
+                	$("#modificarCampos").append('<input type="hidden" name="idpedido" value="'+id+'"/>')
                 	
                     
                 }

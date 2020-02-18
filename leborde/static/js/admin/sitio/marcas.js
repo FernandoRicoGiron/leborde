@@ -55,7 +55,7 @@ $("#TablaMarcas").on('click', 'button.modificarMarca', function(event) {
                 success: function(json) { // on success..
                 	// console.log(json)
                 	seccionInputs("modificarCampos",json)
-                	$("#formmodificar").append('<input type="hidden" name="idmarca" value="'+id+'"/>')
+                	$("#modificarCampos").append('<input type="hidden" name="idmarca" value="'+id+'"/>')
                 	
                     
                 }

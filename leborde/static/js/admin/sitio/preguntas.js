@@ -54,7 +54,7 @@ $("#TablaPreguntas").on('click', 'button.modificarPregunta', function(event) {
                 success: function(json) { // on success..
                 	// console.log(json)
                 	seccionInputs("modificarCampos",json)
-                	$("#formmodificar").append('<input type="hidden" name="idpregunta" value="'+id+'"/>')
+                	$("#modificarCampos").append('<input type="hidden" name="idpregunta" value="'+id+'"/>')
                 	
                     
                 }

@@ -2,6 +2,10 @@
 function seccionInputs(campos, json) {
 	console.log(json);
 	$.each( json, function( key, value ) {
+		$.each(value, function(index, val) {
+			 console.log(val);
+		});
+		
 		tipo = value.tipo;
 		valor = value.valor;
 		label = value.label;
@@ -140,20 +144,38 @@ function seccionInputs(campos, json) {
 			file = '<div class="col-md-7">'+
 						'<div class="form-group">'+
 						  '<label class="bmd-label-floating">'+label+'</label>'+
-			              '<span class="btn btn-info btn-file" ><input style="z-index: 10000;" type="file" id="files2" name="'+name+'" accept="image/jpeg, image/png"/><p style="z-index: -10000; margin-bottom:0">Seleccione una imagen</p></span></a>'+
+			              '<span class="btn btn-info btn-file" ><input style="z-index: 10000;" type="file" class="files2" name="'+name+'" accept="image/jpeg, image/png"/><p style="z-index: -10000; margin-bottom:0">Seleccione una imagen</p></span></a>'+
 			            '</div>'+
-			            '<div id="list" style="max-width:400px;" class="row" style=""></div>'+
+			            '<div id="list'+name+'" style="max-width:400px;" class="row" style=""></div>'+
 		            '</div>';
 		    // alert(file)
 		    $("#"+campos).append(file)
 		    // document.getElementById('files').addEventListener('change', archivo, false);
 		    if (valor != "") {
-                document.getElementById("list").innerHTML = ['<div class="col-md-9" style=""><img style="max-width:100%" class="thumb" src="', valor,'"/></div>'].join('');
+                document.getElementById("list"+name).innerHTML = ['<div class="col-md-9" style=""><a href="'+valor+'"><img style="max-width:100%" class="thumb" src="', valor,'"/></a></div>'].join('');
                 	
 		    }
 		    
 
 		}
+		// else if (tipo == "imagen3"){
+		// 	file = '<div class="col-md-7">'+
+		// 				'<div class="form-group">'+
+		// 				  '<label class="bmd-label-floating">'+label+'</label>'+
+		// 	              '<span class="btn btn-info btn-file" ><input style="z-index: 10000;" type="file" class="files3" name="'+name+'" accept="image/jpeg, image/png"/><p style="z-index: -10000; margin-bottom:0">Seleccione una imagen</p></span></a>'+
+		// 	            '</div>'+
+		// 	            '<div id="list'+name+'" style="max-width:400px;" class="row" style=""></div>'+
+		//             '</div>';
+		//     // alert(file)
+		//     $("#"+campos).append(file)
+		//     // document.getElementById('files').addEventListener('change', archivo, false);
+		//     if (valor != "") {
+        //         document.getElementById("list"+name).innerHTML = ['<div class="col-md-9" style=""><a href="'+valor+'"><img style="max-width:100%" class="thumb" src="', valor,'"/></a></div>'].join('');
+                	
+		//     }
+		    
+
+		// }
 		else if(tipo == "multiselect"){
 			opciones = JSON.parse(value.opciones);
 			opt = "";
